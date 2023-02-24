@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "199948485361",
+    "firebase_url": "https://twiddletheriddle-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "twiddletheriddle",
+    "storage_bucket": "twiddletheriddle.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199948485361:android:c6d336f2a480b07e181f50",
+        "android_client_info": {
+          "package_name": "com.DefaultCompany.TDR"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "199948485361-o834u31l7kjjdmun6p7uvrem1kj6lbhu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiSfx_6_9Fv_8NyzhG52qYwClbk37maeQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "199948485361-o834u31l7kjjdmun6p7uvrem1kj6lbhu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
