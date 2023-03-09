@@ -5,10 +5,14 @@ using TMPro;
 
 public class GridManager : MonoBehaviour
 {
+    [SerializeField]
     private int rows = 5;
+    [SerializeField]
     private int cols = 4;
-    private float width = 200;
-    private float height = 100;
+   // [SerializeField]
+    private float posX = 275;
+    //[SerializeField]
+    private float posY = 850;
     private List<GameObject> nodes;
     // Start is called before the first frame update
     void Start()
@@ -20,20 +24,24 @@ public class GridManager : MonoBehaviour
     {
         nodes = new List<GameObject>();
         GameObject referenceTile = (GameObject)Instantiate(Resources.Load("Node"));
-        for(int row = 0; row < rows; row++)
+        for(int col = 0; col < cols; col++)
         {
-            for(int col = 0; col < cols; col++)
+            if(col != 0)
+            {
+                posX += 300;
+            }
+            posY = 850;
+            for(int row = 0; row < rows; row++)
             {
                 GameObject tile = (GameObject)Instantiate(referenceTile, transform);
                 nodes.Add(tile);
-                float posX = col * width + 1;
-                float posY = row * height + 1;
+                posY -= 150;
                 tile.transform.position = new Vector2(posX, posY);
-        
+                //tile.transform.position = new Vector2(posX, posY);
             }
         }
         Destroy(referenceTile);
-        updateNodes();
+       // updateNodes();
     }
     private void updateNodes()
     {
