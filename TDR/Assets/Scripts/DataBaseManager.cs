@@ -12,17 +12,20 @@ using UnityEngine.SceneManagement;
 
 public class DataBaseManager : MonoBehaviour
 {
+    public static DataBaseManager instance;
+
     public TextMeshProUGUI userName;
     public TextMeshProUGUI feedbackLBL;
     private string userID;
     private DatabaseReference dbReference;
-    private const int MAXPLAYERS = 5;
+    private GridManager gridManager;
+    private static int MAXPLAYERS = 20;
     // Start is called before the first frame update
     void Start()
     {
         userID = SystemInfo.deviceUniqueIdentifier;
         dbReference = FirebaseDatabase.DefaultInstance.RootReference;
-
+        instance = this;
     }
 
     public async void CreateUser()
@@ -59,7 +62,7 @@ public class DataBaseManager : MonoBehaviour
             await dbReference.Child("Lobby").Child(key).SetRawJsonValueAsync(json);
             Debug.Log("Successfully created user '" + newUser.user_name + "'!");
             feedbackLBL.text = "Successfully created user '" + newUser.user_name + "'";
-
+            userID = newUser.userName;
             // move to next scene!
             SceneManager.LoadScene("WaitingRoom");
             return;
@@ -70,6 +73,54 @@ public class DataBaseManager : MonoBehaviour
             return;
         }
     }
+    public void assignGridManager(GridManager item)
+    {
+        gridManager = item;
+    }
+
+    public async void updateUsers()
+    {
+        await dbReference.Child("Lobby").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCanceled)
+            {
+                Debug.Log("FirebaseDatabaseError: IsCanceled: " + task.Exception);
+                return;
+            }
+            if (task.IsFaulted)
+            {
+                Debug.Log("FirebaseDatabaseError: IsFaulted:" + task.Exception);
+                return;
+            }
+            gridManager.updateNodes(userID, getListOfUsers(task.Result));
+            });
+        dbReference.Child("Lobby").ValueChanged += HandleValueChanged;
+    }
+
+    private void HandleValueChanged(object sender, ValueChangedEventArgs args)
+    {
+        if (args.DatabaseError != null)
+        {
+            Debug.LogError(args.DatabaseError.Message);
+            return;
+        }
+         gridManager.updateNodes(userID, getListOfUsers(args.Snapshot));
+        // Do something with the data in args.Snapshot
+    }
+
+    public List<User> getListOfUsers(DataSnapshot snapshot)
+    {
+    List<User> list = new List<User>();
+    foreach (var childSnapshot in snapshot.Children)
+    {
+        User user = JsonUtility.FromJson<User>(childSnapshot.GetRawJsonValue());
+        list.Add(user);
+    }
+    return list;
+    }
+   
+    
+
 
     // used for previous version: I didn't erase it in case you'll need it (hamutal)
     //public async void CheckIfUserNameExists(string userName)

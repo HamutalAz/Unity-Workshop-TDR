@@ -9,18 +9,17 @@ public class GridManager : MonoBehaviour
     private int rows = 5;
     [SerializeField]
     private int cols = 4;
-   // [SerializeField]
     private float posX = 275;
-    //[SerializeField]
     private float posY = 850;
     private List<GameObject> nodes;
     // Start is called before the first frame update
     void Start()
     {
+        DataBaseManager.instance.assignGridManager(this);
         GenerateGrid();
     }
 
-    private void GenerateGrid()
+    public void GenerateGrid()
     {
         nodes = new List<GameObject>();
         GameObject referenceTile = (GameObject)Instantiate(Resources.Load("Node"));
@@ -41,29 +40,30 @@ public class GridManager : MonoBehaviour
             }
         }
         Destroy(referenceTile);
-       // updateNodes();
+        DataBaseManager.instance.updateUsers();
     }
-    private void updateNodes()
+    public void updateNodes(string userId, List<User> users)
     {
-        for(int i = 0; i < nodes.Count; i ++)
+        //iterate through all the nodes in the grid (currently 20)
+        for (int i = 0; i < nodes.Count; i++)
         {
-            if( i > 9)
+            //presents current users in system, changes the id of the owner to yellow.
+            if (i < users.Count)
+            {
+                nodes[i].SetActive(true);
+                TextMeshProUGUI textBox = nodes[i].GetComponentInChildren<TextMeshProUGUI>();
+                if (users[i].Equals(userId))
+                {
+                    textBox.color = Color.yellow;
+                }
+                textBox.text = users[i].userName;
+                
+            }
+            //hides the unused nodes.
+            else
             {
                 nodes[i].SetActive(false);
             }
-            else
-            {
-                TextMeshProUGUI text = nodes[i].GetComponentInChildren<TextMeshProUGUI>();
-                text.text = "hello world!";
-                text.color = Color.yellow;
-            }
-            
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
