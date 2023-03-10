@@ -152,8 +152,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79dd18b9ac3a45648ab82c74270c198e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playersLabel: {fileID: 505351758}
   rows: 5
   cols: 4
+  startPosX: 275
+  startPosY: 850
+  spaceX: 300
+  spaceY: 150
 --- !u!4 &190895327
 Transform:
   m_ObjectHideFlags: 0

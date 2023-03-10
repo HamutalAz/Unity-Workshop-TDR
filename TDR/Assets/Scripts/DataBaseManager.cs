@@ -19,7 +19,7 @@ public class DataBaseManager : MonoBehaviour
     private string userID;
     private DatabaseReference dbReference;
     private GridManager gridManager;
-    private static int MAXPLAYERS = 20;
+    public static int MAXPLAYERS = 20;
     // Start is called before the first frame update
     void Start()
     {
