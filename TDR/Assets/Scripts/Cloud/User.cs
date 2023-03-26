@@ -1,15 +1,19 @@
+using Firebase.Firestore;
 using System;
 using System.Collections.Generic;
+
+[FirestoreData]
 public class User
 {
-    
-    public string userName;
-
+    [FirestoreProperty]
+    public string userName { get; set; }
+    public User()
+    {
+    }
     public User(string userName)
     {
         this.userName = userName;
     }
-
 
     public string user_name
     {
