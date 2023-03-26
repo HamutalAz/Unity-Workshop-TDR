@@ -66,6 +66,10 @@ public class GridManager : MonoBehaviour
                 {
                     textBox.color = Color.yellow;
                 }
+                else
+                {
+                    textBox.color = Color.white;
+                }
                 textBox.text = users[i].userName;
                 
             }
