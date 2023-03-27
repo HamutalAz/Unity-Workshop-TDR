@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class KeyPad : Interactable
 {
+    [SerializeField]
+    private GameObject door;
+    private bool isOpen;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,6 +22,7 @@ public class KeyPad : Interactable
 
     protected override void Interact()
     {
-        Debug.Log("Interracted with " + gameObject.name);
+        isOpen = !isOpen;
+        door.GetComponent<Animator>().SetBool("IsOpen", isOpen);
     }
 }
