@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class GridManager : MonoBehaviour
+public class WaitingRoomSceneHandler : MonoBehaviour
 {
     [SerializeField]
     public TMP_Text playersLabel; 
@@ -19,11 +19,12 @@ public class GridManager : MonoBehaviour
     private float spaceX = 300;
     [SerializeField]
     private float spaceY = 150;
+
     private List<GameObject> nodes;
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        DataBaseManager.instance.assignGridManager(this);
+        DataBaseManager.instance.setWaitingRoomSceneHandler(this);
         GenerateGrid();
     }
 
@@ -44,13 +45,13 @@ public class GridManager : MonoBehaviour
             {
                 GameObject tile = (GameObject)Instantiate(referenceTile, transform);
                 nodes.Add(tile);
-                newPosY -= 150;
+                newPosY -= spaceY;
                 tile.transform.position = new Vector2(newPosX, newPosY);
                 tile.SetActive(false);
             }
         }
         Destroy(referenceTile);
-        DataBaseManager.instance.updateUsers();
+        DataBaseManager.instance.waitingRoomManager.updateUsers();
     }
     public void updateNodes(string userId, List<User> users)
     {
