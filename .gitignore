@@ -60,3 +60,4 @@ crashlytics-build.properties
 
 #mac files
 .DS_Store
+node_modules/
