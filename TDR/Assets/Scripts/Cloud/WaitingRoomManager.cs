@@ -11,7 +11,7 @@ public class WaitingRoomManager : MonoBehaviour
     private void Start()
     {
         dbReference = FirebaseFirestore.DefaultInstance;
-        roomMembersCollection = dbReference.Collection("Lobby").Document("gYdtPMVaorwoc2jH3Iog").Collection("room_members");
+        roomMembersCollection = dbReference.Collection("Lobby").Document("gYdtPMVaorwoc2jH3Iog").Collection("lobby_members");
     }
 
     public async void updateUsers()
@@ -25,12 +25,12 @@ public class WaitingRoomManager : MonoBehaviour
             DataBaseManager.instance.waitingRoomSceneHandler.updateNodes(DataBaseManager.userName, getListOfUsers(collection.Documents));
         });
     }
-    public List<User> getListOfUsers(IEnumerable<DocumentSnapshot> users)
+    public List<RefUser> getListOfUsers(IEnumerable<DocumentSnapshot> users)
     {
-        List<User> list = new List<User>();
+        List<RefUser> list = new List<RefUser>();
         foreach (DocumentSnapshot childSnapshot in users)
         {
-            User user = childSnapshot.ConvertTo<User>();
+            RefUser user = childSnapshot.ConvertTo<RefUser>();
             list.Add(user);
         }
         return list;

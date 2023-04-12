@@ -53,7 +53,7 @@ public class WaitingRoomSceneHandler : MonoBehaviour
         Destroy(referenceTile);
         DataBaseManager.instance.waitingRoomManager.updateUsers();
     }
-    public void updateNodes(string userId, List<User> users)
+    public void updateNodes(string userId, List<RefUser> users)
     {
         //iterate through all the nodes in the grid (currently 20 => 4 cols 5 rows)
         for (int i = 0; i < nodes.Count; i++)

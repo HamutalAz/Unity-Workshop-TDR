@@ -7,6 +7,12 @@ public class User
 {
     [FirestoreProperty]
     public string userName { get; set; }
+    [FirestoreProperty]
+    public string userId { get; set; }
+    [FirestoreProperty]
+    public string gameId { get; set; }
+    [FirestoreProperty]
+    public string roomId { get; set; }
     public User()
     {
     }
@@ -15,13 +21,12 @@ public class User
         this.userName = userName;
     }
 
-    public string user_name
+    public User(string userName, string userId)
     {
-        get => userName;
-    }
-
-    public override string ToString() {
-        return userName;
+        this.userName = userName;
+        this.userId = userId;
+        this.gameId = null;
+        this.roomId = null;
     }
 
 }
