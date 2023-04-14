@@ -1,12 +1,12 @@
 const functions = require("firebase-functions");
 const regionalFunctions = functions.region("europe-west1");
 const firestore = regionalFunctions.firestore;
-const InGamePlayersAmount = 6;
 const lobbyPath = "Lobby/gYdtPMVaorwoc2jH3Iog/lobby_members/{user_id}";
 const admin = require("firebase-admin");
 let currentGameId = null;
 admin.initializeApp();
 const db = admin.firestore();
+let maxPlayers = 0;
 
 // listen on player's joinning the game & move then to game
 exports.checkNumberOfPlayersInLobby = firestore
@@ -18,8 +18,10 @@ exports.checkNumberOfPlayersInLobby = firestore
       const room_mem = lobbyDoc.collection("lobby_members");
       const snapshot = await room_mem.count().get();
       const numOfPlayers = snapshot.data().count;
+      maxPlayers = (await lobbyDoc.get()).data().MaxPlayers;
+      console.log("MaxPlayers is: " + maxPlayers);
       //check if there are enough players in lobby
-      if(numOfPlayers >=InGamePlayersAmount){
+      if(numOfPlayers >=maxPlayers){
         return room_mem.get().then((snapshot) => {
             let size = 0;
             const arr = [];
@@ -35,12 +37,8 @@ exports.checkNumberOfPlayersInLobby = firestore
             });
             console.log("there are " + size + " players in lobby");
               createNewGame(arr,numOfPlayers);
-              //deleteFromLobby(arr);
-              //update game info!
+              deleteFromLobby(arr);
               matchMaking(arr,numOfPlayers, currentGameId);
-              
-              
-              
           });
       }
       console.log("Not enough players in lobby to start a new game!");
@@ -68,18 +66,6 @@ function createNewGame(arr,numOfPlayers) {
         gameId: newGameRef.id
       });
     });
-
-  // return matchMaking(arr,numOfPlayers,newGameRef.id);
-  // return arr.forEach(async (val) => {
-  //   //creates a document for each player
-  //   await newGameMembersRef.doc(val.id).set({
-  //     userName: val.userName,
-  //   });
-  //   //updates the gameId under Users/{user-id}
-  //   await db.collection("Users").doc(val.id).update({
-  //     gameId: newGameRef.id
-  //   });
-  // });
 }
 
 /** deleting users from the lobby
@@ -154,24 +140,8 @@ async function matchMaking(arr, numOfPlayers, gameId){
       await db.collection("Users").doc(user.id).update({
         roomId: roomRef.id
       });
-      
-      
-    
 
-
-
-      
-      
     }
-
-    
-
-
-    
-    //update room in Users/{userId}/roomID => not done!
-    
-    //update game info => numofplayers, num in room, num to eliminate, room name etc.
-    
   }
 }
 
@@ -211,3 +181,5 @@ function shuffle(array) {
   }
   return array;
 }
+
+
