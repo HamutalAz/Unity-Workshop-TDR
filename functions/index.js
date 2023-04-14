@@ -4,6 +4,7 @@ const firestore = regionalFunctions.firestore;
 const InGamePlayersAmount = 6;
 const lobbyPath = "Lobby/gYdtPMVaorwoc2jH3Iog/lobby_members/{user_id}";
 const admin = require("firebase-admin");
+let currentGameId = null;
 admin.initializeApp();
 const db = admin.firestore();
 
@@ -34,9 +35,11 @@ exports.checkNumberOfPlayersInLobby = firestore
             });
             console.log("there are " + size + " players in lobby");
               createNewGame(arr,numOfPlayers);
-              //matchMaking(arr,numOfPlayers, null);
-              //rooms allocation algorithm
               //deleteFromLobby(arr);
+              //update game info!
+              matchMaking(arr,numOfPlayers, currentGameId);
+              
+              
               
           });
       }
@@ -52,9 +55,10 @@ exports.checkNumberOfPlayersInLobby = firestore
 function createNewGame(arr,numOfPlayers) {
   console.log("***** creating game! *****");
   const newGameRef = db.collection("Games").doc();
+  currentGameId = newGameRef.id;
   const newGameMembersRef = newGameRef.collection("game_members");
 
-  arr.forEach(async (val) => {
+  return arr.forEach(async (val) => {
       //creates a document for each player
       await newGameMembersRef.doc(val.id).set({
         userName: val.userName,
@@ -65,7 +69,7 @@ function createNewGame(arr,numOfPlayers) {
       });
     });
 
-  return matchMaking(arr,numOfPlayers,newGameRef.id);
+  // return matchMaking(arr,numOfPlayers,newGameRef.id);
   // return arr.forEach(async (val) => {
   //   //creates a document for each player
   //   await newGameMembersRef.doc(val.id).set({
@@ -100,41 +104,70 @@ function deleteFromLobby(arr) {
  */
 
 async function matchMaking(arr, numOfPlayers, gameId){
-  console.log("MatchMaking!!");
+  console.log("***** matchMaking! *****");
   let isFinal = true;
   let numberOfPlayersInRoom = 1;
   if(numOfPlayers > 3){
       isFinal = false;
       numberOfPlayersInRoom = setNumberOfPlayersInRoom(numOfPlayers);
   }
-  const array = getShuffledArray(numOfPlayers);
-
+  const numberOfRoomsToBeEliminated = Math.floor(numOfPlayers/numberOfPlayersInRoom/2);
+  const numberOfRoomsToQualify = numOfPlayers/numberOfPlayersInRoom - numberOfRoomsToBeEliminated;
+  /*update all game info needed for game => number of players, players in room, players to be eliminated 
+  during this stage of the game, number of rooms, is final or not, etc...
+  */
+  await db.collection("Games").doc(gameId).set({
+    numberOfPlayers: numOfPlayers,
+    numberOfPlayersInARoom: numberOfPlayersInRoom,
+    numberOfRooms: numOfPlayers/numberOfPlayersInRoom,
+    numberOfRoomsToQualify: numberOfRoomsToQualify,
+    numberOfRoomsToEliminate: numberOfRoomsToBeEliminated,
+    isFinal: isFinal,
+    levelName: null
+  });
+      
+  const shuffledArr = shuffle(arr);
   for(i=0;i<numOfPlayers/numberOfPlayersInRoom;i++){
     //creates a document for the room at Rooms/{roomId}.
     const roomRef = db.collection("Rooms").doc();
     //creates a document for the room at Games/{gameId}/game_rooms/{roomId}
-
-    // await db.collection("Games").doc(gameId).collection("game_rooms")
-    //  .doc(roomRef.id).set();
-    
+    await db.collection("Games").doc(gameId).collection("game_rooms")
+    .doc(roomRef.id).set({
+     roomId: roomRef.id,
+    });
     //updates the gameId under Rooms/{roomId}
-    roomRef.set({
+    await roomRef.set({
       gameId: gameId
-    })
+    });
     for(j=0;j<numberOfPlayersInRoom;j++){
-      const user = arr[numberOfPlayersInRoom*i + j];
+      const user = shuffledArr[numberOfPlayersInRoom*i + j];
       //creates a document for the player at Rooms/{roomId}/room_members/{userId}
       await roomRef.collection("room_members")
       .doc(user.id).set({
         userName: user.userName,
       });
-      //updates roomId at Users/{userId}
+      
+      /*updates roomId at Users/{userId}
+      this code should be the last thing running for each matchmaking, beacaues it will trigger
+      an event of room loading at front-end, so every info about the room should already be ready.
+      */
+      await db.collection("Users").doc(user.id).update({
+        roomId: roomRef.id
+      });
+      
+      
+    
+
+
+
+      
+      
     }
 
+    
 
-    //create room document in Rooms/{roomId} => done
-    //update room in Games/{gameID} /game_rooms/{roomId} => done
-    //random players to rooms => done
+
+    
     //update room in Users/{userId}/roomID => not done!
     
     //update game info => numofplayers, num in room, num to eliminate, room name etc.
@@ -143,7 +176,6 @@ async function matchMaking(arr, numOfPlayers, gameId){
 }
 
 function setNumberOfPlayersInRoom(numOfPlayers){
-  //**final**
   if(numOfPlayers <= 3){
     return 1;
   }
@@ -152,20 +184,16 @@ function setNumberOfPlayersInRoom(numOfPlayers){
       choices.push(2);
   if(numOfPlayers % 3 == 0)
       choices.push(3);
-  return choices[getRandomInt(choices.length)];
+  console.log("options for number of players in room: " + choices);
+  const result = choices[getRandomInt(choices.length)];
+  console.log("chosen number players in room: " + result);
+  return result;
 }
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-function getShuffledArray(numOfPlayers){
-  arr = [];
-  for(i=0;i<numOfPlayers;i++){
-    arr.push(i);
-  }
-  return shuffle(arr);
-}
 
 function shuffle(array) {
   let currentIndex = array.length,  randomIndex;
