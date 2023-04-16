@@ -13,6 +13,8 @@ public class User
     public string gameId { get; set; }
     [FirestoreProperty]
     public string roomId { get; set; }
+    [FirestoreProperty]
+    public string location { get; set; }
     public User()
     {
     }
@@ -27,6 +29,7 @@ public class User
         this.userId = userId;
         this.gameId = null;
         this.roomId = null;
+        this.location = null;
     }
 
 }

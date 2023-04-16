@@ -25,16 +25,12 @@ public class otherPlayersMovment : MonoBehaviour
         otherPlayerDoc.GetSnapshotAsync().ContinueWithOnMainThread((task) =>
         {
             DocumentSnapshot snapshot = task.Result;
-            Dictionary<string, object> playerDoc = snapshot.ToDictionary();
-            foreach (KeyValuePair<string, object> pair in playerDoc)
+            User player = snapshot.ConvertTo<User>();
+            newLoc = stringToVec(player.location);
+            if (newLoc != transform.position)
             {
-                if (pair.Key == "Location") { 
-                    newLoc = stringToVec(pair.Value.ToString());
-                    if (newLoc != transform.position) { 
-                        transform.position = newLoc;
-                        Debug.Log("changing otherPlayerLoc to: " + newLoc);
-                    }
-                }
+                transform.position = newLoc;
+                Debug.Log("changing otherPlayerLoc to: " + newLoc);
             }
         });
     }

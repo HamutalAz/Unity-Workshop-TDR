@@ -49,13 +49,12 @@ public class PlayerMotor : MonoBehaviour
             string loc = transform.position.ToString();
             Dictionary<string, object> updates = new Dictionary<string, object>
             {
-                { "Location", loc }
+                { "location", loc }
             };
 
             userDoc.UpdateAsync(updates).ContinueWithOnMainThread(task =>
             {
-                Debug.Log(
-                        "Location updated to: " + loc);
+                Debug.Log("player's location updated to: " + loc);
             });
         }
 

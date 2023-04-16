@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2159070843297269590}
   - component: {fileID: 633619793035670467}
   - component: {fileID: 1704830246752811527}
+  - component: {fileID: 574055802}
   m_Layer: 0
   m_Name: 3RdPersonPlayer
   m_TagString: Untagged
@@ -98,3 +99,15 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &574055802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2621702233471340662}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a30be2eda8a894278bf8a9dfbc5901d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
