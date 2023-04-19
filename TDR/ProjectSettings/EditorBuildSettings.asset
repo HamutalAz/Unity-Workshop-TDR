@@ -8,7 +8,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/LoginV2.unity
     guid: 4a093ef904dab425ca9a9aae53eb6576
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/Levels/level1.unity
+    guid: c54a2b84a640a4dfd82786d28861baa1
   - enabled: 1
     path: Assets/Scenes/WaitingRoom.unity
-    guid: eb7c344f49b9e4648b3b852e6eff6466
+    guid: 5886eb3bfe0d9e843813897feed8289d
   m_configObjects: {}

@@ -20,8 +20,8 @@ public class PlayerMotor : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         dbReference = FirebaseFirestore.DefaultInstance;
-        //userDoc = dbReference.Collection("Users").Document(DataBaseManager.userID);
-        userDoc = dbReference.Collection("Users").Document("JQD1GEkcogVOfGodZ1Y5"); // todo: delete & uncomment above line
+        userDoc = dbReference.Collection("Users").Document(DataBaseManager.userID);
+        //userDoc = dbReference.Collection("Users").Document("JQD1GEkcogVOfGodZ1Y5"); // todo: delete & uncomment above line
 
     }
 

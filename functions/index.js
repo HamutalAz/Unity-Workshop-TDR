@@ -99,7 +99,7 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
   console.log("***** matchMaking! *****");
 
   let isFinal = true;
-  let numberOfPlayersInRoom = 1;
+  let numberOfPlayersInRoom = 2; //todo: change to 1
   if(numOfPlayers > 3){
       isFinal = false;
       numberOfPlayersInRoom = setNumberOfPlayersInRoom(numOfPlayers);
@@ -145,7 +145,9 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
       .doc(user.id).set({
         userName: user.userName,
       });
-      
+
+      await setPlayersLocationInRooms("level1"); //todo: change to levelsOrder[0]
+
       /*updates roomId at Users/{userId}
       this code should be the last thing running for each matchmaking, beacaues it will trigger
       an event of room loading at front-end, so every info about the room should already be ready.
@@ -204,10 +206,7 @@ function shuffle(array) {
  * @return {levelsOrder} - the order of the levels in which we'll play the game
  */
 function shuffleLevels() {
-  // const levelsCol = db.collection("Levels");
-  // const snapshot = await levelsCol.count().get();
-  // const n = await snapshot.data().count;
-  const n = 5; // change to amount of levels we create
+  const n = 1; // change to amount of levels we create
   let levelsOrder = [];
 
   // initialize array
@@ -228,17 +227,17 @@ function shuffleArray(arr) {
   return arr;
 }
 
-// rtyingggggg
-exports.addMessage = functions.https.onRequest(async (req, res) => {
-  setPlayersLocationInRooms("level1");
-  res.json({result: `Sent.`});
-});
+// // trtyingggggg
+// exports.setPlayersLocInLevel = functions.https.onRequest(async (req, res) => {
+//   setPlayersLocationInRooms("level1");
+//   res.json({result: `Level set.`});
+// });
 
 
 async function setPlayersLocationInRooms(currentLevel){
-  const gameMembersCol = db.collection("Games").doc("rZ15WJTyvvdZiUEgeMfg").collection("game_members");
+  // const gameMembersCol = db.collection("Games").doc("rZ15WJTyvvdZiUEgeMfg").collection("game_members");
 
-  // const gameMembersCol = db.collection("Games").doc(currentGameId).collection("game_members");
+  const gameMembersCol = db.collection("Games").doc(currentGameId).collection("game_members");
   let usersIDs = [];
 
   await gameMembersCol.get().then((snapshot) => {
@@ -247,37 +246,23 @@ async function setPlayersLocationInRooms(currentLevel){
     });
   });
 
+  console.log("currentLevel" + currentLevel);
   const levelDoc = db.collection("Levels").doc(currentLevel);
+  console.log("levelDoc" + levelDoc);
   let data = (await levelDoc.get()).data();
   let xArr = data.roomBordersX;
   let y = data.playerYVal;
   let zArr = data.roomBordersZ;
   let loc = null;
+  console.log("xarr, y, zarr: " + xArr + y +zArr);
 
-  return usersIDs.forEach((id) => {
-    // locatePlayers(id);
+  return usersIDs.forEach(async(id) => {
     loc = generateRandomLoc(xArr, y, zArr);
-    db.collection("Users").doc(id).update({
+      await db.collection("Users").doc(id).update({
       location: loc
     });
   })
 }
-
-// const locatePlayers = async (id) => {
-//   let loc = generateRandomLoc(xArr, y, zArr);
-
-//   functions.logger.log('Updating loc', loc)
-
-//   try {
-//     const usersRef = db.collection("Users").doc(id);
-//     await usersRef.update({
-//       location: loc
-//     });
-//     functions.logger.log('Success user updated!', loc)
-//   } catch (error) {
-//     functions.logger.error('Error updating user!', error)
-//   }
-// }
 
 function generateRandomLoc(xArr, y, zArr){
   console.log("***** generateRandomLoc *****");

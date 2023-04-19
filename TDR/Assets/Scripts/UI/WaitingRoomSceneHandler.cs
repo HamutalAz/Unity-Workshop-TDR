@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class WaitingRoomSceneHandler : MonoBehaviour
 {
@@ -87,5 +88,15 @@ public class WaitingRoomSceneHandler : MonoBehaviour
     public string WaitingForPlayersToString(int currentAmount)
     {
         return "Waiting for players: \n" + currentAmount + "/" + DataBaseManager.MAXPLAYERS;
+    }
+
+    public void loadScene(string scene)
+    {
+        Debug.Log("stopping listener");
+        DataBaseManager.instance.waitingRoomManager.stopDocListener();
+        Debug.Log("moving to level1");
+        //SceneManager.LoadScene(sceneName: scene);
+        SceneManager.LoadScene(sceneName: "level1");
+
     }
 }

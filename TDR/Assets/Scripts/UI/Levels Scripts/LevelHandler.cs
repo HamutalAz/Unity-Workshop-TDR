@@ -25,8 +25,7 @@ public class LevelHandler : MonoBehaviour
     async void Start()
     {
         dbReference = FirebaseFirestore.DefaultInstance;
-        //userID = DataBaseManager.userID; // todo: uncomment
-        userID = "JQD1GEkcogVOfGodZ1Y5";    // todo: delete
+        userID = DataBaseManager.userID; 
 
         // Get user's room ID
         DocumentReference userDoc = dbReference.Collection("Users").Document(userID);
@@ -44,37 +43,31 @@ public class LevelHandler : MonoBehaviour
     { 
         // Loop over all of the players in the room (which aren't the current user & add their useID to a list.
         roomDoc = dbReference.Collection("Rooms").Document(roomID);
+        Debug.Log("createOtherPlayers - roomID: " + roomID);
         CollectionReference roomMembers = roomDoc.Collection("room_members");
-        // todo: uncomment below line & delet following line
-        //await roomMembers.WhereNotEqualTo("userName", DataBaseManager.userName).GetSnapshotAsync().ContinueWithOnMainThread((task) =>
-        await roomMembers.WhereNotEqualTo("userName", "Hamutal​").GetSnapshotAsync().ContinueWithOnMainThread((task) =>
+        await roomMembers.WhereNotEqualTo("userName", DataBaseManager.userName).GetSnapshotAsync().ContinueWithOnMainThread((task) =>
         {
             QuerySnapshot snapshot = task.Result;
             foreach (DocumentSnapshot documentSnapshot in snapshot.Documents)
             {
-                //Debug.Log(String.Format("Fetched player with ID: " + documentSnapshot.Id));
+                Debug.Log(String.Format("Fetched player with ID: " + documentSnapshot.Id));
                 otherUsersID.Add(documentSnapshot.Id);
             }
         });
+        Debug.Log("otherUsersID size: " + otherUsersID.Count);
 
         // Get the players document from the DB
         foreach (string id in otherUsersID)
         {
             otherPlayersDocRef.Add(dbReference.Collection("Users").Document(id));
-            //DocumentReference otherPlayerDoc = dbReference.Collection("Users").Document(id);
-            //await otherPlayerDoc.GetSnapshotAsync().ContinueWithOnMainThread((task) =>
-            //{
-            //    DocumentSnapshot snapshot = task.Result;
-            //    User player = snapshot.ConvertTo<User>();
-            //    otherPlayersData.Add(player);
-            //});
         }
         createPlayersAvatars();
     }
 
     // create player's "avatar" and add them to the scene
-    private void createPlayersAvatars()
+    private async void createPlayersAvatars()
     {
+
         foreach (DocumentReference playerDocRef in otherPlayersDocRef)
         {
             GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("3RdPersonPlayer"));
@@ -83,20 +76,13 @@ public class LevelHandler : MonoBehaviour
             playerRenderer.material.SetColor("_Color", UnityEngine.Random.ColorHSV());
             GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
             otherPlayersAvatars.Add(avatar);
-            //todo: generate location to each player when allocating rooms & store it on db. in the following line fetch it from db
-            float x = Random.Range(5f, 11f);
-            float z = Random.Range(4f, 10f);
-            avatar.transform.position = new Vector3(x, 1.06f, z);
 
-            //todo: delete later
-            string loc = avatar.transform.position.ToString();
-            Dictionary<string, object> updates = new Dictionary<string, object>
+            await playerDocRef.GetSnapshotAsync().ContinueWithOnMainThread((task) =>
             {
-                { "location", loc }
-            };
-            playerDocRef.UpdateAsync(updates).ContinueWithOnMainThread(task =>
-            {
-                Debug.Log("other player location updated to: " + loc);
+                DocumentSnapshot snapshot = task.Result;
+                User player = snapshot.ConvertTo<User>();
+                avatar.transform.position = stringToVec(player.location);
+                Debug.Log("another player created at: " + player.location);
             });
 
             Destroy(referencePlayer);
@@ -113,9 +99,10 @@ public class LevelHandler : MonoBehaviour
     async void Update()
     {
         Vector3 newLoc;
+        Debug.Log("UPDATE");
 
         // Get the players document from the DB
-        for(int i=0; i < otherUsersID.Count; i++)
+        for (int i=0; i < otherUsersID.Count; i++)
         {
             DocumentReference docRef = otherPlayersDocRef[i];
             GameObject avatar = otherPlayersAvatars[i];
