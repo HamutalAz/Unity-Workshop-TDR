@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class WaitingRoomSceneHandler : MonoBehaviour
 {
@@ -53,7 +54,7 @@ public class WaitingRoomSceneHandler : MonoBehaviour
         Destroy(referenceTile);
         DataBaseManager.instance.waitingRoomManager.updateUsers();
     }
-    public void updateNodes(string userId, List<User> users)
+    public void updateNodes(string userId, List<RefUser> users)
     {
         //iterate through all the nodes in the grid (currently 20 => 4 cols 5 rows)
         for (int i = 0; i < nodes.Count; i++)
@@ -87,5 +88,15 @@ public class WaitingRoomSceneHandler : MonoBehaviour
     public string WaitingForPlayersToString(int currentAmount)
     {
         return "Waiting for players: \n" + currentAmount + "/" + DataBaseManager.MAXPLAYERS;
+    }
+
+    public void loadScene(string scene)
+    {
+        Debug.Log("stopping listener");
+        DataBaseManager.instance.waitingRoomManager.stopDocListener();
+        Debug.Log("moving to level1");
+        //SceneManager.LoadScene(sceneName: scene);
+        SceneManager.LoadScene(sceneName: "level1");
+
     }
 }
