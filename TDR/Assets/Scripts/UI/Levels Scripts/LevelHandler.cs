@@ -74,6 +74,7 @@ public class LevelHandler : MonoBehaviour
             // the folloigng 2 lines generates random color to player - todo: delete when changing to avatars
             var playerRenderer = referencePlayer.GetComponent<Renderer>();
             playerRenderer.material.SetColor("_Color", UnityEngine.Random.ColorHSV());
+
             GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
             otherPlayersAvatars.Add(avatar);
 
@@ -99,7 +100,6 @@ public class LevelHandler : MonoBehaviour
     async void Update()
     {
         Vector3 newLoc;
-        Debug.Log("UPDATE");
 
         // Get the players document from the DB
         for (int i=0; i < otherUsersID.Count; i++)
@@ -114,7 +114,7 @@ public class LevelHandler : MonoBehaviour
                 {
                     newLoc = stringToVec(player.location);
                     avatar.transform.position = newLoc;
-                    Debug.Log("changing otherPlayerLoc to: " + newLoc);
+                    //Debug.Log("changing otherPlayerLoc to: " + newLoc);
                 }
             });
         }

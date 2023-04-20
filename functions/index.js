@@ -94,7 +94,6 @@ function deleteFromLobby(arr) {
  * @param {arr, numOfPlayers} - an array of dictionarys containing users data, number of users.
  * @return {promise}
  */
-
 async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
   console.log("***** matchMaking! *****");
 
@@ -137,6 +136,7 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
     await roomRef.set({
       gameId: gameId
     });
+
     for(j=0;j<numberOfPlayersInRoom;j++){
       const user = shuffledArr[numberOfPlayersInRoom*i + j];
       
@@ -145,8 +145,6 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
       .doc(user.id).set({
         userName: user.userName,
       });
-
-      await setPlayersLocationInRooms("level1"); //todo: change to levelsOrder[0]
 
       /*updates roomId at Users/{userId}
       this code should be the last thing running for each matchmaking, beacaues it will trigger
@@ -158,6 +156,9 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
 
     }
   }
+    await setPlayersLocationInRooms(levelsOrder[0]); //todo: change to levelsOrder[0]
+
+    //todo: create collection in Game: gameStatus, create doc & add boolean feild: isRoomReady
 }
 
 function setNumberOfPlayersInRoom(numOfPlayers){
