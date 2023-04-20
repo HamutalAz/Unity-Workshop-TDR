@@ -8,6 +8,7 @@ public class WaitingRoomManager : MonoBehaviour
     private FirebaseFirestore dbReference;
     private CollectionReference roomMembersCollection;
     private DocumentReference lobbyDocument;
+    private ListenerRegistration docListener;
     // Start is called before the first frame update
     private void Start()
     {
@@ -39,7 +40,40 @@ public class WaitingRoomManager : MonoBehaviour
         {
             DataBaseManager.instance.waitingRoomSceneHandler.updateNodes(DataBaseManager.userName, getListOfUsers(collection.Documents));
         });
+
+        DocumentReference userDoc = dbReference.Collection("Users").Document(DataBaseManager.userID);
+        // creating a listener on user's DOC
+        docListener = userDoc.Listen(async(docSnapshot) =>
+        {
+            string roomID = docSnapshot.GetValue<string>("roomId");
+            Debug.Log("roomID: " + roomID);
+            string gameID = docSnapshot.GetValue<string>("gameId");
+            Debug.Log("gameID: " + gameID);
+
+            if (roomID != null)
+            {
+                DocumentReference gameDoc = dbReference.Collection("Games").Document(gameID);
+                await gameDoc.GetSnapshotAsync().ContinueWithOnMainThread(task =>
+                {
+                    Debug.Log("on listener");
+                    DocumentSnapshot res = task.Result;
+                    int currentLevel = res.GetValue<int>("currentLevelInd");
+                    Debug.Log("currentLevel" + currentLevel);
+                    string[] levelsOrder = res.GetValue<string[]>("levelsOrder"); // todo: save later
+                    Debug.Log("levelsOrder" + levelsOrder);
+                    DataBaseManager.instance.waitingRoomSceneHandler.loadScene(levelsOrder[currentLevel]);
+                });
+
+            }
+        });
+       
     }
+    public void stopDocListener()
+    {
+        docListener.Stop();
+        Debug.Log("stopped listening!");
+    }
+
     public List<RefUser> getListOfUsers(IEnumerable<DocumentSnapshot> users)
     {
         List<RefUser> list = new List<RefUser>();
