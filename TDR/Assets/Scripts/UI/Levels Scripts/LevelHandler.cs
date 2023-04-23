@@ -11,113 +11,67 @@ using Random = UnityEngine.Random;
 
 public class LevelHandler : MonoBehaviour
 {
-    private static FirebaseFirestore dbReference;
-    private DocumentReference roomDoc;          // --> for future use: maybe we'll need it for syncing other data
-    private string userID;
-    private string roomID;
-
     // other players data
-    private List<string> otherUsersID = new List<string>();
-    private List<DocumentReference> otherPlayersDocRef = new List<DocumentReference>();
     private List<GameObject> otherPlayersAvatars = new List<GameObject>();
+    public Dictionary<string, Vector3> playersLoc = new Dictionary<string, Vector3>();
 
     // Start is called before the first frame update
-    async void Start()
+    void Start()
     {
-        dbReference = FirebaseFirestore.DefaultInstance;
-        userID = DataBaseManager.userID; 
-
-        // Get user's room ID
-        DocumentReference userDoc = dbReference.Collection("Users").Document(userID);
-        await userDoc.GetSnapshotAsync().ContinueWithOnMainThread((task) =>
-        {
-            DocumentSnapshot snapshot = task.Result;
-            User user = snapshot.ConvertTo<User>();
-            roomID = user.roomId;
-        });
-
-        await createOtherPlayers();
-    }
-
-    private async Task createOtherPlayers()
-    { 
-        // Loop over all of the players in the room (which aren't the current user & add their useID to a list.
-        roomDoc = dbReference.Collection("Rooms").Document(roomID);
-        Debug.Log("createOtherPlayers - roomID: " + roomID);
-        CollectionReference roomMembers = roomDoc.Collection("room_members");
-        await roomMembers.WhereNotEqualTo("userName", DataBaseManager.userName).GetSnapshotAsync().ContinueWithOnMainThread((task) =>
-        {
-            QuerySnapshot snapshot = task.Result;
-            foreach (DocumentSnapshot documentSnapshot in snapshot.Documents)
-            {
-                Debug.Log(String.Format("Fetched player with ID: " + documentSnapshot.Id));
-                otherUsersID.Add(documentSnapshot.Id);
-            }
-        });
-        Debug.Log("otherUsersID size: " + otherUsersID.Count);
-
-        // Get the players document from the DB
-        foreach (string id in otherUsersID)
-        {
-            otherPlayersDocRef.Add(dbReference.Collection("Users").Document(id));
-        }
+        DataBaseManager.instance.setLevelHandler(this);
+        DataBaseManager.instance.levelManager.getOtherPlayersData();
         createPlayersAvatars();
     }
 
     // create player's "avatar" and add them to the scene
-    private async void createPlayersAvatars()
+    private void createPlayersAvatars()
     {
+        Dictionary<string, Vector3> playersLoc = DataBaseManager.instance.levelManager.getOtherPlayersLoc();
 
-        foreach (DocumentReference playerDocRef in otherPlayersDocRef)
+        foreach (Vector3 playerLoc in playersLoc.Values)
         {
             GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("3RdPersonPlayer"));
-            // the folloigng 2 lines generates random color to player - todo: delete when changing to avatars
+
+            // the following 2 lines generates random color to player - todo: delete when changing to avatars
             var playerRenderer = referencePlayer.GetComponent<Renderer>();
             playerRenderer.material.SetColor("_Color", UnityEngine.Random.ColorHSV());
 
             GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
             otherPlayersAvatars.Add(avatar);
 
-            await playerDocRef.GetSnapshotAsync().ContinueWithOnMainThread((task) =>
-            {
-                DocumentSnapshot snapshot = task.Result;
-                User player = snapshot.ConvertTo<User>();
-                avatar.transform.position = stringToVec(player.location);
-                Debug.Log("another player created at: " + player.location);
-            });
+            avatar.transform.position = playerLoc;
+            Debug.Log("another player created at: " + playerLoc);
 
             Destroy(referencePlayer);
         }
     }
 
-    private Vector3 stringToVec(string s)
-    {
-        string[] temp = s.Substring(1, s.Length - 2).Split(',');
-        return new Vector3(float.Parse(temp[0]), float.Parse(temp[1]), float.Parse(temp[2]));
-    }
-
     // Update is called once per frame
-    async void Update()
+    void Update()
     {
-        Vector3 newLoc;
+        Dictionary<string, Vector3> playersLoc = DataBaseManager.instance.levelManager.getOtherPlayersLoc();
+        //Debug.Log("is null?: " + playersLoc == null);
+        //Debug.Log("playerLoc: " + playersLoc.Count);
 
-        // Get the players document from the DB
-        for (int i=0; i < otherUsersID.Count; i++)
+        int i = 0;
+
+        foreach (Vector3 playerLoc in playersLoc.Values)
         {
-            DocumentReference docRef = otherPlayersDocRef[i];
             GameObject avatar = otherPlayersAvatars[i];
-            await docRef.GetSnapshotAsync().ContinueWithOnMainThread((task) =>
+
+            if (playersLoc.ToString() != avatar.transform.position.ToString())
             {
-                DocumentSnapshot snapshot = task.Result;
-                User player = snapshot.ConvertTo<User>();
-                if (player.location != avatar.transform.position.ToString())
-                {
-                    newLoc = stringToVec(player.location);
-                    avatar.transform.position = newLoc;
-                    //Debug.Log("changing otherPlayerLoc to: " + newLoc);
-                }
-            });
+                avatar.transform.position = playerLoc * Time.deltaTime;
+                //Debug.Log("changing otherPlayerLoc to: " + newLoc);
+            }
+            i++;
         }
        
     }
+
+    public void setPlayersLoc(Dictionary<string, Vector3> playersLoc)
+    {
+    this.playersLoc = playersLoc;
+
+    }   
 }

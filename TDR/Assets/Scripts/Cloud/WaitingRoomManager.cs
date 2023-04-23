@@ -50,8 +50,13 @@ public class WaitingRoomManager : MonoBehaviour
             string gameID = docSnapshot.GetValue<string>("gameId");
             Debug.Log("gameID: " + gameID);
 
+
             if (roomID != null)
             {
+                // set room & game ID to DB Manager
+                DataBaseManager.roomID = roomID;
+                DataBaseManager.gameID = gameID;
+
                 DocumentReference gameDoc = dbReference.Collection("Games").Document(gameID);
                 await gameDoc.GetSnapshotAsync().ContinueWithOnMainThread(task =>
                 {

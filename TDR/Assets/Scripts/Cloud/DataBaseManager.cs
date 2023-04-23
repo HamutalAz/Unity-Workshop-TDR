@@ -4,16 +4,17 @@ public class DataBaseManager : MonoBehaviour
     //Local user identification
     public static string userName;
     public static string userID;
-    //game id
-    //room id
+    public static string roomID;
+    public static string gameID;
 
 
     //Scene Handlers
     public WaitingRoomSceneHandler waitingRoomSceneHandler;
-
+    public LevelHandler levelHandler;
     //Managers
     public LoginManager loginManager;
     public WaitingRoomManager waitingRoomManager;
+    public LevelManager levelManager;
 
     //Other variables
     public static int MAXPLAYERS = 20;
@@ -36,6 +37,8 @@ public class DataBaseManager : MonoBehaviour
         //Assign all cloud managers, scripts needs to added as components at DatabaseManger object in login scene.
         loginManager = GetComponent<LoginManager>();
         waitingRoomManager = GetComponent<WaitingRoomManager>();
+        levelManager = GetComponent<LevelManager>();
+        Debug.Log(levelManager);
     }
 
     private void OnDestroy()
@@ -49,4 +52,8 @@ public class DataBaseManager : MonoBehaviour
         waitingRoomSceneHandler = waitingRoomInstance;
     }
 
+    public void setLevelHandler(LevelHandler levelHandler)
+    {
+        this.levelHandler = levelHandler;
+    }
 }
