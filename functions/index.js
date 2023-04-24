@@ -57,19 +57,26 @@ function createNewGame(arr,numOfPlayers) {
   const newGameRef = db.collection("Games").doc();
   currentGameId = newGameRef.id;
   const newGameMembersRef = newGameRef.collection("game_members");
-
-  return arr.forEach(async (val) => {
-      
-      //creates a document for each player
-      await newGameMembersRef.doc(val.id).set({
-        userName: val.userName,
-      });
-      
-      //updates the gameId under Users/{user-id}
-      await db.collection("Users").doc(val.id).update({
-        gameId: newGameRef.id
-      });
+  const promises = [];
+  arr.forEach(async (val) => {
+    const p = newGameMembersRef.doc(val.id).set({
+      userName: val.userName,
     });
+    promises.push(p);
+    //creates a document for each player
+    // await newGameMembersRef.doc(val.id).set({
+    //   userName: val.userName,
+    // });
+    const q = db.collection("Users").doc(val.id).update({
+      gameId: newGameRef.id
+    });
+    promises.push(q);
+      // //updates the gameId under Users/{user-id}
+      // await db.collection("Users").doc(val.id).update({
+      //   gameId: newGameRef.id
+      // });
+    });
+  return Promise.all(promises);
 }
 
 /** deleting users from the lobby
@@ -82,12 +89,15 @@ function deleteFromLobby(arr) {
   let lobbyCol = db.collection("Lobby");
   const lobbyDoc = lobbyCol.doc("gYdtPMVaorwoc2jH3Iog");
   lobbyCol = lobbyDoc.collection("lobby_members");
-  
-  return arr.forEach((val) => {
-    lobbyCol.doc(val.id).delete().then(() => {
-      // console.log("Document " + val.id + " successfully deleted!");
-    });
+  const promises = [];
+  arr.forEach((val) => {
+    const p = lobbyCol.doc(val.id).delete();
+    promises.push(p);
+    // lobbyCol.doc(val.id).delete().then(() => {
+    //   // console.log("Document " + val.id + " successfully deleted!");
+    // });
   });
+  return Promise.all(promises);
 }
 
 /** creating rooms for players
@@ -117,9 +127,10 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
     numberOfRoomsToEliminate: numberOfRoomsToBeEliminated,
     isFinal: isFinal,
     levelsOrder: levelsOrder,
-    currentLevelInd: 0
+    currentLevelInd: 0,
   });
-      
+  
+  const promises = [];
   const shuffledArr = shuffle(arr);
   for(i=0;i<numOfPlayers/numberOfPlayersInRoom;i++){
     
@@ -127,38 +138,48 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
     const roomRef = db.collection("Rooms").doc();
     
     //creates a document for the room at Games/{gameId}/game_rooms/{roomId}
-    await db.collection("Games").doc(gameId).collection("game_rooms")
+    const a = db.collection("Games").doc(gameId).collection("game_rooms")
     .doc(roomRef.id).set({
      roomId: roomRef.id,
     });
+    promises.push(a);
     
     //updates the gameId under Rooms/{roomId}
-    await roomRef.set({
+    const b = roomRef.set({
       gameId: gameId
     });
+    promises.push(b);
 
     for(j=0;j<numberOfPlayersInRoom;j++){
       const user = shuffledArr[numberOfPlayersInRoom*i + j];
       
       //creates a document for the player at Rooms/{roomId}/room_members/{userId}
-      await roomRef.collection("room_members")
+      const c = roomRef.collection("room_members")
       .doc(user.id).set({
         userName: user.userName,
       });
+      promises.push(c);
 
       /*updates roomId at Users/{userId}
       this code should be the last thing running for each matchmaking, beacaues it will trigger
       an event of room loading at front-end, so every info about the room should already be ready.
       */
-      await db.collection("Users").doc(user.id).update({
+      const d = db.collection("Users").doc(user.id).update({
         roomId: roomRef.id
       });
+      promises.push(d);
 
     }
   }
-    await setPlayersLocationInRooms(levelsOrder[0]); //todo: change to levelsOrder[0]
+  await Promise.all(promises);
+  
+  await setPlayersLocationInRooms(levelsOrder[0]); //todo: change to levelsOrder[0]
 
-    //todo: create collection in Game: gameStatus, create doc & add boolean feild: isRoomReady
+  //update about game: ready to load the game scene, all data is ready!
+  await db.collection("Games").doc(currentGameId).collection("game_status")
+  .doc().set({
+    readyToLoad : true,
+  });
 }
 
 function setNumberOfPlayersInRoom(numOfPlayers){
@@ -240,7 +261,6 @@ async function setPlayersLocationInRooms(currentLevel){
 
   const gameMembersCol = db.collection("Games").doc(currentGameId).collection("game_members");
   let usersIDs = [];
-
   await gameMembersCol.get().then((snapshot) => {
     snapshot.forEach((doc) => {
       usersIDs.push(doc.id);
@@ -257,12 +277,15 @@ async function setPlayersLocationInRooms(currentLevel){
   let loc = null;
   console.log("xarr, y, zarr: " + xArr + y +zArr);
 
-  return usersIDs.forEach(async(id) => {
+  const promises = [];
+  usersIDs.forEach(async(id) => {
     loc = generateRandomLoc(xArr, y, zArr);
-      await db.collection("Users").doc(id).update({
+    const a = db.collection("Users").doc(id).update({
       location: loc
     });
-  })
+    promises.push(a);
+  });
+  return Promise.all(promises);
 }
 
 function generateRandomLoc(xArr, y, zArr){

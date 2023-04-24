@@ -92,8 +92,10 @@ public class WaitingRoomSceneHandler : MonoBehaviour
 
     public void loadScene(string scene)
     {
-        Debug.Log("stopping listener");
-        DataBaseManager.instance.waitingRoomManager.stopDocListener();
+        //Debug.Log("stopping user listener");
+        //DataBaseManager.instance.waitingRoomManager.stopListenToUserChanges();
+        //Debug.Log("stopping game listener");
+        //DataBaseManager.instance.waitingRoomManager.stopListenToGameChanges();
         Debug.Log("moving to level1");
         //SceneManager.LoadScene(sceneName: scene);
         SceneManager.LoadScene(sceneName: "level1");
