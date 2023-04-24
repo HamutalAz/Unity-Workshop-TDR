@@ -6,6 +6,7 @@ using Firebase.Extensions;
 using Firebase.Firestore;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.LowLevel;
 using UnityEngine.ProBuilder.Shapes;
 using Random = UnityEngine.Random;
 
@@ -19,14 +20,16 @@ public class LevelHandler : MonoBehaviour
     void Start()
     {
         DataBaseManager.instance.setLevelHandler(this);
-        DataBaseManager.instance.levelManager.getOtherPlayersData();
         createPlayersAvatars();
     }
 
     // create player's "avatar" and add them to the scene
-    private void createPlayersAvatars()
+    private async void createPlayersAvatars()
     {
-        Dictionary<string, Vector3> playersLoc = DataBaseManager.instance.levelManager.getOtherPlayersLoc();
+        Dictionary<string, Vector3> playersLoc = await DataBaseManager.instance.levelManager.getOtherPlayersData();
+        //Dictionary<string, Vector3> playersLoc = DataBaseManager.instance.levelManager.getOtherPlayersLoc();
+
+        //Debug.Log("**** LH: createPlayersAvatars: playersLoc: ****" + playersLoc.Count);
 
         foreach (Vector3 playerLoc in playersLoc.Values)
         {
@@ -40,18 +43,22 @@ public class LevelHandler : MonoBehaviour
             otherPlayersAvatars.Add(avatar);
 
             avatar.transform.position = playerLoc;
-            Debug.Log("another player created at: " + playerLoc);
+            Debug.Log("LH: createPlayersAvatars(): avatar created at: " + playerLoc);
 
             Destroy(referencePlayer);
         }
+
+        // set listener on other players location & update their location
+        DataBaseManager.instance.levelManager.listenOnOtherPlayersDoc();
     }
 
     // Update is called once per frame
     void Update()
     {
         Dictionary<string, Vector3> playersLoc = DataBaseManager.instance.levelManager.getOtherPlayersLoc();
-        //Debug.Log("is null?: " + playersLoc == null);
-        //Debug.Log("playerLoc: " + playersLoc.Count);
+
+        if (otherPlayersAvatars.Count == 0)
+            return;
 
         int i = 0;
 
@@ -59,10 +66,13 @@ public class LevelHandler : MonoBehaviour
         {
             GameObject avatar = otherPlayersAvatars[i];
 
-            if (playersLoc.ToString() != avatar.transform.position.ToString())
+            if (playerLoc.ToString() != avatar.transform.position.ToString())
             {
-                avatar.transform.position = playerLoc * Time.deltaTime;
-                //Debug.Log("changing otherPlayerLoc to: " + newLoc);
+                //Debug.Log("**Update** playersLoc:" + playersLoc.ToString());
+                //Debug.Log("**Update** avaterLoc:" + avatar.transform.position.ToString());
+
+                avatar.transform.position = playerLoc;
+                Debug.Log("changing otherPlayerLoc to: " + playerLoc);
             }
             i++;
         }

@@ -277,15 +277,12 @@ async function setPlayersLocationInRooms(currentLevel){
   let loc = null;
   console.log("xarr, y, zarr: " + xArr + y +zArr);
 
-  const promises = [];
-  usersIDs.forEach(async(id) => {
+  return usersIDs.forEach(async(id) => {
     loc = generateRandomLoc(xArr, y, zArr);
-    const a = db.collection("Users").doc(id).update({
+      await db.collection("Users").doc(id).update({
       location: loc
     });
-    promises.push(a);
-  });
-  return Promise.all(promises);
+  })
 }
 
 function generateRandomLoc(xArr, y, zArr){

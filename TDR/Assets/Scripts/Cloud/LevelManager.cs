@@ -20,22 +20,17 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("level manager start!!");
-
         dbReference = FirebaseFirestore.DefaultInstance;
-        //userID = DataBaseManager.userID;
-        //roomID = DataBaseManager.roomID;
-        //getOtherPlayersData();
     }
 
-    public async void getOtherPlayersData()
+    public async Task<Dictionary<string, Vector3>> getOtherPlayersData()
     {
         userID = DataBaseManager.userID;
         roomID = DataBaseManager.roomID;
+        //Debug.Log("**** LM: getOtherPlayersData: roomID: ****" + roomID);
 
         // Loop over all of the players in the room (which aren't the current user & add their useID to a list.
         roomDoc = dbReference.Collection("Rooms").Document(roomID);
-        Debug.Log("createOtherPlayers - roomID: " + roomID);
 
         CollectionReference roomMembers = roomDoc.Collection("room_members");
         await roomMembers.WhereNotEqualTo("userName", DataBaseManager.userName).GetSnapshotAsync().ContinueWithOnMainThread((task) =>
@@ -43,24 +38,21 @@ public class LevelManager : MonoBehaviour
             QuerySnapshot snapshot = task.Result;
             foreach (DocumentSnapshot documentSnapshot in snapshot.Documents)
             {
-                Debug.Log(String.Format("Fetched player with ID: " + documentSnapshot.Id));
+                //Debug.Log(String.Format("LM: getOtherPlayersData: Fetched player with ID: " + documentSnapshot.Id));
                 otherUsersID.Add(documentSnapshot.Id);
             }
         });
-        Debug.Log("amount of other players in the room: " + otherUsersID.Count);
+        //Debug.Log("**** LM: getOtherPlayersData: amount of other players in the room: ****" + otherUsersID.Count);
 
         // Get the players document from the DB
         foreach (string id in otherUsersID)
             otherPlayersDocRef.Add(dbReference.Collection("Users").Document(id));
 
         // Get the players location from DB
-        await getPlayersLocation();
-
-        // listen on other players location & update their location
-        listenOnOtherPlayersDoc();
+        return await setPlayersLocation();
     }
 
-    public async Task getPlayersLocation()
+    public async Task<Dictionary<string,Vector3>> setPlayersLocation()
     {
         foreach (DocumentReference playerDocRef in otherPlayersDocRef)
         {
@@ -69,9 +61,12 @@ public class LevelManager : MonoBehaviour
                 DocumentSnapshot snapshot = task.Result;
                 User player = snapshot.ConvertTo<User>();
                 playersLoc.Add(player.userName, stringToVec(player.location));
+                Debug.Log("**LM: setPlayersLocation() playerLoc: **" + stringToVec(player.location));
             });
         }
-        //DataBaseManager.instance.levelHandler.setPlayersLoc(playersLoc);
+
+        //Debug.Log("**** LM: setPlayersLocation(): playersLoc.Count **** " + playersLoc.Count);
+        return getOtherPlayersLoc();
     }
 
     public void listenOnOtherPlayersDoc()
@@ -82,9 +77,8 @@ public class LevelManager : MonoBehaviour
             {
                 string location = docSnapshot.GetValue<string>("location");
                 string userNAme = docSnapshot.GetValue<string>("userName");
-
-                playersLoc[userNAme] = stringToVec(location);
-                //DataBaseManager.instance.levelHandler.setPlayersLoc(playersLoc);
+                if (location != null)
+                    playersLoc[userNAme] = stringToVec(location);
             });
         }
     }
