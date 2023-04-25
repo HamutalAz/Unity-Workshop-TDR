@@ -7,6 +7,7 @@ using TMPro;
 public class ChatHandler : MonoBehaviour
 {
     public GameObject chatPanel, textObject;
+    public TMP_InputField inputField;
 
     [SerializeField]
     public List<Message> messageList = new List<Message>();
@@ -19,10 +20,15 @@ public class ChatHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (inputField.text != "")
         {
-            sendMessageToChat("you pressed ENTER! please note that this time the message is much much longer");
+            if (Input.GetKeyDown(KeyCode.Return))
+            {
+                sendMessageToChat(inputField.text);
+                inputField.text = "";
+            }
         }
+        
     }
 
     public void sendMessageToChat(string text)
