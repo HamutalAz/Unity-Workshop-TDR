@@ -524,6 +524,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1906ac971200546438e43befd7173d2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  chatHandler: {fileID: 609163933}
 --- !u!4 &487103806
 Transform:
   m_ObjectHideFlags: 0
@@ -1102,7 +1103,6 @@ MonoBehaviour:
   chatPanel: {fileID: 1598739033}
   textObject: {fileID: 4799805664978654386, guid: daf6c4a46fd8229448baf778d363153f, type: 3}
   inputField: {fileID: 1161017454}
-  messageList: []
 --- !u!1 &815750340
 GameObject:
   m_ObjectHideFlags: 0
@@ -1446,9 +1446,9 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4294967295
   m_fontSize: 40
-  m_fontSizeBase: 14
+  m_fontSizeBase: 40
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 40
   m_fontStyle: 0

@@ -11,10 +11,12 @@ public class DataBaseManager : MonoBehaviour
     //Scene Handlers
     public WaitingRoomSceneHandler waitingRoomSceneHandler;
     public LevelHandler levelHandler;
+    public ChatHandler chatHandler;
     //Managers
     public LoginManager loginManager;
     public WaitingRoomManager waitingRoomManager;
     public LevelManager levelManager;
+    public ChatManager chatManager;
 
     //Other variables
     public static int MAXPLAYERS = 20;
@@ -38,6 +40,7 @@ public class DataBaseManager : MonoBehaviour
         loginManager = GetComponent<LoginManager>();
         waitingRoomManager = GetComponent<WaitingRoomManager>();
         levelManager = GetComponent<LevelManager>();
+        chatManager = GetComponent<ChatManager>();
         Debug.Log(levelManager);
     }
 
@@ -55,5 +58,10 @@ public class DataBaseManager : MonoBehaviour
     public void setLevelHandler(LevelHandler levelHandler)
     {
         this.levelHandler = levelHandler;
+    }
+
+    public void setChatHandler(ChatHandler chatHandler)
+    {
+        this.chatHandler = chatHandler;
     }
 }

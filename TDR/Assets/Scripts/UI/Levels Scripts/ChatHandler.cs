@@ -14,7 +14,10 @@ public class ChatHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Debug.Log("At ChatHandler.start()");
+        DataBaseManager.instance.setChatHandler(this);
+        //enable listener at ChatManager
+        DataBaseManager.instance.chatManager.startListeningToMessages();
     }
 
     // Update is called once per frame
@@ -24,33 +27,38 @@ public class ChatHandler : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                sendMessageToChat(inputField.text);
+                Debug.Log("user pressed enter, about to send message to chat.");
+                Message newMessage = sendMessageToChat(inputField.text, DataBaseManager.userName);
                 inputField.text = "";
+                DataBaseManager.instance.chatManager.addMessageToFirestore(newMessage);
             }
         }
         
     }
 
-    public void sendMessageToChat(string text)
+    private void OnDestroy()
     {
-        Message newMessage = new Message();
-        //to do: add normal constructor to class Message. 
-        newMessage.text = text;
+        Debug.Log("At ChatHandler.OnDestroy()");
+        //disable listener at chatManager
+        DataBaseManager.instance.chatManager.stopListeningToMessages();
+    }
+
+    public Message sendMessageToChat(string text, string sentBy)
+    {
+        // itay levy needs to change to => DataBaseManager.userName
+        Message newMessage = new Message(text, sentBy, "white");
 
         GameObject newText = Instantiate(textObject, chatPanel.transform);
 
-        newMessage.textObject = newText.GetComponent<TMP_Text>();
-        newMessage.textObject.text = newMessage.text;
+        TMP_Text tmp_text = newText.GetComponent<TMP_Text>();
+        tmp_text.text = newMessage.sentBy + ": " + newMessage.text;
+
+        //needs to be changed later
+        tmp_text.color = Color.white;
 
         messageList.Add(newMessage);
+        return newMessage;
     }
 }
 
-[System.Serializable]
-public class Message
-{
-    public string text;
-    public string sentBy;
-    public TMP_Text textObject;
 
-}
