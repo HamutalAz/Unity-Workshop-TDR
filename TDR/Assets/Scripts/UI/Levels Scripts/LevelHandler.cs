@@ -25,6 +25,7 @@ public class LevelHandler : MonoBehaviour
         Debug.Log("At LevelHandler.start()");
         DataBaseManager.instance.setLevelHandler(this);
         createPlayersAvatars();
+        //DataBaseManager.instance.levelManager.listenOnRoomObjects();
     }
 
     // create player's "avatar" and add them to the scene
@@ -72,13 +73,8 @@ public class LevelHandler : MonoBehaviour
             GameObject avatar = otherPlayersAvatars[i];
 
             if (playerLoc.ToString() != avatar.transform.position.ToString())
-            {
-                //Debug.Log("**Update** playersLoc:" + playersLoc.ToString());
-                //Debug.Log("**Update** avaterLoc:" + avatar.transform.position.ToString());
-
                 avatar.transform.position = playerLoc;
-                //Debug.Log("changing otherPlayerLoc to: " + playerLoc);
-            }
+            
             i++;
         }
        

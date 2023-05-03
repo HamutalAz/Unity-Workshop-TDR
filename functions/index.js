@@ -143,6 +143,9 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
      roomId: roomRef.id,
     });
     promises.push(a);
+
+    // todo: clone current level game object to room
+    // copyLevelObjCollection(roomId, levelsOrder[0]).then(() => console.log('copy complete')).catch(error => console.log('copy failed. ' + error));
     
     //updates the gameId under Rooms/{roomId}
     const b = roomRef.set({
@@ -173,7 +176,7 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
   }
   await Promise.all(promises);
   
-  await setPlayersLocationInRooms(levelsOrder[0]); //todo: change to levelsOrder[0]
+  await setPlayersLocationInRooms(levelsOrder[0]);
 
   //update about game: ready to load the game scene, all data is ready!
   await db.collection("Games").doc(currentGameId).collection("game_status")
@@ -249,13 +252,6 @@ function shuffleArray(arr) {
   return arr;
 }
 
-// // trtyingggggg
-// exports.setPlayersLocInLevel = functions.https.onRequest(async (req, res) => {
-//   setPlayersLocationInRooms("level1");
-//   res.json({result: `Level set.`});
-// });
-
-
 async function setPlayersLocationInRooms(currentLevel){
   // const gameMembersCol = db.collection("Games").doc("rZ15WJTyvvdZiUEgeMfg").collection("game_members");
 
@@ -299,4 +295,25 @@ function randomFromInterval(min, max) {
   return Math.random() * (max - min + 1) + min
 }
 
-
+async function copyLevelObjCollection(roomId, currentLevel) {
+    const documents = await firestore.collection("Levels").doc(currentLevel).collection("room_objects").get();
+    let writeBatch = firebaseAdmin.firestore().batch();
+    const destCollection = firestore.collection("Rooms").doc(roomId).collection("room_objects");
+    let i = 0;
+    for (const doc of documents.docs) {
+        writeBatch.set(destCollection.doc(doc.id), doc.data());
+        i++;
+        if (i > 400) {  // write batch only allows maximum 500 writes per batch
+            i = 0;
+            console.log('Intermediate committing of batch operation');
+            await writeBatch.commit();
+            writeBatch = firebaseAdmin.firestore().batch();
+        }
+    }
+    if (i > 0) {
+        console.log('Firebase batch operation completed. Doing final committing of batch operation.');
+        await writeBatch.commit();
+    } else {
+        console.log('Firebase batch operation completed.');
+    }
+}

@@ -17,6 +17,7 @@ public class LevelManager : MonoBehaviour
     private List<string> otherUsersID = new List<string>();
     private List<DocumentReference> otherPlayersDocRef = new List<DocumentReference>();
     private Dictionary<String, Vector3> playersLoc = new Dictionary<string, Vector3>();
+    private Dictionary<String, object> objectsData = new Dictionary<string, object>();
 
     private void Start()
     {
@@ -91,6 +92,33 @@ public class LevelManager : MonoBehaviour
     {
         string[] temp = s.Substring(1, s.Length - 2).Split(',');
         return new Vector3(float.Parse(temp[0]), float.Parse(temp[1]), float.Parse(temp[2]));
+    }
+
+    public void listenOnRoomObjects()
+    {
+        CollectionReference roomObjects = roomDoc.Collection("room_objects");
+
+        roomObjects.GetSnapshotAsync().ContinueWithOnMainThread((task) =>
+        {
+            QuerySnapshot snapshot = task.Result;
+            foreach (DocumentSnapshot documentSnapshot in snapshot.Documents)
+            {
+                DocumentReference roomObjDocRef = documentSnapshot.Reference;
+
+                roomObjDocRef.Listen((docSnapshot) =>
+                {
+                    // todo: make it generic ...
+                    string name = docSnapshot.GetValue<string>("name"); // the name of the object
+                    bool isOpen = docSnapshot.GetValue<bool>("isOpen"); // the change - in our case it's a door.
+                    objectsData[name] = isOpen;
+
+                });
+
+
+
+            }
+        });
+
     }
 
 }
