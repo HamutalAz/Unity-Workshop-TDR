@@ -16,9 +16,13 @@ public class LevelHandler : MonoBehaviour
     private List<GameObject> otherPlayersAvatars = new List<GameObject>();
     public Dictionary<string, Vector3> playersLoc = new Dictionary<string, Vector3>();
 
+    [SerializeField]
+    public GameObject chatHandler;
+
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("At LevelHandler.start()");
         DataBaseManager.instance.setLevelHandler(this);
         createPlayersAvatars();
     }
@@ -50,6 +54,7 @@ public class LevelHandler : MonoBehaviour
 
         // set listener on other players location & update their location
         DataBaseManager.instance.levelManager.listenOnOtherPlayersDoc();
+        checkIfChatIsNeeded();
     }
 
     // Update is called once per frame
@@ -72,7 +77,7 @@ public class LevelHandler : MonoBehaviour
                 //Debug.Log("**Update** avaterLoc:" + avatar.transform.position.ToString());
 
                 avatar.transform.position = playerLoc;
-                Debug.Log("changing otherPlayerLoc to: " + playerLoc);
+                //Debug.Log("changing otherPlayerLoc to: " + playerLoc);
             }
             i++;
         }
@@ -84,4 +89,15 @@ public class LevelHandler : MonoBehaviour
     this.playersLoc = playersLoc;
 
     }   
+
+    public void checkIfChatIsNeeded()
+    {
+        Debug.Log("At LevelHandler.checkIfChatIsNeeded()");
+        Debug.Log("number of other players in room: " + otherPlayersAvatars.Count + " " + playersLoc.Count);
+        if (otherPlayersAvatars.Count == 0)
+        {
+            Debug.Log("destroying chat...");
+            Destroy(chatHandler);
+        }
+    }
 }
