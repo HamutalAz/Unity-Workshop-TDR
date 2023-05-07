@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.LowLevel;
 using UnityEngine.ProBuilder.Shapes;
 using Random = UnityEngine.Random;
+using TMPro;
 
 public class LevelHandler : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class LevelHandler : MonoBehaviour
 
     [SerializeField]
     public GameObject chatHandler;
+    [SerializeField]
+    public TextMeshProUGUI teamsPassaedLabel;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +29,8 @@ public class LevelHandler : MonoBehaviour
         DataBaseManager.instance.setLevelHandler(this);
         createPlayersAvatars();
         //DataBaseManager.instance.levelManager.listenOnRoomObjects();
+
+        DataBaseManager.instance.levelManager.getTeamPassedInfo();
     }
 
     // create player's "avatar" and add them to the scene
@@ -56,6 +61,7 @@ public class LevelHandler : MonoBehaviour
         // set listener on other players location & update their location
         DataBaseManager.instance.levelManager.listenOnOtherPlayersDoc();
         checkIfChatIsNeeded();
+        DataBaseManager.instance.levelManager.listenOnGameDocument();
     }
 
     // Update is called once per frame
@@ -95,5 +101,10 @@ public class LevelHandler : MonoBehaviour
             Debug.Log("destroying chat...");
             Destroy(chatHandler);
         }
+    }
+
+    public void updateTeamPassedLabel(int passed, int total)
+    {
+        teamsPassaedLabel.text = passed + "/" + total + " Teams passed";
     }
 }

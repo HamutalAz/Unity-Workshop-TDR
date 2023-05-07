@@ -9,7 +9,8 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     private static FirebaseFirestore dbReference;
-    private DocumentReference roomDoc;          // --> for future use: maybe we'll need it for syncing other data
+    private DocumentReference roomDoc; // --> for future use: maybe we'll need it for syncing other data
+    private DocumentReference gameDoc;
     private string userID;
     private string roomID;
 
@@ -21,7 +22,8 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        dbReference = FirebaseFirestore.DefaultInstance;
+        dbReference = FirebaseFirestore.DefaultInstance; 
+
     }
 
     public async Task<Dictionary<string, Vector3>> getOtherPlayersData()
@@ -120,5 +122,29 @@ public class LevelManager : MonoBehaviour
         });
 
     }
+
+    public void listenOnGameDocument()
+    {
+        gameDoc.Listen(snapshot =>
+        {
+            int qualified = snapshot.GetValue<int>("Qualified");
+            int totalTeams = snapshot.GetValue<int>("numberOfRoomsToQualify");
+            DataBaseManager.instance.levelHandler.updateTeamPassedLabel(qualified, totalTeams);
+        });
+    }
+
+    public void getTeamPassedInfo()
+    {
+        gameDoc = dbReference.Collection("Games").Document(DataBaseManager.gameID);
+        gameDoc.GetSnapshotAsync().ContinueWithOnMainThread(snapshot =>
+        {
+            DocumentSnapshot doc = snapshot.Result;
+            int qualified = doc.GetValue<int>("Qualified");
+            int totalTeams = doc.GetValue<int>("numberOfRoomsToQualify");
+            DataBaseManager.instance.levelHandler.updateTeamPassedLabel(qualified, totalTeams);
+        });
+    }
+    
+
 
 }
