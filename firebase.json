@@ -1,15 +1,24 @@
 {
   "functions": [
     {
-      "source": "functions",
-      "codebase": "default",
+      "source": "pre_game",
+      "codebase": "pre_game",
       "ignore": [
         "node_modules",
         ".git",
         "firebase-debug.log",
         "firebase-debug.*.log"
       ],
-      "predeploy": [
+      "predeploy": []
+    },
+    {
+      "source": "in_game",
+      "codebase": "in_game",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log"
       ]
     }
   ],
