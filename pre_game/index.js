@@ -21,11 +21,10 @@ exports.checkNumberOfPlayersInLobby = firestore
       const snapshot = await room_mem.count().get();
       const numOfPlayers = snapshot.data().count;
       maxPlayers = (await lobbyDoc.get()).data().MaxPlayers;
-      console.log("MaxPlayers is: " + maxPlayers);
       
       //check if there are enough players in lobby
       if(numOfPlayers >=maxPlayers){
-        return room_mem.get().then((snapshot) => {
+        return room_mem.get().then(async(snapshot) => {
             let size = 0;
             const arr = [];
             snapshot.forEach((doc) => {
@@ -37,13 +36,10 @@ exports.checkNumberOfPlayersInLobby = firestore
               size = size + 1;
             });
             console.log("there are " + size + " / " + maxPlayers +" players in lobby");
-              createNewGame(arr,numOfPlayers);
-              deleteFromLobby(arr);
+              await createNewGame(arr,numOfPlayers);
+              await deleteFromLobby(arr);
               let levelsOrder = shuffleLevels();
-              matchMaking(arr, numOfPlayers, currentGameId, levelsOrder);
-              //setPlayersLocationInRooms(levelsOrder[0]);
-              //copy level objects to Rooms/{room_id}/room_objects
-              //update that room is ready
+              return matchMaking(arr, numOfPlayers, currentGameId, levelsOrder);
           });
       }
       console.log("Not enough players in lobby to start a new game!");
@@ -67,18 +63,10 @@ function createNewGame(arr,numOfPlayers) {
       userName: val.userName,
     });
     promises.push(p);
-    //creates a document for each player
-    // await newGameMembersRef.doc(val.id).set({
-    //   userName: val.userName,
-    // });
     const q = db.collection("Users").doc(val.id).update({
       gameId: newGameRef.id
     });
     promises.push(q);
-      // //updates the gameId under Users/{user-id}
-      // await db.collection("Users").doc(val.id).update({
-      //   gameId: newGameRef.id
-      // });
     });
   return Promise.all(promises);
 }
@@ -97,9 +85,6 @@ function deleteFromLobby(arr) {
   arr.forEach((val) => {
     const p = lobbyCol.doc(val.id).delete();
     promises.push(p);
-    // lobbyCol.doc(val.id).delete().then(() => {
-    //   // console.log("Document " + val.id + " successfully deleted!");
-    // });
   });
   return Promise.all(promises);
 }
@@ -156,6 +141,7 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
     promises.push(b);
 
     //copy all level objects to room!
+    promises.push(copyAllLevelObjects("level1", roomRef));
     //promises.push(copyAllLevelObjects("level1" ,roomRef));
 
     for(j=0;j<numberOfPlayersInRoom;j++){
@@ -186,13 +172,64 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
   console.log("At MatchMaking: finished players location creation!");
 
   //update about game: ready to load the game scene, all data is ready!
-  await db.collection("Games").doc(currentGameId).collection("game_status")
+  return db.collection("Games").doc(currentGameId).collection("game_status")
   .doc().set({
     readyToLoad : true,
   });
-  console.log("At MatchMaking: room is ready to load!");
+
+  //async functions must return a promise!!!!!
 }
 
+
+async function setPlayersLocationInRooms(currentLevel){
+  // const gameMembersCol = db.collection("Games").doc("rZ15WJTyvvdZiUEgeMfg").collection("game_members");
+
+  const gameMembersCol = db.collection("Games").doc(currentGameId).collection("game_members");
+  let usersIDs = [];
+  await gameMembersCol.get().then((snapshot) => {
+    snapshot.forEach((doc) => {
+      usersIDs.push(doc.id);
+    });
+  });
+
+  console.log("currentLevel" + currentLevel);
+  const levelDoc = db.collection("Levels").doc(currentLevel);
+  console.log("levelDoc" + levelDoc);
+  let data = (await levelDoc.get()).data();
+  let xArr = data.roomBordersX;
+  let y = data.playerYVal;
+  let zArr = data.roomBordersZ;
+  let loc = null;
+  console.log("xarr, y, zarr: " + xArr + y +zArr);
+
+  promises = []
+  usersIDs.forEach(async(id) => {
+    loc = generateRandomLoc(xArr, y, zArr);
+    const p = db.collection("Users").doc(id).update({
+      location: loc
+    });
+    promises.push(p);
+  });
+  return Promise.all(promises);
+}
+
+async function copyAllLevelObjects(currentLevel, roomRef){
+  const levelObjectsCollection = db.collection("Levels").doc(currentLevel).collection("room_objects");
+  const roomObjectsCollection = roomRef.collection("room_objects");
+
+  const snapshot = await levelObjectsCollection.get();
+  promises = [];
+  snapshot.docs.forEach(doc => {
+    const p = roomObjectsCollection.doc(doc.id).set(doc.data());
+    promises.push(p);
+  });
+  return Promise.all(promises);
+}
+
+
+
+
+//All this functions do not contact with database, they are logic functions!~
 function setNumberOfPlayersInRoom(numOfPlayers){
   
   if(numOfPlayers <= 3){
@@ -260,42 +297,6 @@ function shuffleArray(arr) {
   return arr;
 }
 
-// // trtyingggggg
-// exports.setPlayersLocInLevel = functions.https.onRequest(async (req, res) => {
-//   setPlayersLocationInRooms("level1");
-//   res.json({result: `Level set.`});
-// });
-
-
-async function setPlayersLocationInRooms(currentLevel){
-  // const gameMembersCol = db.collection("Games").doc("rZ15WJTyvvdZiUEgeMfg").collection("game_members");
-
-  const gameMembersCol = db.collection("Games").doc(currentGameId).collection("game_members");
-  let usersIDs = [];
-  await gameMembersCol.get().then((snapshot) => {
-    snapshot.forEach((doc) => {
-      usersIDs.push(doc.id);
-    });
-  });
-
-  console.log("currentLevel" + currentLevel);
-  const levelDoc = db.collection("Levels").doc(currentLevel);
-  console.log("levelDoc" + levelDoc);
-  let data = (await levelDoc.get()).data();
-  let xArr = data.roomBordersX;
-  let y = data.playerYVal;
-  let zArr = data.roomBordersZ;
-  let loc = null;
-  console.log("xarr, y, zarr: " + xArr + y +zArr);
-
-  return usersIDs.forEach(async(id) => {
-    loc = generateRandomLoc(xArr, y, zArr);
-      await db.collection("Users").doc(id).update({
-      location: loc
-    });
-  })
-}
-
 function generateRandomLoc(xArr, y, zArr){
   console.log("***** generateRandomLoc *****");
   const x = randomFromInterval(xArr[0], xArr[1]);
@@ -309,20 +310,3 @@ function generateRandomLoc(xArr, y, zArr){
 function randomFromInterval(min, max) {
   return Math.random() * (max - min + 1) + min
 }
-
-
-// /** 
-//  * @return {promise}
-//  */
-// function copyAllLevelObjects(currentLevel, roomRef){
-//   const promises = [];
-//   const levelObjectsRef = db.collection("Levels").doc(currentLevel).collection("room_objects");
-//   const roomObjects = roomRef.collection("roob_objects");
-//   levelObjects = levelObjectsRef.get();
-//   promises.push(levelObjects);
-//   levelObjects.forEach(doc =>{
-//     objectDoc = roomObjects.doc(doc.id);
-//     promises.push(objectDoc.set(doc.data()));
-//   })
-//   return promises;
-// }
