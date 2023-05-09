@@ -30,7 +30,7 @@ public class otherPlayersMovment : MonoBehaviour
             if (newLoc != transform.position)
             {
                 transform.position = newLoc;
-                Debug.Log("changing otherPlayerLoc to: " + newLoc);
+                //Debug.Log("changing otherPlayerLoc to: " + newLoc);
             }
         });
     }

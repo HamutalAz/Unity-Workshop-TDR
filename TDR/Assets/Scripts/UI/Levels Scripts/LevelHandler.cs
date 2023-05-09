@@ -54,7 +54,7 @@ public class LevelHandler : MonoBehaviour
             otherPlayersAvatars.Add(avatar);
 
             avatar.transform.position = playerLoc;
-            Debug.Log("LH: createPlayersAvatars(): avatar created at: " + playerLoc);
+            //Debug.Log("LH: createPlayersAvatars(): avatar created at: " + playerLoc);
 
             Destroy(referencePlayer);
         }
