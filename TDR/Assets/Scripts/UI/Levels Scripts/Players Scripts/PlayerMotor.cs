@@ -21,7 +21,6 @@ public class PlayerMotor : MonoBehaviour
         controller = GetComponent<CharacterController>();
         dbReference = FirebaseFirestore.DefaultInstance;
         userDoc = dbReference.Collection("Users").Document(DataBaseManager.userID);
-        //userDoc = dbReference.Collection("Users").Document("JQD1GEkcogVOfGodZ1Y5"); // todo: delete & uncomment above line
 
     }
 
@@ -52,10 +51,7 @@ public class PlayerMotor : MonoBehaviour
                 { "location", loc }
             };
 
-            userDoc.UpdateAsync(updates).ContinueWithOnMainThread(task =>
-            {
-                //Debug.Log("player's location updated to: " + loc);
-            });
+            DataBaseManager.instance.levelManager.updatePlayerLocation(updates);
         }
 
     }

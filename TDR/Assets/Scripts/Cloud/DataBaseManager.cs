@@ -12,6 +12,7 @@ public class DataBaseManager : MonoBehaviour
     public WaitingRoomSceneHandler waitingRoomSceneHandler;
     public LevelHandler levelHandler;
     public ChatHandler chatHandler;
+
     //Managers
     public LoginManager loginManager;
     public WaitingRoomManager waitingRoomManager;

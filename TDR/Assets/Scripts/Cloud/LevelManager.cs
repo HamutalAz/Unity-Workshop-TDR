@@ -9,27 +9,33 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     private static FirebaseFirestore dbReference;
+
+    // Docs & Collections
     private DocumentReference roomDoc;
     private DocumentReference gameDoc;
     private CollectionReference roomObjects;
+    private DocumentReference userDoc;
+
     private string userID;
     private string roomID;
 
     // other players data
-    private List<string> otherUsersID = new List<string>();
-    private List<DocumentReference> otherPlayersDocRef = new List<DocumentReference>();
-    private Dictionary<String, Vector3> playersLoc = new Dictionary<string, Vector3>(); // players locations
+    private List<string> otherUsersID = new();
+    private List<DocumentReference> otherPlayersDocRef = new();
+    private Dictionary<string, Vector3> playersLoc = new(); // players locations
 
     private void Start()
     {
         dbReference = FirebaseFirestore.DefaultInstance; 
 
     }
-
+    
     public async Task<Dictionary<string, Vector3>> getOtherPlayersData()
     {
         userID = DataBaseManager.userID;
         roomID = DataBaseManager.roomID;
+        userDoc = dbReference.Collection("Users").Document(userID);
+
         //Debug.Log("**** LM: getOtherPlayersData: roomID: ****" + roomID);
 
         // Loop over all of the players in the room (which aren't the current user & add their useID to a list.
@@ -178,6 +184,14 @@ public class LevelManager : MonoBehaviour
             return false;
         }
 
+    }
+
+    public void updatePlayerLocation(Dictionary<string,object> data)
+    {
+        userDoc.UpdateAsync(data).ContinueWithOnMainThread(task =>
+        {
+            //Debug.Log("player's location updated to: " + loc);
+        });
     }
 
 }
