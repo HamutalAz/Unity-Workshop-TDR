@@ -110,7 +110,13 @@ public class LevelHandler : MonoBehaviour
 
     public void UpdateRoomObjectUI(string name, Dictionary<string, object> data)
     {
+        try {
         levelObjects[name].UpdateUI(data);
+        }
+        catch (Exception)
+        {
+            
+        }
     }
 
     public void addLevelObject(string name, Interactable obj)

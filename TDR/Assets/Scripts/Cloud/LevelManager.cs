@@ -105,19 +105,21 @@ public class LevelManager : MonoBehaviour
     }
 
     // create listeners on the objects in the room and set their initial value
-    public void listenOnRoomObjects()
+    async public void listenOnRoomObjects()
     {
         roomObjects = roomDoc.Collection("room_objects");
 
-        roomObjects.GetSnapshotAsync().ContinueWithOnMainThread((task) =>
+        await roomObjects.GetSnapshotAsync().ContinueWithOnMainThread((task) =>
         {
             QuerySnapshot snapshot = task.Result;
             foreach (DocumentSnapshot documentSnapshot in snapshot.Documents)
             {
                 DocumentReference roomObjDocRef = documentSnapshot.Reference;
-                Debug.Log("inside listen loop on room obj!");
+                //Debug.Log("inside listen loop on room obj!");
 
-                string name = documentSnapshot.GetValue<string>("name"); 
+                string name = documentSnapshot.GetValue<string>("name");
+                //Debug.Log("got doc: " + name);
+
                 Dictionary<string, object> data = documentSnapshot.ToDictionary();
                 //objectsData[name] = data;
                 DataBaseManager.instance.levelHandler.UpdateRoomObjectUI(name, data);
