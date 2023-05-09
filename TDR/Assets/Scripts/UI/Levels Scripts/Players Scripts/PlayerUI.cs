@@ -17,4 +17,8 @@ public class PlayerUI : MonoBehaviour
     {
         promptText.text = promptMessage;
     }
+    //public void setPromptText(TextMeshProUGUI text)
+    //{
+    //    this.promptText = text;
+    //}
 }

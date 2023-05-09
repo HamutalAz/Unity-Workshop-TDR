@@ -17,8 +17,8 @@ public class PlayerMotor : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         Vector3 loc = await DataBaseManager.instance.levelManager.getInitialPlayerLoc();
-        //Debug.Log("location is: " + loc);
-        SetLocation(loc);
+        Debug.Log("location is: " + loc);
+        controller.transform.position = loc;
     }
 
     // Update is called once per frame

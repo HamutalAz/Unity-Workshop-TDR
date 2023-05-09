@@ -38,7 +38,6 @@ public class LevelHandler : MonoBehaviour
     private async void createPlayersAvatars()
     {
         Dictionary<string, Vector3> playersLoc = await DataBaseManager.instance.levelManager.getOtherPlayersData();
-        //Dictionary<string, Vector3> playersLoc = DataBaseManager.instance.levelManager.getOtherPlayersLoc();
 
         //Debug.Log("**** LH: createPlayersAvatars: playersLoc: ****" + playersLoc.Count);
 
@@ -116,6 +115,19 @@ public class LevelHandler : MonoBehaviour
 
     public void addLevelObject(string name, Interactable obj)
     {
+        Debug.Log("trying to add!");
         levelObjects.Add(name, obj);
+        Debug.Log("Obj added");
     }
+
+    //async private void createPlayer()
+    //{
+    //    Vector3 loc = await DataBaseManager.instance.levelManager.getInitialPlayerLoc();
+    //    GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("Player"));
+    //    GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
+
+    //    avatar.transform.position = loc;
+    //    Destroy(referencePlayer);
+    //    (Player)referencePlayer.
+    //}
 }

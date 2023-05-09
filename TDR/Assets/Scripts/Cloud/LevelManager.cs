@@ -115,7 +115,8 @@ public class LevelManager : MonoBehaviour
             foreach (DocumentSnapshot documentSnapshot in snapshot.Documents)
             {
                 DocumentReference roomObjDocRef = documentSnapshot.Reference;
-                
+                Debug.Log("inside listen loop on room obj!");
+
                 string name = documentSnapshot.GetValue<string>("name"); 
                 Dictionary<string, object> data = documentSnapshot.ToDictionary();
                 //objectsData[name] = data;
@@ -171,8 +172,8 @@ public class LevelManager : MonoBehaviour
 
                     documentSnapshot.Reference.UpdateAsync(data).ContinueWithOnMainThread(task =>
                     {
-                        //Debug.Log(
-                        //        "**** Updated" + objName + " document.");
+                        Debug.Log(
+                                "**** Updated" + objName + " document.");
                     });
                 }
             });
