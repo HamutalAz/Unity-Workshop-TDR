@@ -21,6 +21,7 @@ public class LevelHandler : MonoBehaviour
     public GameObject chatHandler;
     [SerializeField]
     public TextMeshProUGUI teamsPassaedLabel;
+    public Dictionary<string, Interactable> levelObjects = new();
 
     // Start is called before the first frame update
     void Start()
@@ -28,7 +29,7 @@ public class LevelHandler : MonoBehaviour
         Debug.Log("At LevelHandler.start()");
         DataBaseManager.instance.setLevelHandler(this);
         createPlayersAvatars();
-        //DataBaseManager.instance.levelManager.listenOnRoomObjects();
+        DataBaseManager.instance.levelManager.listenOnRoomObjects();
 
         DataBaseManager.instance.levelManager.getTeamPassedInfo();
     }
@@ -60,7 +61,7 @@ public class LevelHandler : MonoBehaviour
 
         // set listener on other players location & update their location
         DataBaseManager.instance.levelManager.listenOnOtherPlayersDoc();
-        checkIfChatIsNeeded();
+        CheckIfChatIsNeeded();
         DataBaseManager.instance.levelManager.listenOnGameDocument();
     }
 
@@ -86,13 +87,13 @@ public class LevelHandler : MonoBehaviour
        
     }
 
-    public void setPlayersLoc(Dictionary<string, Vector3> playersLoc)
+    public void SetPlayersLoc(Dictionary<string, Vector3> playersLoc)
     {
     this.playersLoc = playersLoc;
 
     }   
 
-    public void checkIfChatIsNeeded()
+    public void CheckIfChatIsNeeded()
     {
         Debug.Log("At LevelHandler.checkIfChatIsNeeded()");
         Debug.Log("number of other players in room: " + otherPlayersAvatars.Count + " " + playersLoc.Count);
@@ -103,8 +104,18 @@ public class LevelHandler : MonoBehaviour
         }
     }
 
-    public void updateTeamPassedLabel(int passed, int total)
+    public void UpdateTeamPassedLabel(int passed, int total)
     {
         teamsPassaedLabel.text = passed + "/" + total + " Teams passed";
+    }
+
+    public void UpdateRoomObjectUI(string name, Dictionary<string, object> data)
+    {
+        levelObjects[name].UpdateUI(data);
+    }
+
+    public void addLevelObject(string name, Interactable obj)
+    {
+        levelObjects.Add(name, obj);
     }
 }

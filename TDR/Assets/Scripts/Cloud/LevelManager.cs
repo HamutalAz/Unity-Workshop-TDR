@@ -9,16 +9,16 @@ using UnityEngine;
 public class LevelManager : MonoBehaviour
 {
     private static FirebaseFirestore dbReference;
-    private DocumentReference roomDoc; // --> for future use: maybe we'll need it for syncing other data
+    private DocumentReference roomDoc;
     private DocumentReference gameDoc;
+    private CollectionReference roomObjects;
     private string userID;
     private string roomID;
 
     // other players data
     private List<string> otherUsersID = new List<string>();
     private List<DocumentReference> otherPlayersDocRef = new List<DocumentReference>();
-    private Dictionary<String, Vector3> playersLoc = new Dictionary<string, Vector3>();
-    private Dictionary<String, object> objectsData = new Dictionary<string, object>();
+    private Dictionary<String, Vector3> playersLoc = new Dictionary<string, Vector3>(); // players locations
 
     private void Start()
     {
@@ -85,20 +85,23 @@ public class LevelManager : MonoBehaviour
             });
         }
     }
+
     public Dictionary<string, Vector3> getOtherPlayersLoc()
     {
         return playersLoc;
     }
 
+    // convert a string represents a 3D vector into a Vector3
     private Vector3 stringToVec(string s)
     {
         string[] temp = s.Substring(1, s.Length - 2).Split(',');
         return new Vector3(float.Parse(temp[0]), float.Parse(temp[1]), float.Parse(temp[2]));
     }
 
+    // create listeners on the objects in the room and set their initial value
     public void listenOnRoomObjects()
     {
-        CollectionReference roomObjects = roomDoc.Collection("room_objects");
+        roomObjects = roomDoc.Collection("room_objects");
 
         roomObjects.GetSnapshotAsync().ContinueWithOnMainThread((task) =>
         {
@@ -106,18 +109,21 @@ public class LevelManager : MonoBehaviour
             foreach (DocumentSnapshot documentSnapshot in snapshot.Documents)
             {
                 DocumentReference roomObjDocRef = documentSnapshot.Reference;
+                
+                string name = documentSnapshot.GetValue<string>("name"); 
+                Dictionary<string, object> data = documentSnapshot.ToDictionary();
+                //objectsData[name] = data;
+                DataBaseManager.instance.levelHandler.UpdateRoomObjectUI(name, data);
 
                 roomObjDocRef.Listen((docSnapshot) =>
                 {
-                    // todo: make it generic ...
-                    string name = docSnapshot.GetValue<string>("name"); // the name of the object
-                    bool isOpen = docSnapshot.GetValue<bool>("isOpen"); // the change - in our case it's a door.
-                    objectsData[name] = isOpen;
+                    Debug.Log("something changed in game object!");
+                    string name = docSnapshot.GetValue<string>("name");             // the name of the object
+                    Dictionary<string, object> data = docSnapshot.ToDictionary();   // it's data
+                    //objectsData[name] = data;
 
+                    DataBaseManager.instance.levelHandler.UpdateRoomObjectUI(name, data);
                 });
-
-
-
             }
         });
 
@@ -129,7 +135,7 @@ public class LevelManager : MonoBehaviour
         {
             int qualified = snapshot.GetValue<int>("Qualified");
             int totalTeams = snapshot.GetValue<int>("numberOfRoomsToQualify");
-            DataBaseManager.instance.levelHandler.updateTeamPassedLabel(qualified, totalTeams);
+            DataBaseManager.instance.levelHandler.UpdateTeamPassedLabel(qualified, totalTeams);
         });
     }
 
@@ -141,10 +147,37 @@ public class LevelManager : MonoBehaviour
             DocumentSnapshot doc = snapshot.Result;
             int qualified = doc.GetValue<int>("Qualified");
             int totalTeams = doc.GetValue<int>("numberOfRoomsToQualify");
-            DataBaseManager.instance.levelHandler.updateTeamPassedLabel(qualified, totalTeams);
+            DataBaseManager.instance.levelHandler.UpdateTeamPassedLabel(qualified, totalTeams);
         });
     }
-    
 
+
+    public async Task<bool> WriteToDb(string objName, Dictionary<string,object> data)
+    {
+        try
+        {
+            await roomObjects.WhereEqualTo("name", objName).GetSnapshotAsync().ContinueWithOnMainThread((task) =>
+            {
+                QuerySnapshot snapshot = task.Result;
+
+                foreach (DocumentSnapshot documentSnapshot in snapshot.Documents) // there's actually one like that
+                {
+
+                    documentSnapshot.Reference.UpdateAsync(data).ContinueWithOnMainThread(task =>
+                    {
+                        //Debug.Log(
+                        //        "**** Updated" + objName + " document.");
+                    });
+                }
+            });
+
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+
+    }
 
 }

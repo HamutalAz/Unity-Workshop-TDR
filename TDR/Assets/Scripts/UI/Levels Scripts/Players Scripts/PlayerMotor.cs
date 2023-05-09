@@ -54,7 +54,7 @@ public class PlayerMotor : MonoBehaviour
 
             userDoc.UpdateAsync(updates).ContinueWithOnMainThread(task =>
             {
-                Debug.Log("player's location updated to: " + loc);
+                //Debug.Log("player's location updated to: " + loc);
             });
         }
 
