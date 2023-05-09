@@ -70,7 +70,7 @@ public class LevelManager : MonoBehaviour
                 DocumentSnapshot snapshot = task.Result;
                 User player = snapshot.ConvertTo<User>();
                 playersLoc.Add(player.userName, stringToVec(player.location));
-                Debug.Log("**LM: setPlayersLocation() playerLoc: **" + stringToVec(player.location));
+                //Debug.Log("**LM: setPlayersLocation() playerLoc: **" + stringToVec(player.location));
             });
         }
 
@@ -192,6 +192,17 @@ public class LevelManager : MonoBehaviour
         {
             //Debug.Log("player's location updated to: " + loc);
         });
+    }
+
+    public async Task<Vector3> getInitialPlayerLoc()
+    {
+        userDoc = dbReference.Collection("Users").Document(DataBaseManager.userID);
+        return await userDoc.GetSnapshotAsync().ContinueWithOnMainThread(task =>
+        {
+            string location = task.Result.GetValue<string>("location");
+            Debug.Log("111: location is:" + location);
+            return stringToVec(location);
+        });        
     }
 
 }
