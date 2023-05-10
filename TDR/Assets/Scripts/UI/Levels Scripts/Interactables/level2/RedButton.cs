@@ -40,7 +40,8 @@ public class RedButton : Interactable
         // create dictionary with the data we want to send to the DB
         Dictionary<string, object> data = new Dictionary<string, object>
             {
-                { "isOn", !isOn }
+                { "isOn", !isOn},
+                {"key", "isOn" }
             };
 
 

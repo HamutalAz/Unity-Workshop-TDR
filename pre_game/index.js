@@ -141,7 +141,7 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
     promises.push(b);
 
     //copy all level objects to room!
-    promises.push(copyAllLevelObjects("level1", roomRef));
+    promises.push(copyAllLevelObjects(levelsOrder[0], roomRef)); // todo: make it not hard codded!!!!
     //promises.push(copyAllLevelObjects("level1" ,roomRef));
 
     for(j=0;j<numberOfPlayersInRoom;j++){
@@ -279,10 +279,11 @@ function shuffleLevels() {
   const n = 1; // change to amount of levels we create
   let levelsOrder = [];
 
-  // initialize array
-  for (let i = 0; i < n; i++) {
+  // initialize array // todo: uncomment below line & delete following line
+  for (let i = 0; i < 2; i++) {
       levelsOrder[i] = "level" + Number(i + 1);
   }
+  // levelsOrder[0] = "level2";
   return shuffleArray(levelsOrder); // shuffle the array
 }
 

@@ -98,7 +98,7 @@ public class WaitingRoomSceneHandler : MonoBehaviour
         //DataBaseManager.instance.waitingRoomManager.stopListenToGameChanges();
         Debug.Log("moving to level1");
         //SceneManager.LoadScene(sceneName: scene);
-        SceneManager.LoadScene(sceneName: "level2"); // todo: change to scene later
+        SceneManager.LoadScene(sceneName: scene); // todo: change to scene later
 
     }
 }

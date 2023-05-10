@@ -165,16 +165,16 @@ public class LevelManager : MonoBehaviour
 
     public async void LaunchRequest(string functionName, string objName, Dictionary<string, object> data)
     {
-        data.Add("userID", userID);
-        data.Add("roomID", roomID);
-        data.Add("objectName", objName);
-        Debug.Log("about to GetHttpsCallable!");
+        
+        Dictionary<string, object> newDict = new();
+        newDict.Add("roomID", roomID);
+        newDict.Add("objectName", objName);
+        newDict.Add("data", data);
         HttpsCallableReference request = functions.GetHttpsCallable(functionName);
-        Debug.Log("after to GetHttpsCallable!");
-        Debug.Log("about to callAsync! with:" + functionName + data);
+        
         try
         {
-            HttpsCallableResult response = await request.CallAsync(data);
+            HttpsCallableResult response = await request.CallAsync(newDict);
             Debug.Log(response.Data.ToString());
         } 
         catch(Exception e)

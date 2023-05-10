@@ -26,7 +26,8 @@ public class KeyPad : Interactable
         // create dictionary with the data we want to send to the DB
         Dictionary<string, object> data = new Dictionary<string, object>
             {
-                { "isOpen", !isOpen }
+                { "isOpen", !isOpen },
+                {"key", "isOpen" }
             };
 
         DataBaseManager.instance.levelManager.LaunchRequest("updateObject", "door", data);
