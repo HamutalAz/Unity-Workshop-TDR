@@ -33,7 +33,7 @@ public class RedButton : Interactable
         //}
     }
 
-    protected async override void Interact()
+    protected override void Interact()
     {
         Debug.Log("interact with button!!!");
 
@@ -43,14 +43,17 @@ public class RedButton : Interactable
                 { "isOn", !isOn }
             };
 
-        // send the data to the DB
-        bool status = await DataBaseManager.instance.levelManager.WriteToDb("redLight", data);
 
-        // check if sucseed
-        if (!status)
-        {
-            Debug.Log("couldn't turn on light!!!");
-        }
+        DataBaseManager.instance.levelManager.LaunchRequest("updateObject", "redLight", data);
+
+        // send the data to the DB
+        //bool status = await DataBaseManager.instance.levelManager.WriteToDb("redLight", data);
+
+        //// check if sucseed
+        //if (!status)
+        //{
+        //    Debug.Log("couldn't turn on light!!!");
+        //}
     }
     // Apply received changes
     public override void UpdateUI(Dictionary<string, object> data)

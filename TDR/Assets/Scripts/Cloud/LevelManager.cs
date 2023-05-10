@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Firebase.Extensions;
 using Firebase.Firestore;
+using Firebase.Functions;
 using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
     private static FirebaseFirestore dbReference;
+    private static FirebaseFunctions functions;
 
     // Docs & Collections
     private DocumentReference roomDoc;
@@ -26,7 +28,8 @@ public class LevelManager : MonoBehaviour
 
     private void Start()
     {
-        dbReference = FirebaseFirestore.DefaultInstance; 
+        dbReference = FirebaseFirestore.DefaultInstance;
+        functions = FirebaseFunctions.GetInstance( FirebaseFunctions.DefaultInstance.App ,"europe-west1");
 
     }
     
@@ -158,6 +161,28 @@ public class LevelManager : MonoBehaviour
             int totalTeams = doc.GetValue<int>("numberOfRoomsToQualify");
             DataBaseManager.instance.levelHandler.UpdateTeamPassedLabel(qualified, totalTeams);
         });
+    }
+
+    public async void LaunchRequest(string functionName, string objName, Dictionary<string, object> data)
+    {
+        data.Add("userID", userID);
+        data.Add("roomID", roomID);
+        data.Add("objectName", objName);
+        Debug.Log("about to GetHttpsCallable!");
+        HttpsCallableReference request = functions.GetHttpsCallable(functionName);
+        Debug.Log("after to GetHttpsCallable!");
+        Debug.Log("about to callAsync! with:" + functionName + data);
+        try
+        {
+            HttpsCallableResult response = await request.CallAsync(data);
+            Debug.Log(response.Data.ToString());
+        } 
+        catch(Exception e)
+        {
+            Debug.Log(e.Message);
+        }
+        
+        
     }
 
 

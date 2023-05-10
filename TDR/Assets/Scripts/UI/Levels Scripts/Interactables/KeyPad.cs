@@ -21,7 +21,7 @@ public class KeyPad : Interactable
         
     }
 
-    protected async override void Interact()
+    protected override void Interact()
     {
         // create dictionary with the data we want to send to the DB
         Dictionary<string, object> data = new Dictionary<string, object>
@@ -29,14 +29,16 @@ public class KeyPad : Interactable
                 { "isOpen", !isOpen }
             };
 
-        // send the data to the DB
-        bool status = await DataBaseManager.instance.levelManager.WriteToDb("door", data);
+        DataBaseManager.instance.levelManager.LaunchRequest("updateObject", "door", data);
 
-        // check if sucseed
-        if (!status)
-        {
-            Debug.Log("couldn't open door!!!");
-        }
+        //// send the data to the DB
+        //bool status = await DataBaseManager.instance.levelManager.WriteToDb("door", data);
+
+        //// check if sucseed
+        //if (!status)
+        //{
+        //    Debug.Log("couldn't open door!!!");
+        //}
 
     }
 
