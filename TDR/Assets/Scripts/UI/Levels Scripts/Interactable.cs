@@ -20,4 +20,9 @@ public abstract class Interactable : MonoBehaviour
     {
 
     }
+
+    public virtual void sendCode(string code)
+    {
+
+    }
 }
