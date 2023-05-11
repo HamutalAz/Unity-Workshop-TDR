@@ -24894,7 +24894,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4313341546407541126, guid: b4d056c536c724f9c9b366e77fa888a4, type: 3}
       propertyPath: m_text
-      value: You win!
+      value: YOU WIN!
       objectReference: {fileID: 0}
     - target: {fileID: 4313341546407541126, guid: b4d056c536c724f9c9b366e77fa888a4, type: 3}
       propertyPath: m_fontSize
