@@ -162,7 +162,7 @@ public class LevelManager : MonoBehaviour
         });
     }
 
-    public async Task<bool> LaunchRequest(string functionName, string objName, Dictionary<string, object> data)
+    public async Task<object> LaunchRequest(string functionName, string objName, Dictionary<string, object> data)
     {
         Dictionary<string, object> newDict = new();
         newDict.Add("userID", userID);
@@ -183,8 +183,7 @@ public class LevelManager : MonoBehaviour
                 Debug.Log(task.Result.Data);
             }
 
-            return (bool)task.Result.Data;
-            //Debug.Log("problem with function!");
+            return task.Result.Data;
         });
     }
     public async Task<bool> WriteToDb(string objName, Dictionary<string,object> data)

@@ -29,7 +29,7 @@ public class KeyPad : Interactable
                 {"key", "isOpen" }
             };
 
-        bool response = await DataBaseManager.instance.levelManager.LaunchRequest("updateObject", "door", data);
+        bool response = (bool) await DataBaseManager.instance.levelManager.LaunchRequest("updateObject", "door", data);
         Debug.Log(response);
 
         //// send the data to the DB

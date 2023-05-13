@@ -46,8 +46,18 @@ public class InteractivePanel : MonoBehaviour
                 for (int i = 0; i < inputFields.Count; i++)
                     code += inputFields[i].text;
                 i = 0;
-                box.GetComponent<Box>().sendCode(code);
 
+                Dictionary<string, object> data = new Dictionary<string, object>
+            {
+                {"key", "isOpen" },
+                {"code", code }
+            };
+                var panel = box.GetComponent<Box>();
+                bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("checkCode", "box", data);
+                if (response)
+                {
+                    panel.toggleVisability();
+                }
             }
         }
 
@@ -61,9 +71,7 @@ public class InteractivePanel : MonoBehaviour
             {
                 {"key", "owner" }
             };
-
-
-            bool response = await DataBaseManager.instance.levelManager.LaunchRequest("dropObject", "box", data);
+            bool response = (bool) await DataBaseManager.instance.levelManager.LaunchRequest("dropObject", "box", data);
             if (response)
             {
                 box.GetComponent<Box>().toggleVisability();

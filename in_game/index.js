@@ -12,11 +12,7 @@ const db = admin.firestore();
 exports.updateObject = regionalFunctions.https.onCall(async(data) => {
   console.log("***********updateObject*********");
   const roomId = data.roomID;
-  console.log("roomId" + roomId);
-  const json = data.data;
-  console.log("json: " + json);
   const key = data.data.key;
-  console.log("key: " + json.key);
   const objectName = data.objectName; 
   let oldState;
   const docs = await db.collection("Rooms").doc(roomId).collection("room_objects")
@@ -67,7 +63,7 @@ exports.pickUpObject = regionalFunctions.https.onCall(async(data) => {
 
 
 exports.dropObject = regionalFunctions.https.onCall(async(data) => {
-  console.log("***********pickUpObject*********");
+  console.log("***********dropObject*********");
   const userId = data.userID;
   const roomId = data.roomID;
   const key = data.data.key;
@@ -80,7 +76,7 @@ exports.dropObject = regionalFunctions.https.onCall(async(data) => {
   docs.forEach(async (doc) =>{
     let currentOwner = doc.data().owner;
     console.log("current owner of object: " + currentOwner);
-    if(currentOwner == userId){ // object is free to grab.
+    if(currentOwner == userId){ // object is free to drop.
       console.log("entered 'if'. about to drop object.");
       isDropped = true;
       const p = doc.ref.update({[key] : null});
@@ -90,5 +86,35 @@ exports.dropObject = regionalFunctions.https.onCall(async(data) => {
   await Promise.all(promises);
   console.log("about to return: " + isDropped);
   return isDropped;
+});
+
+exports.checkCode = regionalFunctions.https.onCall(async(data) => {
+  console.log("***********checkCode************");
+  const roomId = data.roomID;
+  const key = data.data.key;
+  const objectName = data.objectName; 
+  const codeInput = data.data.code;
+  let isCodeValid = false;
+  const docs = await db.collection("Rooms").doc(roomId).collection("room_objects")
+  .where('name','==', objectName).get();
+
+  promises = [];
+  docs.forEach(async (doc) =>{
+    let code = doc.data().code;
+    console.log("input by user: " + codeInput);
+    if(code == codeInput){ // code is correct
+      console.log("entered 'if'. code is correct.");
+      isCodeValid = true;
+      const p = doc.ref.update({
+        [key] : isCodeValid, // opening box
+        owner : null // releasing panel!
+      }); 
+      
+      promises.push(p);
+    }
+  });
+  await Promise.all(promises);
+  console.log("about to return: " + isCodeValid);
+  return isCodeValid;
 });
 

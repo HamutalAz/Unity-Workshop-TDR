@@ -44,7 +44,7 @@ public class RedButton : Interactable
             };
 
 
-        bool response = await DataBaseManager.instance.levelManager.LaunchRequest("updateObject", "redLight", data);
+        bool response = (bool) await DataBaseManager.instance.levelManager.LaunchRequest("updateObject", "redLight", data);
 
         Debug.Log(response);
         

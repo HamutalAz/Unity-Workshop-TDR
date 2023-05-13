@@ -35,7 +35,7 @@ public class Box : Interactable
                 { "key", "owner" }
         };
         //send request to try and capture the panel!
-        bool response = await DataBaseManager.instance.levelManager.LaunchRequest("pickUpObject", "box", data);
+        bool response = (bool) await DataBaseManager.instance.levelManager.LaunchRequest("pickUpObject", "box", data);
         if (response)
         {
             toggleVisability();
