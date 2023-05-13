@@ -29,8 +29,7 @@ public class LevelManager : MonoBehaviour
     private void Start()
     {
         dbReference = FirebaseFirestore.DefaultInstance;
-        functions = FirebaseFunctions.GetInstance( FirebaseFunctions.DefaultInstance.App ,"europe-west1");
-
+        functions = FirebaseFunctions.GetInstance("europe-west1");
     }
     
     public async Task<Dictionary<string, Vector3>> getOtherPlayersData()
@@ -163,29 +162,31 @@ public class LevelManager : MonoBehaviour
         });
     }
 
-    public async void LaunchRequest(string functionName, string objName, Dictionary<string, object> data)
+    public async Task<bool> LaunchRequest(string functionName, string objName, Dictionary<string, object> data)
     {
-        
         Dictionary<string, object> newDict = new();
+        newDict.Add("userID", userID);
         newDict.Add("roomID", roomID);
         newDict.Add("objectName", objName);
         newDict.Add("data", data);
         HttpsCallableReference request = functions.GetHttpsCallable(functionName);
-        
-        try
+        return await request.CallAsync(newDict).ContinueWith(task =>
         {
-            HttpsCallableResult response = await request.CallAsync(newDict);
-            Debug.Log(response.Data.ToString());
-        } 
-        catch(Exception e)
-        {
-            Debug.Log(e.Message);
-        }
-        
-        
+            if (task.IsCanceled)
+                Debug.Log("Function call was canceled.");
+
+            if (task.IsFaulted)
+                Debug.Log("Function call was faulted.");
+            if (task.IsCompleted)
+            {
+                Debug.Log("http finished successfully");
+                Debug.Log(task.Result.Data);
+            }
+
+            return (bool)task.Result.Data;
+            //Debug.Log("problem with function!");
+        });
     }
-
-
     public async Task<bool> WriteToDb(string objName, Dictionary<string,object> data)
     {
         try

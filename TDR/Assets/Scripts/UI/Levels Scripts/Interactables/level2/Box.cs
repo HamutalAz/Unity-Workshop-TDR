@@ -25,10 +25,23 @@ public class Box : Interactable
         
     }
 
-    protected override void Interact()
+    protected override async void Interact()
     {
-        Debug.Log("interact with box!!!");
-        toggleVisability();
+        Debug.Log("At: Box::Interact");
+       
+        // create dictionary with the data we want to send to the DB
+        Dictionary<string, object> data = new Dictionary<string, object>
+        {
+                { "key", "owner" }
+        };
+        //send request to try and capture the panel!
+        bool response = await DataBaseManager.instance.levelManager.LaunchRequest("pickUpObject", "box", data);
+        if (response)
+        {
+            toggleVisability();
+        }
+        
+        
     }
 
     // Apply received changes
