@@ -21,7 +21,7 @@ public class InteractivePanel : MonoBehaviour
     }
 
     // Update is called once per frame
-    async void Update()
+    void Update()
     {
         if (inputFields[i].text != "")
         {
@@ -48,16 +48,12 @@ public class InteractivePanel : MonoBehaviour
                 i = 0;
 
                 Dictionary<string, object> data = new Dictionary<string, object>
-            {
-                {"key", "isOpen" },
-                {"code", code }
-            };
-                var panel = box.GetComponent<Box>();
-                bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("checkCode", "box", data);
-                if (response)
                 {
-                    panel.toggleVisability();
-                }
+                    {"key", "isOpen" },
+                    {"code", code }
+                };
+
+                box.GetComponent<Box>().sendCode(data);
             }
         }
 
@@ -71,17 +67,13 @@ public class InteractivePanel : MonoBehaviour
             {
                 {"key", "owner" }
             };
-            bool response = (bool) await DataBaseManager.instance.levelManager.LaunchRequest("dropObject", "box", data);
-            if (response)
-            {
-                box.GetComponent<Box>().toggleVisability();
-            }
-            Debug.Log(response);
-            
+
+            box.GetComponent<Box>().dropObject(data);            
         }
     }
     public void setFeedbackMessage(string message)
     {
         feedbackLabel.text = message;
     }
+
 }

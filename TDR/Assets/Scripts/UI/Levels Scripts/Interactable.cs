@@ -21,7 +21,7 @@ public abstract class Interactable : MonoBehaviour
 
     }
 
-    public virtual void sendCode(string code)
+    public virtual void sendCode(Dictionary<string, object> data)
     {
 
     }

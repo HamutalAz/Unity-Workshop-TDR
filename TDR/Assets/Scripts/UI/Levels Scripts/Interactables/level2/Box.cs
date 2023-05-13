@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Google.MiniJSON;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Box : Interactable
 {
@@ -11,6 +12,8 @@ public class Box : Interactable
     private GameObject panel;
     public LevelHandler levelHandler;
     private bool isPanelVisable = false;
+    [SerializeField]
+    private GameObject player;
 
     // Start is called before the first frame update
     void Start()
@@ -27,6 +30,7 @@ public class Box : Interactable
 
     protected override async void Interact()
     {
+        panel.GetComponent<InteractivePanel>().setFeedbackMessage("");
         Debug.Log("At: Box::Interact");
        
         // create dictionary with the data we want to send to the DB
@@ -57,29 +61,38 @@ public class Box : Interactable
         Debug.Log("IsOpen:" + isOpen);
     }
 
-    public override void sendCode(string code)
+    async public override void sendCode(Dictionary<string, object> data)
     {
-        Debug.Log("BOXXXXX : " + code);
-
-        // create dictionary with the data we want to send to the DB
-        Dictionary<string, object> data = new Dictionary<string, object>
-        {
-                { "code", code },
-                { "key", "code" }
-        };
-
-        //todo: send code to serve.
-        //bool res = DataBaseManager.instance.levelManager.LaunchRequest("insertCode", "box", data);
-        //if (!res)
-        //{
-            //panel.GetComponent<InteractivePanel>().setFeedbackMessage("Incorrect code, try again.");
-        //}
-
+        bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("checkCode", "box", data);
+        if (response)
+            toggleVisability();
+        
+        else
+            panel.GetComponent<InteractivePanel>().setFeedbackMessage("Wrong code, try again.");
+        
     }
 
     public void toggleVisability()
     {
+        InputManager input = player.GetComponent<InputManager>();
         isPanelVisable = !isPanelVisable;
+
+        // able/disable player's movment
+        if (isPanelVisable)
+            input.OnDisable();
+        else
+            input.OnEnable();
+
         panel.SetActive(isPanelVisable);
+
+    }
+
+    async public void dropObject(Dictionary<string, object> data)
+    {
+        bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("dropObject", "box", data);
+        if (response)
+            toggleVisability();
+
+        Debug.Log(response);
     }
 }

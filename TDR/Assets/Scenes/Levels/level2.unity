@@ -18908,8 +18908,8 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -18937,7 +18937,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: -338.17584, y: 0, z: -318.4762, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -22259,6 +22259,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 87c4955e096b64c019a26d80c5176197, type: 3}
+--- !u!1 &1197243150 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1839608445989079094, guid: 87c4955e096b64c019a26d80c5176197, type: 3}
+  m_PrefabInstance: {fileID: 1197243149}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1230116600 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6961079265755372938, guid: cd7d19e0fa8f34d769e648d6297bcea3, type: 3}
@@ -29233,6 +29238,7 @@ MonoBehaviour:
   isOpen: 0
   panel: {fileID: 1911178802}
   levelHandler: {fileID: 1809312509}
+  player: {fileID: 1197243150}
 --- !u!43 &1861872759
 Mesh:
   m_ObjectHideFlags: 0
