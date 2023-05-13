@@ -65,3 +65,30 @@ exports.pickUpObject = regionalFunctions.https.onCall(async(data) => {
   return isPickedUp;
 });
 
+
+exports.dropObject = regionalFunctions.https.onCall(async(data) => {
+  console.log("***********pickUpObject*********");
+  const userId = data.userID;
+  const roomId = data.roomID;
+  const key = data.data.key;
+  const objectName = data.objectName; 
+  let isDropped = false;
+  const docs = await db.collection("Rooms").doc(roomId).collection("room_objects")
+  .where('name','==', objectName).get();
+
+  promises = [];
+  docs.forEach(async (doc) =>{
+    let currentOwner = doc.data().owner;
+    console.log("current owner of object: " + currentOwner);
+    if(currentOwner == userId){ // object is free to grab.
+      console.log("entered 'if'. about to drop object.");
+      isDropped = true;
+      const p = doc.ref.update({[key] : null});
+      promises.push(p);
+    }
+  });
+  await Promise.all(promises);
+  console.log("about to return: " + isDropped);
+  return isDropped;
+});
+

@@ -21,7 +21,7 @@ public class InteractivePanel : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    async void Update()
     {
         if (inputFields[i].text != "")
         {
@@ -56,7 +56,20 @@ public class InteractivePanel : MonoBehaviour
             for (int i = 0; i < inputFields.Count; i++)
                 inputFields[i].text = "";
             i = 0;
-            box.GetComponent<Box>().toggleVisability();
+
+            Dictionary<string, object> data = new Dictionary<string, object>
+            {
+                {"key", "owner" }
+            };
+
+
+            bool response = await DataBaseManager.instance.levelManager.LaunchRequest("dropObject", "box", data);
+            if (response)
+            {
+                box.GetComponent<Box>().toggleVisability();
+            }
+            Debug.Log(response);
+            
         }
     }
     public void setFeedbackMessage(string message)
