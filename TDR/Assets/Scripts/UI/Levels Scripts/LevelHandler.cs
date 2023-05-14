@@ -10,6 +10,7 @@ using UnityEngine.LowLevel;
 using UnityEngine.ProBuilder.Shapes;
 using Random = UnityEngine.Random;
 using TMPro;
+using UnityEngine.UI;
 
 public class LevelHandler : MonoBehaviour
 {
@@ -21,6 +22,10 @@ public class LevelHandler : MonoBehaviour
     public GameObject chatHandler;
     [SerializeField]
     public TextMeshProUGUI teamsPassaedLabel;
+    [SerializeField]
+    public GameObject backPack;
+    public int backPackAvailableSlotInd = 1;
+
     public Dictionary<string, Interactable> levelObjects = new();
 
     // Start is called before the first frame update
@@ -124,6 +129,12 @@ public class LevelHandler : MonoBehaviour
         Debug.Log("trying to add!");
         levelObjects.Add(name, obj);
         Debug.Log("Obj added");
+    }
+
+    public void addItemToBackpack(string photoName)
+    {
+          
+
     }
 
     //async private void createPlayer()

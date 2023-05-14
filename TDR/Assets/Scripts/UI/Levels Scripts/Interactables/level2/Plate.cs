@@ -9,13 +9,12 @@ public class Plate : Interactable
     private bool isReadable = false;
     private string owner = null;
     public LevelHandler levelHandler;
-    [SerializeField]
-    private GameObject plate;
+
     // Start is called before the first frame update
     void Start()
     {
         levelHandler.addLevelObject("plate", this);
-        plate.GetComponent<BoxCollider>().enabled = false;
+        gameObject.GetComponent<BoxCollider>().enabled = false;
     }
 
     // Update is called once per frame
@@ -24,7 +23,7 @@ public class Plate : Interactable
         
     }
 
-    protected override void Interact()
+    protected override async void Interact()
     {
 
         Debug.Log("**** interact with plate!!!");
@@ -37,7 +36,8 @@ public class Plate : Interactable
             };
 
         // todo: send request to DB to put the plate in backpack
-        //DataBaseManager.instance.levelManager.LaunchRequest("putInBackPack", "plate", data);
+        bool response = (bool) await DataBaseManager.instance.levelManager.LaunchRequest("pickUpObject", "plate", data);
+
     }
 
     // Apply received changes
@@ -58,9 +58,10 @@ public class Plate : Interactable
             else
             {
                 Debug.Log("someone else owns the plate!");
-                // make it unactive (unviable)
-                gameObject.SetActive(!gameObject.activeSelf);
+                
             }
+            // make it unactive (unviable)
+            gameObject.SetActive(!gameObject.activeSelf);
         }
 
         Debug.Log("owner:" + owner);

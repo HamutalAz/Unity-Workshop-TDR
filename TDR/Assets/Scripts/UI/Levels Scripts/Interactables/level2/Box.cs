@@ -15,8 +15,6 @@ public class Box : Interactable
     [SerializeField]
     private GameObject player;
     [SerializeField]
-    private GameObject box;
-    [SerializeField]
     private GameObject plate;
 
 
@@ -72,7 +70,7 @@ public class Box : Interactable
         if (response)
         {
             toggleVisability(); // disable code panel
-            box.GetComponent<BoxCollider>().enabled = false;  //disable box interaction.
+            gameObject.GetComponent<BoxCollider>().enabled = false;  //disable box interaction.
             plate.GetComponent<BoxCollider>().enabled = true; // start plate interaction.
         }
         else

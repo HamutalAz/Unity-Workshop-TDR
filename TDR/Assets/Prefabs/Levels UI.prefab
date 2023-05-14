@@ -548,7 +548,7 @@ GameObject:
   - component: {fileID: 8463694648202293865}
   - component: {fileID: 8463694648202293864}
   m_Layer: 5
-  m_Name: placeHolder
+  m_Name: placeHolder 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -905,7 +905,7 @@ GameObject:
   - component: {fileID: 8463694648420234654}
   - component: {fileID: 8463694648420234657}
   m_Layer: 5
-  m_Name: placeHolder (3)
+  m_Name: placeHolder 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1108,7 +1108,7 @@ GameObject:
   - component: {fileID: 8463694648565713448}
   - component: {fileID: 8463694648565713451}
   m_Layer: 5
-  m_Name: placeHolder (4)
+  m_Name: placeHolder 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1127,7 +1127,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8463694649107184055}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1751,9 +1751,9 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8463694648202293867}
-  - {fileID: 8463694649449247726}
-  - {fileID: 8463694648420234656}
   - {fileID: 8463694648565713450}
+  - {fileID: 8463694648420234656}
+  - {fileID: 8463694649449247726}
   m_Father: {fileID: 8463694649070324978}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1947,7 +1947,7 @@ GameObject:
   - component: {fileID: 8463694649449247724}
   - component: {fileID: 8463694649449247727}
   m_Layer: 5
-  m_Name: placeHolder (2)
+  m_Name: placeHolder 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1966,7 +1966,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8463694649107184055}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
