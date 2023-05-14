@@ -9,10 +9,13 @@ public class Plate : Interactable
     private bool isReadable = false;
     private string owner = null;
     public LevelHandler levelHandler;
+    [SerializeField]
+    private GameObject plate;
     // Start is called before the first frame update
     void Start()
     {
         levelHandler.addLevelObject("plate", this);
+        plate.GetComponent<BoxCollider>().enabled = false;
     }
 
     // Update is called once per frame

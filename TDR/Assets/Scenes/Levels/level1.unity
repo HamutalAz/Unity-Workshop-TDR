@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -297,6 +297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   promptMessage: Press E to open door
   door: {fileID: 329466608}
+  keyPad: {fileID: 511864034}
 --- !u!114 &545673063 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8463694649424762649, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}

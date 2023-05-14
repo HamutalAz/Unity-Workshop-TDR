@@ -14,6 +14,11 @@ public class Box : Interactable
     private bool isPanelVisable = false;
     [SerializeField]
     private GameObject player;
+    [SerializeField]
+    private GameObject box;
+    [SerializeField]
+    private GameObject plate;
+
 
     // Start is called before the first frame update
     void Start()
@@ -65,8 +70,11 @@ public class Box : Interactable
     {
         bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("checkCode", "box", data);
         if (response)
-            toggleVisability();
-        
+        {
+            toggleVisability(); // disable code panel
+            box.GetComponent<BoxCollider>().enabled = false;  //disable box interaction.
+            plate.GetComponent<BoxCollider>().enabled = true; // start plate interaction.
+        }
         else
             panel.GetComponent<InteractivePanel>().setFeedbackMessage("Wrong code, try again.");
         
@@ -95,4 +103,6 @@ public class Box : Interactable
 
         Debug.Log(response);
     }
+
+   
 }
