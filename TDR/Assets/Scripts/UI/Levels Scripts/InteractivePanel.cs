@@ -13,15 +13,15 @@ public class InteractivePanel : MonoBehaviour
     public TMP_Text feedbackLabel;
     private string code;
     [SerializeField]
-    public Button OKBTN;
+    public Image OKBTN;
     [SerializeField]
-    public Button rightBTN;
+    public Image rightBTN;
     [SerializeField]
-    public Button LeftTN;
+    public Image leftBTN;
     [SerializeField]
-    public Button upBTN;
+    public Image upBTN;
     [SerializeField]
-    public Button downBTN;
+    public Image downBTN;
     [SerializeField]
     public Button resetBTN;
 
@@ -33,17 +33,12 @@ public class InteractivePanel : MonoBehaviour
     private Sprite redOK;
     [SerializeField]
     private Sprite blackOK;
-    private Button lastClicked;
+    private Image lastClicked;
 
     // Start is called before the first frame update
     void Start()
     {
-
-        //redArrow = Resources.Load("playRed", typeof(Sprite)) as Sprite;
-        //blackArrow = Resources.Load("play", typeof(Sprite)) as Sprite;
-        //redOK = Resources.Load("checkedRed", typeof(Sprite)) as Sprite;
-        //blackOK = Resources.Load("checked", typeof(Sprite)) as Sprite;
-        lastClicked = rightBTN;
+        lastClicked = upBTN;
     }
 
     // Update is called once per frame
@@ -83,13 +78,13 @@ public class InteractivePanel : MonoBehaviour
 
             box.GetComponent<Box>().dropObject(data);
             code = "";
+            restoreLastClickedColor();
         }
     }
 
     public void OkClicked()
     {
-        if (lastClicked != OKBTN)
-            lastClicked.GetComponent<Image>().sprite = blackArrow;
+        restoreLastClickedColor();
 
         lastClicked = OKBTN;
         OKBTN.GetComponent<Image>().sprite = redOK;
@@ -107,69 +102,30 @@ public class InteractivePanel : MonoBehaviour
 
     public void rightClicked()
     {
-        if (lastClicked != OKBTN)
-            lastClicked.GetComponent<Image>().sprite = blackArrow;
-        else
-            lastClicked.GetComponent<Image>().sprite = blackOK;
-
-        rightBTN.GetComponent<Image>().sprite = redArrow;
-
-        lastClicked = rightBTN;
-
-        code += "R";
-        setFeedbackMessage(code);
+        arrowBtnClicked('R', rightBTN);
     }
 
     public void leftClicked()
     {
-        if (lastClicked != OKBTN)
-            lastClicked.GetComponent<Image>().sprite = blackArrow;
-        else
-            lastClicked.GetComponent<Image>().sprite = blackOK;
-
-        downBTN.GetComponent<Image>().sprite = redArrow;
-
-        lastClicked = LeftTN;
-        code += "L";
-        setFeedbackMessage(code);
-        LeftTN.GetComponent<Image>().sprite = redArrow;
-
+        arrowBtnClicked('L', leftBTN);
     }
 
     public void upClicked()
     {
-        if (lastClicked != OKBTN)
-            lastClicked.GetComponent<Image>().sprite = blackArrow;
-        else
-            lastClicked.GetComponent<Image>().sprite = blackOK;
-
-        downBTN.GetComponent<Image>().sprite = redArrow;
-
-        lastClicked = upBTN;
-        code += "U";
-        setFeedbackMessage(code);
-        upBTN.GetComponent<Image>().sprite = redArrow;
+        arrowBtnClicked('U', upBTN);
 
     }
 
     public void downClicked()
     {
-        if (lastClicked != OKBTN)
-            lastClicked.GetComponent<Image>().sprite = blackArrow;
-        else
-            lastClicked.GetComponent<Image>().sprite = blackOK;
-
-        downBTN.GetComponent<Image>().sprite = redArrow;
-
-        lastClicked = downBTN;
-        code += "D";
-        setFeedbackMessage(code);
+        arrowBtnClicked('D',downBTN);
     }
 
     public void resetClicked()
     {
         code = "";
         setFeedbackMessage(code);
+        restoreLastClickedColor();
     }
 
     public void setFeedbackMessage(string message)
@@ -177,4 +133,20 @@ public class InteractivePanel : MonoBehaviour
         feedbackLabel.text = message;
     }
 
+     private void restoreLastClickedColor()
+    {
+        if (lastClicked == OKBTN)
+            lastClicked.GetComponent<Image>().sprite = blackOK;
+        else
+            lastClicked.GetComponent<Image>().sprite = blackArrow;
+    }
+
+    private void arrowBtnClicked(char c, Image img)
+    {
+        restoreLastClickedColor();
+        img.GetComponent<Image>().sprite = redArrow;
+        lastClicked = img;
+        code += c;
+        setFeedbackMessage(code);
+    }
 }
