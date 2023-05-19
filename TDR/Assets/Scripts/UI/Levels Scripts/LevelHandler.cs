@@ -22,9 +22,9 @@ public class LevelHandler : MonoBehaviour
     public GameObject chatHandler;
     [SerializeField]
     public TextMeshProUGUI teamsPassaedLabel;
-    [SerializeField]
-    public GameObject backPack;
-    public int backPackAvailableSlotInd = 1;
+    //[SerializeField]
+    //public GameObject backPack;
+    //public int backPackAvailableSlotInd = 1;
 
     public Dictionary<string, Interactable> levelObjects = new();
 
@@ -129,12 +129,6 @@ public class LevelHandler : MonoBehaviour
         Debug.Log("trying to add!");
         levelObjects.Add(name, obj);
         Debug.Log("Obj added");
-    }
-
-    public void addItemToBackpack(string photoName)
-    {
-          
-
     }
 
     //async private void createPlayer()

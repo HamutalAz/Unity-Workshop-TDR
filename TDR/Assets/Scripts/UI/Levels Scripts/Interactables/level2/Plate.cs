@@ -9,6 +9,9 @@ public class Plate : Interactable
     private bool isReadable = false;
     private string owner = null;
     public LevelHandler levelHandler;
+    [SerializeField]
+    public GameObject backPack;
+    private Vector2 deltaSize = new Vector3(1800, 1200);
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +38,7 @@ public class Plate : Interactable
                 { "key", "owner" }
             };
 
-        // todo: send request to DB to put the plate in backpack
+        // send request to DB to put the plate in backpack
         bool response = (bool) await DataBaseManager.instance.levelManager.LaunchRequest("pickUpObject", "plate", data);
 
     }
@@ -53,7 +56,10 @@ public class Plate : Interactable
             if (owner == DataBaseManager.userID)
             {
                 Debug.Log("you own the plate!");
-                // put in backPack
+                if(isReadable)
+                    backPack.GetComponent<BackPackManager>().PutInBackPack("readablePlate", deltaSize);
+                else
+                    backPack.GetComponent<BackPackManager>().PutInBackPack("unreadablePlate", deltaSize);
             }
             else
             {
