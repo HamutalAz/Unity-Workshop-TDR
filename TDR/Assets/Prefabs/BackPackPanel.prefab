@@ -353,7 +353,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Click the item you would like to take out
+  m_text: 'Right click the item you would like to take out
 
 '
   m_isRightToLeft: 0
@@ -382,7 +382,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25.3
+  m_fontSize: 26.75
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -418,7 +418,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -342.1974, y: 0, z: -93.14612, w: 0}
+  m_margin: {x: -386.4967, y: 0, z: -184.35059, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -490,7 +490,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Press E to exit
+  m_text: Press tab to exit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
@@ -791,6 +791,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53b223c40a408466193ff45bcbef75f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  placeholders:
+  - {fileID: 7128270875819915512}
+  - {fileID: 3895949153554676532}
+  - {fileID: 2377954034660057545}
+  - {fileID: 8136007710424997912}
 --- !u!1 &7128270875819915512
 GameObject:
   m_ObjectHideFlags: 0

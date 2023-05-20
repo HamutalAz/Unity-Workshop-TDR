@@ -22,9 +22,14 @@ public class LevelHandler : MonoBehaviour
     public GameObject chatHandler;
     [SerializeField]
     public TextMeshProUGUI teamsPassaedLabel;
-    //[SerializeField]
-    //public GameObject backPack;
-    //public int backPackAvailableSlotInd = 1;
+    [SerializeField]
+    public GameObject backPack;
+    [SerializeField]
+    public GameObject backPackPanel;
+    private bool isBPVisable = true;
+    private bool isBPPanelVisable = false;
+    [SerializeField]
+    GameObject player;
 
     public Dictionary<string, Interactable> levelObjects = new();
 
@@ -88,7 +93,27 @@ public class LevelHandler : MonoBehaviour
             
             i++;
         }
-       
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            Debug.Log("toggle back pack visability!!!");
+
+            isBPPanelVisable = !isBPPanelVisable;
+            backPackPanel.SetActive(isBPPanelVisable);
+
+            isBPVisable = !isBPVisable;
+            backPack.SetActive(isBPVisable);
+
+            InputManager input = player.GetComponent<InputManager>();
+
+            // able/disable player's movment
+            if (isBPPanelVisable)
+                input.OnDisable();
+            else
+                input.OnEnable();
+
+        }
+
     }
 
     public void SetPlayersLoc(Dictionary<string, Vector3> playersLoc)
