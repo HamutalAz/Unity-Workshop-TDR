@@ -13,6 +13,7 @@ public class BackPackManager : MonoBehaviour
     List<GameObject> placeholders;
     [SerializeField]
     BackPackPanel bpPanel;
+    Dictionary<string, GameObject> imageToObjectMap = new();
 
     // Start is called before the first frame update
     void Start()
@@ -32,7 +33,8 @@ public class BackPackManager : MonoBehaviour
             return;
         }
 
-        createNewObjImage(imageName, delta, placeholders[empty]);
+        GameObject img = createNewObjImage(imageName, delta, placeholders[empty]);
+        imageToObjectMap.Add(objName, img);
 
         empty++;
 
@@ -57,4 +59,12 @@ public class BackPackManager : MonoBehaviour
 
         return imgObject;
     }
+
+    public void deleteFromBackPack(string gameObjName)
+    {
+        imageToObjectMap.Remove(gameObjName);
+        Destroy(imageToObjectMap[gameObjName]);
+        empty--;
+    }
+
 }

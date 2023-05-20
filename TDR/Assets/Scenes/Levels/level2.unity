@@ -5365,10 +5365,32 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1645774437419092379, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
+      propertyPath: m_text
+      value: 'Double click on  the item you would like to take out
+
+'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1645774437419092379, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
+      propertyPath: m_fontSize
+      value: 25.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1645774437419092379, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
+      propertyPath: m_margin.x
+      value: -431.0459
+      objectReference: {fileID: 0}
     - target: {fileID: 1645774438704595285, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
       propertyPath: m_RootOrder
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 1645774438704595286, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6236978616452920787, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
+      propertyPath: backPack
+      value: 
+      objectReference: {fileID: 149633778}
     - target: {fileID: 8463694648003185188, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -0.00012207031
