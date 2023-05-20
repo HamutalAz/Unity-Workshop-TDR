@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.LowLevel;
 using UnityEngine.UI;
 
@@ -24,22 +25,22 @@ public class BackPackManager : MonoBehaviour
     {
     }
 
-    public void PutInBackPack(string objName, Vector2 delta)
+    public void PutInBackPack(string imageName, Vector2 delta, string objName)
     {
         if (empty == placeholders.Count) { 
             Debug.Log("**** BACKPACK IS FULL!!!");
             return;
         }
 
-        createNewObjImage(objName, delta, placeholders[empty]);
+        createNewObjImage(imageName, delta, placeholders[empty]);
 
         empty++;
 
-        bpPanel.GetComponent<BackPackPanel>().PutInBackPack(objName, delta);
+        bpPanel.GetComponent<BackPackPanel>().PutInBackPack(imageName, delta, objName);
         
     }
 
-    static public void createNewObjImage(string objName, Vector2 delta, GameObject parent)
+    static public GameObject createNewObjImage(string objName, Vector2 delta, GameObject parent)
     {
         GameObject imgObject = new GameObject(objName);
 
@@ -53,5 +54,7 @@ public class BackPackManager : MonoBehaviour
         Texture2D tex = Resources.Load<Texture2D>(objName);
         image.sprite = Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f));
         trans.transform.SetParent(parent.transform);            // setting parent
+
+        return imgObject;
     }
 }

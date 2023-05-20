@@ -57,17 +57,18 @@ public class Plate : Interactable
             {
                 Debug.Log("you own the plate!");
                 if(isReadable)
-                    backPack.GetComponent<BackPackManager>().PutInBackPack("readablePlate", deltaSize);
+                    backPack.GetComponent<BackPackManager>().PutInBackPack("readablePlate", deltaSize, "plate");
                 else
-                    backPack.GetComponent<BackPackManager>().PutInBackPack("unreadablePlate", deltaSize);
+                    backPack.GetComponent<BackPackManager>().PutInBackPack("unreadablePlate", deltaSize, "plate");
             }
             else
             {
                 Debug.Log("someone else owns the plate!");
                 
             }
-            // make it unactive (unviable)
+            // make it unactive (unvisable)
             gameObject.SetActive(!gameObject.activeSelf);
+            Debug.Log("is plate activee?" + isActiveAndEnabled);
         }
 
         Debug.Log("owner:" + owner);
