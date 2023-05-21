@@ -10,10 +10,12 @@ public class BackPackManager : MonoBehaviour
 {
     private int empty = 0;
     [SerializeField]
-    List<GameObject> placeholders;
+    List<GameObject> sideBarPlaceHolders;
     [SerializeField]
-    BackPackPanel bpPanel;
-    Dictionary<string, GameObject> imageToObjectMap = new();
+    List<GameObject> panelPlaceHolders;
+    //BackPackPanel bpPanel;
+    Dictionary<string, GameObject> nameToImgMap = new();
+    Dictionary<GameObject, string> imgToObjName = new();
 
     // Start is called before the first frame update
     void Start()
@@ -28,18 +30,23 @@ public class BackPackManager : MonoBehaviour
 
     public void PutInBackPack(string imageName, Vector2 delta, string objName)
     {
-        if (empty == placeholders.Count) { 
+        if (empty == sideBarPlaceHolders.Count) { 
             Debug.Log("**** BACKPACK IS FULL!!!");
             return;
         }
 
-        GameObject img = createNewObjImage(imageName, delta, placeholders[empty]);
-        imageToObjectMap.Add(objName, img);
+        // put image in backpack side bar
+        GameObject img = createNewObjImage(imageName, delta, sideBarPlaceHolders[empty]);
+        nameToImgMap.Add(objName, img);
+
+        // put image in backpack panel
+        GameObject img2 = createNewObjImage(imageName, delta / 2.2f, panelPlaceHolders[empty]);
+        imgToObjName.Add(img2, objName);
+
+        // add event listener to clicking on the img in the panel
+        addEventListener(img2);
 
         empty++;
-
-        bpPanel.GetComponent<BackPackPanel>().PutInBackPack(imageName, delta, objName);
-        
     }
 
     static public GameObject createNewObjImage(string objName, Vector2 delta, GameObject parent)
@@ -60,10 +67,54 @@ public class BackPackManager : MonoBehaviour
         return imgObject;
     }
 
-    public void deleteFromBackPack(string gameObjName)
+    private void addEventListener(GameObject img)
     {
-        imageToObjectMap.Remove(gameObjName);
-        Destroy(imageToObjectMap[gameObjName]);
+        try
+        {
+            Debug.Log("adding event listener");
+            EventTrigger trigger = img.AddComponent<EventTrigger>();
+            EventTrigger.Entry entry = new EventTrigger.Entry();
+            entry.eventID = EventTriggerType.PointerClick;
+            entry.callback.AddListener((eventData) => {
+                dropOutOfBackPack(img);
+            });
+
+            trigger.triggers.Add(entry);
+        }
+        catch (System.Exception e)
+        {
+            Debug.Log(e.Data);
+            Debug.Log(e.StackTrace);
+        }
+        Debug.Log("Event listener added");
+    }
+
+    private async void dropOutOfBackPack(GameObject gameObject)
+    {
+        string objectName = imgToObjName[gameObject];
+        GameObject sideBarImage = nameToImgMap[objectName];
+        GameObject panelObject = gameObject;
+
+        Debug.Log("item " + imgToObjName[gameObject] + " about to be drop out of the back pack.");
+
+        // create dictionary with the data we want to send to the DB
+        Dictionary<string, object> data = new Dictionary<string, object>
+        {
+                { "owner", null },
+                { "key", "owner" }
+        };
+
+        // send request to server to drop object
+        bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("dropObject", objectName, data); ;
+
+        // delete object from backpack side bar & destroy image
+        nameToImgMap.Remove(objectName);
+        Destroy(sideBarImage);
+
+        // delete object from backpack panel & destroy image
+        imgToObjName.Remove(panelObject);
+        Destroy(panelObject);
+
         empty--;
     }
 

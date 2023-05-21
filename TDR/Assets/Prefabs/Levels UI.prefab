@@ -2453,7 +2453,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8463694648661928212}
   m_HandleRect: {fileID: 8463694648661928215}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -2496,11 +2496,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6961079265201146612, guid: 6f607d125135849ca8c9659d3dbf3021, type: 3}
       propertyPath: m_SizeDelta.x
-      value: -868.0754
+      value: -868.07544
       objectReference: {fileID: 0}
     - target: {fileID: 6961079265201146612, guid: 6f607d125135849ca8c9659d3dbf3021, type: 3}
       propertyPath: m_SizeDelta.y
       value: -486.6839
+      objectReference: {fileID: 0}
+    - target: {fileID: 6961079265201146612, guid: 6f607d125135849ca8c9659d3dbf3021, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6961079265201146612, guid: 6f607d125135849ca8c9659d3dbf3021, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2520,15 +2524,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6961079265201146612, guid: 6f607d125135849ca8c9659d3dbf3021, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6961079265201146612, guid: 6f607d125135849ca8c9659d3dbf3021, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6961079265201146612, guid: 6f607d125135849ca8c9659d3dbf3021, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6961079265201146612, guid: 6f607d125135849ca8c9659d3dbf3021, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -2558,7 +2562,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2360586137067798130, guid: 6f607d125135849ca8c9659d3dbf3021, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6f607d125135849ca8c9659d3dbf3021, type: 3}
 --- !u!224 &1645774438704595285 stripped
 RectTransform:

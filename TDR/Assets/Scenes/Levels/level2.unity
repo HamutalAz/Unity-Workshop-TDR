@@ -5594,12 +5594,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 568c5c7d4ce164a0185118c78bcbeeea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  placeholders:
+  sideBarPlaceHolders:
   - {fileID: 149633782}
   - {fileID: 149633781}
   - {fileID: 149633780}
   - {fileID: 149633779}
-  bpPanel: {fileID: 1056689493}
+  panelPlaceHolders:
+  - {fileID: 1951843626}
+  - {fileID: 1951843625}
+  - {fileID: 1951843624}
+  - {fileID: 1951843623}
 --- !u!1 &156862597
 GameObject:
   m_ObjectHideFlags: 0
@@ -19983,17 +19987,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.0000002, y: 1.5603552, z: 1.9999999}
   m_Center: {x: 4.3198655e-21, y: 0.00000050663954, z: 0}
---- !u!114 &1056689493 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6236978616452920787, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
-  m_PrefabInstance: {fileID: 149633775}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1326368395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53b223c40a408466193ff45bcbef75f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!43 &1069267687
 Mesh:
   m_ObjectHideFlags: 0
@@ -31703,6 +31696,26 @@ Transform:
   m_Father: {fileID: 1118752970}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1951843623 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 478692676401212345, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
+  m_PrefabInstance: {fileID: 149633775}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1951843624 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6290542470939781736, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
+  m_PrefabInstance: {fileID: 149633775}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1951843625 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4638002318545858709, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
+  m_PrefabInstance: {fileID: 149633775}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1951843626 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1486463906540106585, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
+  m_PrefabInstance: {fileID: 149633775}
+  m_PrefabAsset: {fileID: 0}
 --- !u!43 &1959433470
 Mesh:
   m_ObjectHideFlags: 0

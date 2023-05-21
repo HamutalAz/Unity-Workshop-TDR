@@ -705,7 +705,6 @@ GameObject:
   - component: {fileID: 6961079265201146612}
   - component: {fileID: 6961079265201146570}
   - component: {fileID: 6961079265201146613}
-  - component: {fileID: 2360586137067798130}
   m_Layer: 5
   m_Name: BackPackPanel
   m_TagString: Untagged
@@ -779,23 +778,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &2360586137067798130
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6961079265201146615}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 53b223c40a408466193ff45bcbef75f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  placeholders:
-  - {fileID: 7128270875819915512}
-  - {fileID: 3895949153554676532}
-  - {fileID: 2377954034660057545}
-  - {fileID: 8136007710424997912}
 --- !u!1 &7128270875819915512
 GameObject:
   m_ObjectHideFlags: 0
