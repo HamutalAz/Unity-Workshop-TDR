@@ -58,6 +58,11 @@ function createNewGame(arr,numOfPlayers) {
   currentGameId = newGameRef.id;
   const newGameMembersRef = newGameRef.collection("game_members");
   const promises = [];
+  const values = newGameRef.set({
+    currentLevelInd: 0,
+    numberOfPlayers: numOfPlayers
+  });
+  promises.push(values);
   arr.forEach(async (val) => {
     const p = newGameMembersRef.doc(val.id).set({
       userName: val.userName,
@@ -98,9 +103,12 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
 
   let isFinal = true;
   let numberOfPlayersInRoom = 2; //todo: change to 1
+  let currentGameInfo = await db.collection("Games").doc(gameId).get();
+  let currentLevel = levelsOrder[currentGameInfo.data().currentLevelInd];
   if(numOfPlayers > 3){
       isFinal = false;
-      numberOfPlayersInRoom = setNumberOfPlayersInRoom(numOfPlayers);
+      
+      numberOfPlayersInRoom = setNumberOfPlayersInRoom(numOfPlayers,currentLevel);
   }
   const numberOfRoomsToBeEliminated = Math.floor(numOfPlayers/numberOfPlayersInRoom/2);
   const numberOfRoomsToQualify = numOfPlayers/numberOfPlayersInRoom - numberOfRoomsToBeEliminated;
@@ -108,8 +116,7 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
   /*update all game info needed for game => number of players, players in room, players to be eliminated 
   during this stage of the game, number of rooms, is final or not, etc...
   */
-  await db.collection("Games").doc(gameId).set({
-    numberOfPlayers: numOfPlayers,
+  await db.collection("Games").doc(gameId).update({
     numberOfPlayersInARoom: numberOfPlayersInRoom,
     numberOfRooms: numOfPlayers/numberOfPlayersInRoom,
     numberOfRoomsToQualify: numberOfRoomsToQualify,
@@ -117,7 +124,6 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
     Qualified: 0,
     isFinal: isFinal,
     levelsOrder: levelsOrder,
-    currentLevelInd: 0,
   });
   
   const promises = [];
@@ -168,7 +174,7 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
   await Promise.all(promises);
   console.log("At MatchMaking: finished creating rooms, and updating game and users!");
   
-  await setPlayersLocationInRooms(levelsOrder[0]); //todo: change to levelsOrder[0]
+  await setPlayersLocationInRooms(currentLevel); //todo: change to levelsOrder[0]
   console.log("At MatchMaking: finished players location creation!");
 
   //update about game: ready to load the game scene, all data is ready!
@@ -196,21 +202,43 @@ async function setPlayersLocationInRooms(currentLevel){
   const levelDoc = db.collection("Levels").doc(currentLevel);
   console.log("levelDoc" + levelDoc);
   let data = (await levelDoc.get()).data();
+  let subRoom = data.subRooms;
   let xArr = data.roomBordersX;
   let y = data.playerYVal;
   let zArr = data.roomBordersZ;
+  let xArr2 = null;
+  let zArr2 = null;
+  if(subRoom){
+    xArr2 = data.roomBordersX2;
+    zArr2 = data.roomBordersZ2;
+  }
   let loc = null;
-  console.log("xarr, y, zarr: " + xArr + y +zArr);
-
+  //console.log("xarr, y, zarr: " + xArr + y +zArr);
   promises = []
-  usersIDs.forEach(async(id) => {
-    loc = generateRandomLoc(xArr, y, zArr);
-    const p = db.collection("Users").doc(id).update({
+  for (var i = 0; i < usersIDs.length; i++) {
+    if(subRoom){
+      if(i%2 == 0){
+        loc = generateRandomLoc(xArr, y, zArr);
+      } else{
+        loc = generateRandomLoc(xArr2, y, zArr2);
+      }
+    } else{
+      loc = generateRandomLoc(xArr, y, zArr);
+    }
+    const p = db.collection("Users").doc(usersIDs[i]).update({
       location: loc
     });
     promises.push(p);
-  });
-  return Promise.all(promises);
+  }
+  return Promise.all(promises);  
+  // usersIDs.forEach(async(id) => {
+  //   loc = generateRandomLoc(xArr, y, zArr);
+  //   const p = db.collection("Users").doc(id).update({
+  //     location: loc
+  //   });
+  //   promises.push(p);
+  // });
+  
 }
 
 async function copyAllLevelObjects(currentLevel, roomRef){
@@ -230,13 +258,16 @@ async function copyAllLevelObjects(currentLevel, roomRef){
 
 
 //All this functions do not contact with database, they are logic functions!~
-function setNumberOfPlayersInRoom(numOfPlayers){
+function setNumberOfPlayersInRoom(numOfPlayers, currentLevel){
   
   if(numOfPlayers <= 3){
     return 1;
   }
-  const choices = [1];
   
+  const choices = [];
+  if(currentLevel != "level2"){
+    choices.push(1);
+  }
   if(numOfPlayers % 2 == 0)
       choices.push(2);
   
@@ -276,15 +307,19 @@ function shuffle(array) {
  * @return {levelsOrder} - the order of the levels in which we'll play the game
  */
 function shuffleLevels() {
-  const n = 1; // change to amount of levels we create
-  let levelsOrder = [];
-
+  const n = 2; // change to amount of levels we create
+  let level2 = [];
+  level2[0] = "level2";
+  let levelsOrder = ["level1"];
+  return level2.concat(shuffleArray(levelsOrder));
   // initialize array // todo: uncomment below line & delete following line
-  for (let i = 0; i < 2; i++) {
-      levelsOrder[i] = "level" + Number(i + 1);
-  }
+  // for (let i = 0; i < 2; i++) {
+  //     levelsOrder[i] = "level" + Number(i + 1);
+  // }
   // levelsOrder[0] = "level2";
-  return shuffleArray(levelsOrder); // shuffle the array
+  //return shuffleArray(levelsOrder); // shuffle the array
+
+  // return levelsOrder;
 }
 
 

@@ -61,7 +61,7 @@ public class LevelHandler : MonoBehaviour
 
             GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
             otherPlayersAvatars.Add(avatar);
-
+            Debug.Log("about to put a player in:" + playerLoc);
             avatar.transform.position = playerLoc;
             //Debug.Log("LH: createPlayersAvatars(): avatar created at: " + playerLoc);
 
