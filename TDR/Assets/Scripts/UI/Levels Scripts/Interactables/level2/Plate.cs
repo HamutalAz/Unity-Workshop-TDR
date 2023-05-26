@@ -56,6 +56,7 @@ public class Plate : Interactable
             if (owner == DataBaseManager.userID)
             {
                 Debug.Log("you own the plate!");
+
                 if(isReadable)
                     backPack.GetComponent<BackPackManager>().PutInBackPack("readablePlate", deltaSize, "plate");
                 else
@@ -67,10 +68,18 @@ public class Plate : Interactable
                 
             }
             // make it unactive (unvisable)
-            gameObject.SetActive(!gameObject.activeSelf);
+            gameObject.SetActive(false);
             Debug.Log("is plate activee?" + isActiveAndEnabled);
+        }
+        else
+        {
+            //update plate's new location
+            gameObject.transform.position = DataBaseManager.instance.levelManager.stringToVec((string)data["location"]);
+            //make plate active again.
+            gameObject.SetActive(true);
         }
 
         Debug.Log("owner:" + owner);
     }
+
 }

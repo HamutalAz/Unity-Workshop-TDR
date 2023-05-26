@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.LowLevel;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class BackPackManager : MonoBehaviour
@@ -97,11 +98,23 @@ public class BackPackManager : MonoBehaviour
 
         Debug.Log("item " + imgToObjName[gameObject] + " about to be drop out of the back pack.");
 
+        GameObject player = DataBaseManager.instance.levelHandler.player;
+        Vector3 playerPos = player.transform.position;
+        Vector3 playerDirection = player.transform.forward;
+        float spawnDistance = 1;
+        string levelName = SceneManager.GetActiveScene().name;
+
         // create dictionary with the data we want to send to the DB
         Dictionary<string, object> data = new Dictionary<string, object>
         {
                 { "owner", null },
-                { "key", "owner" }
+                { "key", "owner" },
+                { "playerLocationX", playerPos.x },
+                { "playerLocationZ", playerPos.z },
+                { "playerDirectionX", playerDirection.x},
+                { "playerDirectionZ", playerDirection.z},
+                { "desiredY", 0 },
+                { "level" , levelName }
         };
 
         // send request to server to drop object
@@ -116,6 +129,7 @@ public class BackPackManager : MonoBehaviour
         Destroy(panelObject);
 
         empty--;
+        Vector3 spawnPos = playerPos + playerDirection * spawnDistance;
     }
 
 }

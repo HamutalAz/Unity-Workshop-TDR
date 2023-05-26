@@ -52,7 +52,10 @@ exports.pickUpObject = regionalFunctions.https.onCall(async(data) => {
     if(currentOwner == null){ // object is free to grab.
       console.log("entered 'if'. about to pickUp object.");
       isPickedUp = true;
-      const p = doc.ref.update({[key] : userId});
+      const p = doc.ref.update({
+        [key] : userId,
+        location : null
+      });
       promises.push(p);
     }
   });
@@ -68,6 +71,22 @@ exports.dropObject = regionalFunctions.https.onCall(async(data) => {
   const roomId = data.roomID;
   const key = data.data.key;
   const objectName = data.objectName; 
+
+  const level = data.data.level;
+  const playerLocationX = data.data.playerLocationX;
+  const playerLocationZ = data.data.playerLocationZ;
+  const playerDirectionX = data.data.playerDirectionX;
+  const playerDirectionZ = data.data.playerDirectionZ;
+  const desiredY = data.data.desiredY
+
+  console.log("Player's locationX: " + playerLocationX);
+  console.log("Player's locationZ: " + playerLocationZ);
+  console.log("Player's directionX: " + playerDirectionX);
+  console.log("Player's directionZ: " + playerDirectionZ);
+  console.log("current level:" + level);
+
+
+
   let isDropped = false;
   const docs = await db.collection("Rooms").doc(roomId).collection("room_objects")
   .where('name','==', objectName).get();
@@ -79,7 +98,11 @@ exports.dropObject = regionalFunctions.https.onCall(async(data) => {
     if(currentOwner == userId){ // object is free to drop.
       console.log("entered 'if'. about to drop object.");
       isDropped = true;
-      const p = doc.ref.update({[key] : null});
+      const newLocation = await getValidLocation(playerLocationX,playerLocationZ,playerDirectionX, playerDirectionZ ,level, desiredY);
+      const p = doc.ref.update({
+        [key] : null,
+        location : newLocation
+      });
       promises.push(p);
     }
   });
@@ -118,3 +141,41 @@ exports.checkCode = regionalFunctions.https.onCall(async(data) => {
   return isCodeValid;
 });
 
+async function getValidLocation(playerLocationX, playerLocationZ, playerDirectionX, playerDirectionZ, level, desiredY){
+  const levelDoc = await db.collection("Levels").doc(level).get();
+  let borderX, borderZ;
+  if(playerLocationZ <= 0){
+    borderX = levelDoc.data().roomBordersX;
+    borderZ = levelDoc.data().roomBordersZ;
+  } else{
+    borderX = levelDoc.data().roomBordersX2;
+    borderZ = levelDoc.data().roomBordersZ2;
+  }
+  let desiredLocationX = playerLocationX + playerDirectionX;
+  let desiredLocationZ = playerLocationZ + playerDirectionZ;
+  if(checkIfLocationIsValid(desiredLocationX,desiredLocationZ,borderX,borderZ)){
+    return getLocation(desiredLocationX,desiredY,desiredLocationZ);
+  }
+  desiredLocationX = desiredLocationX - (2*playerDirectionX);
+  if(checkIfLocationIsValid(desiredLocationX,desiredLocationZ,borderX,borderZ)){
+    return getLocation(desiredLocationX,desiredY,desiredLocationZ);
+  }
+  desiredLocationZ = desiredLocationZ - (2*playerDirectionZ);
+  if(checkIfLocationIsValid(desiredLocationX,desiredLocationZ,borderX,borderZ)){
+    return getLocation(desiredLocationX,desiredY,desiredLocationZ);
+  }
+  desiredLocationX = desiredLocationX + (2*desiredLocationX);
+  if(checkIfLocationIsValid(desiredLocationX,desiredLocationZ,borderX,borderZ)){
+    return getLocation(desiredLocationX,desiredY,desiredLocationZ);
+  }
+  console.log("problem with locations, no location was found valid!");
+  return getLocation(borderX[0], desiredY, borderz[0]);
+}
+
+function checkIfLocationIsValid(x,z,borderX,borderZ){
+  return (borderX[0]<=x && x <= borderX[1]) && (borderZ[0]<=z && z<=borderZ[1]);
+}
+
+function getLocation(x,y,z){
+  return "(" + x.toFixed(2) + ", " + y + ", " + z.toFixed(2) + ")";
+}

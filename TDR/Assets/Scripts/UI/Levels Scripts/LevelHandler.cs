@@ -29,9 +29,10 @@ public class LevelHandler : MonoBehaviour
     private bool isBPVisable = true;
     private bool isBPPanelVisable = false;
     [SerializeField]
-    GameObject player;
+    public GameObject player;
 
     public Dictionary<string, Interactable> levelObjects = new();
+
 
     // Start is called before the first frame update
     void Start()
@@ -42,6 +43,8 @@ public class LevelHandler : MonoBehaviour
         DataBaseManager.instance.levelManager.listenOnRoomObjects();
 
         DataBaseManager.instance.levelManager.getTeamPassedInfo();
+
+
     }
 
     // create player's "avatar" and add them to the scene

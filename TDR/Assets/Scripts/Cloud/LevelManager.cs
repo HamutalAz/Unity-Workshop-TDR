@@ -100,7 +100,7 @@ public class LevelManager : MonoBehaviour
     }
 
     // convert a string represents a 3D vector into a Vector3
-    private Vector3 stringToVec(string s)
+    public Vector3 stringToVec(string s)
     {
         string[] temp = s.Substring(1, s.Length - 2).Split(',');
         return new Vector3(float.Parse(temp[0]), float.Parse(temp[1]), float.Parse(temp[2]));
