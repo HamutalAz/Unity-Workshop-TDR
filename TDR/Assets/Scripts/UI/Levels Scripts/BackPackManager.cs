@@ -18,6 +18,11 @@ public class BackPackManager : MonoBehaviour
     Dictionary<string, GameObject> nameToImgMap = new();
     Dictionary<GameObject, string> imgToObjName = new();
 
+    // backPack double click data
+    float clicked = 0;
+    float clicktime = 0;
+    float clickdelay = 0.5f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -77,7 +82,20 @@ public class BackPackManager : MonoBehaviour
             EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = EventTriggerType.PointerClick;
             entry.callback.AddListener((eventData) => {
-                dropOutOfBackPack(img);
+
+                clicked++;
+
+                if (clicked == 1)
+                    clicktime = Time.time;
+
+                if (clicked > 1 && Time.time - clicktime < clickdelay)
+                {
+                    clicked = 0;
+                    clicktime = 0;
+                    dropOutOfBackPack(img);
+                }
+                else if (clicked > 2 || Time.time - clicktime > 1)
+                    clicked = 0;
             });
 
             trigger.triggers.Add(entry);
@@ -120,16 +138,20 @@ public class BackPackManager : MonoBehaviour
         // send request to server to drop object
         bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("dropObject", objectName, data); ;
 
-        // delete object from backpack side bar & destroy image
-        nameToImgMap.Remove(objectName);
-        Destroy(sideBarImage);
+        if (response) {
 
-        // delete object from backpack panel & destroy image
-        imgToObjName.Remove(panelObject);
-        Destroy(panelObject);
+            // delete object from backpack side bar & destroy image
+            nameToImgMap.Remove(objectName);
+            Destroy(sideBarImage);
 
-        empty--;
-        Vector3 spawnPos = playerPos + playerDirection * spawnDistance;
+            // delete object from backpack panel & destroy image
+            imgToObjName.Remove(panelObject);
+            Destroy(panelObject);
+
+            empty--;
+
+            Vector3 spawnPos = playerPos + playerDirection * spawnDistance;
+        }
     }
 
 }

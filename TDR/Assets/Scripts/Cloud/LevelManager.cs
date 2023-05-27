@@ -228,7 +228,7 @@ public class LevelManager : MonoBehaviour
         return await userDoc.GetSnapshotAsync().ContinueWithOnMainThread(task =>
         {
             string location = task.Result.GetValue<string>("location");
-            Debug.Log("111: location is:" + location);
+            Debug.Log("******* player location from DB is: " + location);
             return stringToVec(location);
         });        
     }

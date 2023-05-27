@@ -13,8 +13,6 @@ public class Box : Interactable
     public LevelHandler levelHandler;
     private bool isPanelVisable = false;
     [SerializeField]
-    private GameObject player;
-    [SerializeField]
     private GameObject plate;
 
 
@@ -80,14 +78,10 @@ public class Box : Interactable
 
     public void toggleVisability()
     {
-        InputManager input = player.GetComponent<InputManager>();
         isPanelVisable = !isPanelVisable;
 
         // able/disable player's movment
-        if (isPanelVisable)
-            input.OnDisable();
-        else
-            input.OnEnable();
+        levelHandler.togglePlayerInputSystem(isPanelVisable);
 
         panel.SetActive(isPanelVisable);
 

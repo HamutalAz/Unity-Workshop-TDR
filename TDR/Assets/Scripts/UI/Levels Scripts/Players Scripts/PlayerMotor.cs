@@ -11,13 +11,16 @@ public class PlayerMotor : MonoBehaviour
     public float speed = 5;
     public float gravity = -9.8f;
     public float jumpHeight = 1.5f;
-
+    private bool isLocSet = false;
     // Start is called before the first frame update
     async void Start()
     {
         controller = GetComponent<CharacterController>();
+       
         Vector3 loc = await DataBaseManager.instance.levelManager.getInitialPlayerLoc();
-        controller.Move(transform.TransformDirection(loc) * speed * Time.deltaTime);
+        transform.position = loc;
+        Physics.SyncTransforms();
+        //controller.Move(transform.TransformDirection(loc) * speed * Time.deltaTime);
     }
 
     // Update is called once per frame

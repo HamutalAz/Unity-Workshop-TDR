@@ -30,6 +30,8 @@ public class LevelHandler : MonoBehaviour
     private bool isBPPanelVisable = false;
     [SerializeField]
     public GameObject player;
+    //[SerializeField]
+    //public TextMeshProUGUI promptText;
 
     public Dictionary<string, Interactable> levelObjects = new();
 
@@ -40,8 +42,8 @@ public class LevelHandler : MonoBehaviour
         Debug.Log("At LevelHandler.start()");
         DataBaseManager.instance.setLevelHandler(this);
         createPlayersAvatars();
+        //createPlayer();
         DataBaseManager.instance.levelManager.listenOnRoomObjects();
-
         DataBaseManager.instance.levelManager.getTeamPassedInfo();
 
 
@@ -64,7 +66,7 @@ public class LevelHandler : MonoBehaviour
 
             GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
             otherPlayersAvatars.Add(avatar);
-            Debug.Log("about to put a player in:" + playerLoc);
+            Debug.Log("******* about to put another player in:" + playerLoc);
             avatar.transform.position = playerLoc;
             //Debug.Log("LH: createPlayersAvatars(): avatar created at: " + playerLoc);
 
@@ -107,16 +109,22 @@ public class LevelHandler : MonoBehaviour
             isBPVisable = !isBPVisable;
             backPack.SetActive(isBPVisable);
 
-            InputManager input = player.GetComponent<InputManager>();
-
-            // able/disable player's movment
-            if (isBPPanelVisable)
-                input.OnDisable();
-            else
-                input.OnEnable();
-
+            togglePlayerInputSystem(isBPPanelVisable);
         }
 
+    }
+
+    public bool togglePlayerInputSystem(bool val)
+    {
+        InputManager input = player.GetComponent<InputManager>();
+
+        // able/disable player's movment
+        if (val)
+            input.OnDisable();
+        else
+            input.OnEnable();
+
+        return input.isActiveAndEnabled;
     }
 
     public void SetPlayersLoc(Dictionary<string, Vector3> playersLoc)
@@ -165,8 +173,16 @@ public class LevelHandler : MonoBehaviour
     //    GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("Player"));
     //    GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
 
-    //    avatar.transform.position = loc;
+    //    Vector3 newPos = new Vector3(loc.x, loc.y, loc.z);
+    //    avatar.transform.position = newPos;
+
+    //    //Debug.Log("******* putting player in: " + loc);
+    //    Debug.Log("******* avatar.transform.position: " + avatar.transform.position);
+
     //    Destroy(referencePlayer);
-    //    (Player)referencePlayer.
+    //    player = avatar;
+
+    //    player.GetComponent<PlayerUI>().setPromptText(promptText);
+    //    player.transform.parent = null;
     //}
 }
