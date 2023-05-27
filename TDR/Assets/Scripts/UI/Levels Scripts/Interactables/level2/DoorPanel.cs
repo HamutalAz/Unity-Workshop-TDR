@@ -8,6 +8,8 @@ public class DoorPanel : Interactable
 //public class RedButton : MonoBehaviour
 {
     public LevelHandler levelHandler;
+    [SerializeField]
+    public GameObject backPack;
 
     // Start is called before the first frame update
     void Start()
@@ -21,12 +23,17 @@ public class DoorPanel : Interactable
 
     }
 
-    protected override async void Interact()
+    protected override void Interact()
     {
         Debug.Log("interact with doorPanel!!!");
 
-        
+        Vector3 loc = transform.position;
+        Vector3 rot = new Vector3(0, 0, 90); // todo: isOK?
+
+        backPack.GetComponent<BackPackManager>().dropItemInLoc(loc, rot);
+
     }
+
     // Apply received changes
     public override void UpdateUI(Dictionary<string, object> data)
     {

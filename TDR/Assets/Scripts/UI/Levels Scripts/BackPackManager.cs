@@ -17,11 +17,18 @@ public class BackPackManager : MonoBehaviour
     //BackPackPanel bpPanel;
     Dictionary<string, GameObject> nameToImgMap = new();
     Dictionary<GameObject, string> imgToObjName = new();
+    [SerializeField]
+    LevelHandler levelHandler;
 
     // backPack double click data
     float clicked = 0;
     float clicktime = 0;
     float clickdelay = 0.5f;
+
+    bool dropInLoc = false;
+    Vector3 location = Vector3.zero;
+    Vector3 rotation = Vector3.zero;
+
 
     // Start is called before the first frame update
     void Start()
@@ -32,6 +39,7 @@ public class BackPackManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+       
     }
 
     public void PutInBackPack(string imageName, Vector2 delta, string objName)
@@ -113,17 +121,19 @@ public class BackPackManager : MonoBehaviour
         string objectName = imgToObjName[gameObject];
         GameObject sideBarImage = nameToImgMap[objectName];
         GameObject panelObject = gameObject;
+        string levelName = SceneManager.GetActiveScene().name;
+        Dictionary<string, object> data;
 
         Debug.Log("item " + imgToObjName[gameObject] + " about to be drop out of the back pack.");
 
-        GameObject player = DataBaseManager.instance.levelHandler.player;
-        Vector3 playerPos = player.transform.position;
-        Vector3 playerDirection = player.transform.forward;
-        float spawnDistance = 1;
-        string levelName = SceneManager.GetActiveScene().name;
+        if (!dropInLoc)
+        {
+            GameObject player = DataBaseManager.instance.levelHandler.player;
+            Vector3 playerPos = player.transform.position;
+            Vector3 playerDirection = player.transform.forward;
 
-        // create dictionary with the data we want to send to the DB
-        Dictionary<string, object> data = new Dictionary<string, object>
+            // create dictionary with the data we want to send to the DB
+            data = new Dictionary<string, object>
         {
                 { "owner", null },
                 { "key", "owner" },
@@ -132,8 +142,28 @@ public class BackPackManager : MonoBehaviour
                 { "playerDirectionX", playerDirection.x},
                 { "playerDirectionZ", playerDirection.z},
                 { "desiredY", 0 },
-                { "level" , levelName }
+                { "level" , levelName },
+                { "dropInLoc" , dropInLoc }
+
         };
+        }
+        else
+        {
+            // create dictionary with the data we want to send to the DB
+            data = new Dictionary<string, object>
+        {
+                { "owner", null },
+                { "key", "owner" },
+                { "desiredX", location.x },
+                { "desiredY", location.y},
+                { "desiredZ", location.z },
+                { "rotationX", rotation.x},
+                { "rotationY", rotation.y },
+                { "rotationZ", rotation.z},
+                { "level" , levelName },
+                { "dropInLoc" , dropInLoc }
+        };
+        }
 
         // send request to server to drop object
         bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("dropObject", objectName, data); ;
@@ -150,8 +180,21 @@ public class BackPackManager : MonoBehaviour
 
             empty--;
 
-            Vector3 spawnPos = playerPos + playerDirection * spawnDistance;
+            levelHandler.toggleBackPackVisability();
+
+            dropInLoc = false;
         }
+    }
+
+    public void dropItemInLoc(Vector3 loc, Vector3 rot)
+    {
+        dropInLoc = true;
+        location = loc;
+        rotation = rot;
+
+        levelHandler.toggleBackPackVisability();
+
+        // todo: if tab repressed - it doesn't change dropInLoc
     }
 
 }

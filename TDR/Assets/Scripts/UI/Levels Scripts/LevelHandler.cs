@@ -101,17 +101,22 @@ public class LevelHandler : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            Debug.Log("toggle back pack visability!!!");
-
-            isBPPanelVisable = !isBPPanelVisable;
-            backPackPanel.SetActive(isBPPanelVisable);
-
-            isBPVisable = !isBPVisable;
-            backPack.SetActive(isBPVisable);
-
-            togglePlayerInputSystem(isBPPanelVisable);
+            toggleBackPackVisability();
         }
 
+    }
+
+    public void toggleBackPackVisability()
+    {
+        Debug.Log("toggle back pack visability!!!");
+
+        isBPPanelVisable = !isBPPanelVisable;
+        backPackPanel.SetActive(isBPPanelVisable);
+
+        isBPVisable = !isBPVisable;
+        backPack.SetActive(isBPVisable);
+
+        togglePlayerInputSystem(isBPPanelVisable);
     }
 
     public bool togglePlayerInputSystem(bool val)

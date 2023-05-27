@@ -11,7 +11,7 @@ public class PlayerMotor : MonoBehaviour
     public float speed = 5;
     public float gravity = -9.8f;
     public float jumpHeight = 1.5f;
-    private bool isLocSet = false;
+
     // Start is called before the first frame update
     async void Start()
     {
