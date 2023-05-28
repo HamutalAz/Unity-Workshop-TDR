@@ -8,17 +8,17 @@ public class BoardPanelManager : MonoBehaviour
 {
 
     private List<int> choosenLocations = new();
+    // 2D board nested inside the panel
     private GameObject innerBoard;
-
     [SerializeField]
     public TextMeshProUGUI feedbackLabel;
-
+    // 3D board, on the tunnel wall
     [SerializeField]
     public GameObject outerBoard;
 
     private Color red = new Color32(219, 55, 55, 255);
     private Color black = new Color32(0, 0, 0, 255);
-    private Color white = new Color32(255, 255, 255, 255);
+    private Color white = new Color32(255, 255, 255, 100);
 
     // Start is called before the first frame update
     void Start()
@@ -29,27 +29,52 @@ public class BoardPanelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Dictionary<string, object> data = new Dictionary<string, object>
+            {
+                {"key", "owner" }
+            };
+
+            outerBoard.GetComponent<Board>().dropObject(data);
+            resetClicked();
+        }
     }
 
-    public void okClicked()
+    async public void okClicked()
     {
         choosenLocations.Sort();
 
-        bool result = false;
-
-        // send request to server
-      
-        // update UI
+        // update UI (for the user only - so he'll think there's a progress).
+        // It'll be updated again after a response from DB will be received.
         outerBoard.GetComponent<Board>().setRooksInLocation(choosenLocations);
 
-        // if OK - close panel; else: show feedback label
-        if (result) {
+        //// todo: delete later!!
+        //choosenLocations = new List<int>
+        //{
+        //    11,33,56,53,44
+        //};
+
+        // send request to server
+        Dictionary<string, object> data = new Dictionary<string, object>
+        {
+            {"key", "isOpen" },
+            {"code", choosenLocations }
+        };
+
+        bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("checkCode", "board", data);
+
+        
+        if (response)   // if OK - close panel;
+        {
             gameObject.SetActive(false);
             DataBaseManager.instance.levelHandler.togglePlayerInputSystem(false);
         }
-        else
-            feedbackLabel.text = "Wrong locations. Try again.";
+        else            // else: show feedback label
+        {
+            resetClicked();
+            feedbackLabel.text = "Wrong. Try again.";
+        }
 
     }
 

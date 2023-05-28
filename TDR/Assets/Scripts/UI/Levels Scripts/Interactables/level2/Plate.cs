@@ -12,6 +12,10 @@ public class Plate : Interactable
     [SerializeField]
     public GameObject backPack;
     private Vector2 deltaSize = new Vector3(1800, 1200);
+    [SerializeField]
+    private Material visableMaterial;
+    [SerializeField]
+    private Material inVisableMaterial;
 
     // Start is called before the first frame update
     void Start()
@@ -48,12 +52,15 @@ public class Plate : Interactable
     {
         Debug.Log("updating data from the DB!");
 
+        // extract data
         owner = (string)data["owner"];
+        isReadable = (bool)data["isReadable"];
+        string location = (string)data["location"];
+        string rotation = (string)data["rotation"];
 
-        // put in backPack or set visable false if belongs to someone else.
-        if(owner != null)
+        if (owner != null) // if someone owns the plate
         {
-            if (owner == DataBaseManager.userID)
+            if (owner == DataBaseManager.userID) // if the user owns it
             {
                 Debug.Log("you own the plate!");
 
@@ -71,13 +78,26 @@ public class Plate : Interactable
             gameObject.SetActive(false);
             Debug.Log("is plate activee?" + isActiveAndEnabled);
         }
-        else
+        else // the plate isn't owned by someone
         {
-            //update plate's new location
-            gameObject.transform.position = DataBaseManager.instance.levelManager.stringToVec((string)data["location"]);
-            //make plate active again.
+            //update plate's new location & rotation
+            gameObject.transform.position = DataBaseManager.instance.levelManager.stringToVec(location);
+            if (!rotation.Equals(""))
+                gameObject.transform.eulerAngles = DataBaseManager.instance.levelManager.stringToVec(rotation);
+
+            // change image
+            if (isReadable)
+                gameObject.GetComponent<MeshRenderer>().material = visableMaterial;
+            else
+                gameObject.GetComponent<MeshRenderer>().material = inVisableMaterial;
+
+
+            //make plate active again
             gameObject.SetActive(true);
+
+
         }
+
 
         Debug.Log("owner:" + owner);
     }

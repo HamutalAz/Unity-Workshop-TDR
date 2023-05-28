@@ -362,3 +362,5 @@ MonoBehaviour:
   isReadable: 0
   levelHandler: {fileID: 0}
   backPack: {fileID: 0}
+  visableMaterial: {fileID: 2100000, guid: 0efd0f499dedd4189a1de0d8aac72d89, type: 2}
+  inVisableMaterial: {fileID: 2100000, guid: 6c4cf9c714dba4648ac09f30084bd3f8, type: 2}

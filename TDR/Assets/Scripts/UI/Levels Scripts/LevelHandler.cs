@@ -157,11 +157,11 @@ public class LevelHandler : MonoBehaviour
     public void UpdateRoomObjectUI(string name, Dictionary<string, object> data)
     {
         try {
-        levelObjects[name].UpdateUI(data);
+            levelObjects[name].UpdateUI(data);
         }
         catch (Exception)
         {
-            
+            Debug.Log("couldn't find matching obj");
         }
     }
 

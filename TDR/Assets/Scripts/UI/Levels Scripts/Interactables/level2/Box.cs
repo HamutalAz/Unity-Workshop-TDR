@@ -41,12 +41,9 @@ public class Box : Interactable
         };
         //send request to try and capture the panel!
         bool response = (bool) await DataBaseManager.instance.levelManager.LaunchRequest("pickUpObject", "box", data);
+
         if (response)
-        {
             toggleVisability();
-        }
-        
-        
     }
 
     // Apply received changes
@@ -69,7 +66,7 @@ public class Box : Interactable
         {
             toggleVisability(); // disable code panel
             gameObject.GetComponent<BoxCollider>().enabled = false;  //disable box interaction.
-            plate.GetComponent<BoxCollider>().enabled = true; // start plate interaction.
+            plate.GetComponent<BoxCollider>().enabled = true;        // start plate interaction.
         }
         else
             panel.GetComponent<InteractivePanel>().setFeedbackMessage("Wrong code, try again.");
@@ -79,10 +76,7 @@ public class Box : Interactable
     public void toggleVisability()
     {
         isPanelVisable = !isPanelVisable;
-
-        // able/disable player's movment
         levelHandler.togglePlayerInputSystem(isPanelVisable);
-
         panel.SetActive(isPanelVisable);
 
     }
