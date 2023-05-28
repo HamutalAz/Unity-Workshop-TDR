@@ -172,6 +172,11 @@ public class LevelHandler : MonoBehaviour
         Debug.Log("Obj added");
     }
 
+    public Interactable getLevelObject(string name)
+    {
+        return levelObjects[name];
+    }
+
     //async private void createPlayer()
     //{
     //    Vector3 loc = await DataBaseManager.instance.levelManager.getInitialPlayerLoc();
