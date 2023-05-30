@@ -56,14 +56,15 @@ function createNewGame(arr,numOfPlayers) {
   
   const newGameRef = db.collection("Games").doc();
   currentGameId = newGameRef.id;
-  const newGameMembersRef = newGameRef.collection("game_members");
   const promises = [];
   const values = newGameRef.set({
     currentLevelInd: 0,
     numberOfPlayers: numOfPlayers
   });
   promises.push(values);
+  const newGameMembersRef = newGameRef.collection("game_members");
   arr.forEach(async (val) => {
+    console.log("currently in createNewGame with player: " + val);
     const p = newGameMembersRef.doc(val.id).set({
       userName: val.userName,
     });

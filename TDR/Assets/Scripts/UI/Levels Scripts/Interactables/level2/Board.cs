@@ -35,7 +35,7 @@ public class Board : Interactable
                 { "key", "owner" }
         };
         //send request to try and capture the panel!
-        bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("pickUpObject", "board", data);
+        bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("pickUpPanel", "board", data);
 
         if (response)
             toggleVisability();
@@ -64,7 +64,7 @@ public class Board : Interactable
 
     async public void dropObject(Dictionary<string, object> data)
     {
-        bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("dropObject", "board", data);
+        bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("dropPanel", "board", data);
         Debug.Log("was able to drop menu?" + response);
 
         if (response)

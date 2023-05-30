@@ -40,7 +40,7 @@ public class Box : Interactable
                 { "key", "owner" }
         };
         //send request to try and capture the panel!
-        bool response = (bool) await DataBaseManager.instance.levelManager.LaunchRequest("pickUpObject", "box", data);
+        bool response = (bool) await DataBaseManager.instance.levelManager.LaunchRequest("pickUpPanel", "box", data);
 
         if (response)
             toggleVisability();
@@ -83,7 +83,7 @@ public class Box : Interactable
 
     async public void dropObject(Dictionary<string, object> data)
     {
-        bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("dropObject", "box", data);
+        bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("dropPanel", "box", data);
         if (response)
             toggleVisability();
 
