@@ -172,7 +172,7 @@ exports.dropPanel = regionalFunctions.https.onCall(async(data) => {
 exports.checkCode = regionalFunctions.https.onCall(async(data) => {
   console.log("***********checkCode************");
   const roomId = data.roomID;
-  const key = data.data.key;
+  const key = data.data.key; // isOpen
   const objectName = data.objectName; 
   const codeInput = data.data.code;
   let isCodeValid = false;
@@ -183,7 +183,14 @@ exports.checkCode = regionalFunctions.https.onCall(async(data) => {
   docs.forEach(async (doc) =>{
     let code = doc.data().code;
     console.log("input by user: " + codeInput);
-    if(code == codeInput){ // code is correct
+    if (objectName == "board"){
+      const s = doc.ref.update({
+        currentRooksLocations : code,
+      });
+      promises.push(s);
+    }
+    console.log("code in database: " + code);
+    if(code.toString() == codeInput.toString()){ // code is correct
       console.log("entered 'if'. code is correct.");
       isCodeValid = true;
       const p = doc.ref.update({
