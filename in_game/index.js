@@ -105,7 +105,11 @@ exports.dropObject = regionalFunctions.https.onCall(async(data) => {
   const playerDirectionX = data.data.playerDirectionX;
   const playerDirectionZ = data.data.playerDirectionZ;
   const desiredY = data.data.desiredY
-
+  const isSpecificLocation = data.data.dropInLoc;
+  let specificLocation = null;
+  if(isSpecificLocation){
+    specificLocation = data.data.specificLocation;
+  }
   console.log("Player's locationX: " + playerLocationX);
   console.log("Player's locationZ: " + playerLocationZ);
   console.log("Player's directionX: " + playerDirectionX);
@@ -126,11 +130,14 @@ exports.dropObject = regionalFunctions.https.onCall(async(data) => {
       console.log("entered 'if'. about to drop object.");
       isDropped = true;
       const levelData = await db.collection("Levels").doc(level).get(); 
-      const newLocation = getValidLocation(playerLocationX,playerLocationZ,2*playerDirectionX, 2*playerDirectionZ ,levelData.data(), desiredY);
-      console.log("location chosen for item: " + newLocation);
+      if(!isSpecificLocation){
+        specificLocation = getValidLocation(playerLocationX,playerLocationZ,2*playerDirectionX, 2*playerDirectionZ ,levelData.data(), desiredY);
+      }
+      //const newLocation = getValidLocation(playerLocationX,playerLocationZ,2*playerDirectionX, 2*playerDirectionZ ,levelData.data(), desiredY);
+      console.log("location chosen for item: " + specificLocation);
       const p = doc.ref.update({
         [key] : null,
-        location : newLocation
+        location : specificLocation
       });
       promises.push(p);
     }

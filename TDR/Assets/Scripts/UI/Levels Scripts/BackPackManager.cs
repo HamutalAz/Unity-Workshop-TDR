@@ -165,6 +165,8 @@ public class BackPackManager : MonoBehaviour
                 { "rotationZ", rotation.z},
                 { "level" , levelName },
                 { "dropInLoc" , dropInLoc }
+                //{"specificLocation", location}
+                //this line needed to be added if you want to drop an object in a specific location, considreing dropInLoc is true!
         };
         }
 
