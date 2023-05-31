@@ -103,9 +103,7 @@ exports.dropObject = regionalFunctions.https.onCall(async(data) => {
   const desiredY = data.data.desiredY
   const isSpecificLocation = data.data.dropInLoc;
   let specificLocation = null;
-  if(isSpecificLocation){
-    specificLocation = data.data.specificLocation;
-  }
+  
   console.log("Player's locationX: " + playerLocationX);
   console.log("Player's locationZ: " + playerLocationZ);
   console.log("Player's directionX: " + playerDirectionX);
@@ -126,6 +124,9 @@ exports.dropObject = regionalFunctions.https.onCall(async(data) => {
       const levelData = await db.collection("Levels").doc(level).get(); 
       if(!isSpecificLocation){
         specificLocation = getValidLocation(playerLocationX,playerLocationZ,2*playerDirectionX, 2*playerDirectionZ ,levelData.data(), desiredY);
+      }
+      else{
+        specificLocation = getValidLocation(playerLocationX, desiredY,playerLocationZ);
       }
       //const newLocation = getValidLocation(playerLocationX,playerLocationZ,2*playerDirectionX, 2*playerDirectionZ ,levelData.data(), desiredY);
       console.log("location chosen for item: " + specificLocation);
@@ -378,11 +379,11 @@ function checkIfLocationIsInCircle(location, center, radius){
 function stringToPoint(location, index){
   console.log('At: stringToPoint! index: ' + index);
   console.log("before split: " + location);
-  const newString = splitMulti(location, [' ', '(', ')']);
+  const newString = splitMulti(location, [' ', ',', '(', ')']);
   console.log("after split: " + newString);
-  const returnValue = parseDouble(newString[index]);
+  const returnValue = parseFloat(newString[index]);
   console.log("about to return: " + returnValue);
-  return returnValue;;
+  return returnValue;
 }
 
 
