@@ -146,11 +146,12 @@ public class WaitingRoomManager : MonoBehaviour
                     {
                         DocumentSnapshot res = task.Result;
                         int currentLevel = res.GetValue<int>("currentLevelInd");
-                        //Debug.Log("currentLevel" + currentLevel);
+                        Debug.Log("currentLevel" + currentLevel);
                         string[] levelsOrder = res.GetValue<string[]>("levelsOrder"); // todo: save later
                         stopListenToUserChanges();
                         stopListenToGameChanges();
-                        //Debug.Log("levelsOrder" + levelsOrder);
+                        Debug.Log("levelsOrder" + levelsOrder);
+                        Debug.Log("level" + levelsOrder[currentLevel]);
                         DataBaseManager.instance.waitingRoomSceneHandler.loadScene(levelsOrder[currentLevel]);
                     });
                 }

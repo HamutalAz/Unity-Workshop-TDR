@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -644,8 +644,8 @@ MonoBehaviour:
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.7802895, g: 0.8396226, b: 0, a: 1}
+    m_SelectedColor: {r: 0.13921706, g: 0.8584906, b: 0, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -746,6 +746,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   userNameInput: {fileID: 79364157}
   feedbackLBL: {fileID: 1576812111}
+  logInButton: {fileID: 388560910}
 --- !u!4 &461471183
 Transform:
   m_ObjectHideFlags: 0
@@ -759,7 +760,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &693758901
 GameObject:
@@ -1337,6 +1338,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waitingRoomSceneHandler: {fileID: 0}
   levelHandler: {fileID: 0}
+  chatHandler: {fileID: 0}
   loginManager: {fileID: 0}
   waitingRoomManager: {fileID: 0}
   levelManager: {fileID: 0}
@@ -1354,7 +1356,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &974556024
 MonoBehaviour:

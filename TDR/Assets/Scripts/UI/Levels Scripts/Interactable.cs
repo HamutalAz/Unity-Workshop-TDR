@@ -15,4 +15,14 @@ public abstract class Interactable : MonoBehaviour
     {
 
     }
+
+    public virtual void UpdateUI(Dictionary<string, object> data)
+    {
+
+    }
+
+    public virtual void sendCode(Dictionary<string, object> data)
+    {
+
+    }
 }

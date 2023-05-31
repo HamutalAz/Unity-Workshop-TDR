@@ -26,7 +26,7 @@ public class LoginManager : MonoBehaviour
                 //if there is even one iteration of this loop, it means there is a user with that name in the db.
                 foreach (DocumentSnapshot documentSnapshot in querySnapshotTask.Result.Documents)
                 {
-                    throw new Exception();
+                    throw new Exception("Username '" + newUserName + "' already exists. please try again.");
                 }
             });
             
@@ -39,15 +39,9 @@ public class LoginManager : MonoBehaviour
             await usersCollection.Document(newUser.userId).SetAsync(newUser);
             //await roomMembersCollection.Document()
 
-
-
             //Here we need to consider to just save an instance of User in databasemanager.
             DataBaseManager.userName = newUserName;
             DataBaseManager.userID = newUser.userId;
-
-
-
-
 
             //await usersCollection.AddAsync(newUser);
             
@@ -65,7 +59,7 @@ public class LoginManager : MonoBehaviour
         catch (Exception e)
         {
             Debug.Log(e.Message);
-            throw new Exception("Username '" + newUserName + "' already exists. please try again.");
+            throw e;
         }
 
     }

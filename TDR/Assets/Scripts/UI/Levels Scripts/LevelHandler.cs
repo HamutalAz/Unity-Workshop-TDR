@@ -9,6 +9,8 @@ using UnityEngine;
 using UnityEngine.LowLevel;
 using UnityEngine.ProBuilder.Shapes;
 using Random = UnityEngine.Random;
+using TMPro;
+using UnityEngine.UI;
 
 public class LevelHandler : MonoBehaviour
 {
@@ -18,20 +20,40 @@ public class LevelHandler : MonoBehaviour
 
     [SerializeField]
     public GameObject chatHandler;
+    [SerializeField]
+    public TextMeshProUGUI teamsPassaedLabel;
+    [SerializeField]
+    public GameObject backPack;
+    [SerializeField]
+    public GameObject backPackPanel;
+    private bool isBPVisable = true;
+    private bool isBPPanelVisable = false;
+    [SerializeField]
+    public GameObject player;
+    //[SerializeField]
+    //public TextMeshProUGUI promptText;
+
+    private Dictionary<string, Interactable> levelObjects = new();
+
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("At LevelHandler.start()");
+        Debug.Log("At LevelHandler.start(), levelObjects.size(): " + levelObjects.Count);
         DataBaseManager.instance.setLevelHandler(this);
+        
         createPlayersAvatars();
+        //createPlayer();
+        DataBaseManager.instance.levelManager.listenOnRoomObjects();
+        DataBaseManager.instance.levelManager.getTeamPassedInfo();
+
+
     }
 
     // create player's "avatar" and add them to the scene
     private async void createPlayersAvatars()
     {
         Dictionary<string, Vector3> playersLoc = await DataBaseManager.instance.levelManager.getOtherPlayersData();
-        //Dictionary<string, Vector3> playersLoc = DataBaseManager.instance.levelManager.getOtherPlayersLoc();
 
         //Debug.Log("**** LH: createPlayersAvatars: playersLoc: ****" + playersLoc.Count);
 
@@ -45,16 +67,17 @@ public class LevelHandler : MonoBehaviour
 
             GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
             otherPlayersAvatars.Add(avatar);
-
+            Debug.Log("******* about to put another player in:" + playerLoc);
             avatar.transform.position = playerLoc;
-            Debug.Log("LH: createPlayersAvatars(): avatar created at: " + playerLoc);
+            //Debug.Log("LH: createPlayersAvatars(): avatar created at: " + playerLoc);
 
             Destroy(referencePlayer);
         }
 
         // set listener on other players location & update their location
         DataBaseManager.instance.levelManager.listenOnOtherPlayersDoc();
-        checkIfChatIsNeeded();
+        CheckIfChatIsNeeded();
+        DataBaseManager.instance.levelManager.listenOnGameDocument();
     }
 
     // Update is called once per frame
@@ -72,25 +95,51 @@ public class LevelHandler : MonoBehaviour
             GameObject avatar = otherPlayersAvatars[i];
 
             if (playerLoc.ToString() != avatar.transform.position.ToString())
-            {
-                //Debug.Log("**Update** playersLoc:" + playersLoc.ToString());
-                //Debug.Log("**Update** avaterLoc:" + avatar.transform.position.ToString());
-
                 avatar.transform.position = playerLoc;
-                //Debug.Log("changing otherPlayerLoc to: " + playerLoc);
-            }
+            
             i++;
         }
-       
+
+        if (Input.GetKeyDown(KeyCode.Tab))
+        {
+            toggleBackPackVisability();
+        }
+
     }
 
-    public void setPlayersLoc(Dictionary<string, Vector3> playersLoc)
+    public void toggleBackPackVisability()
+    {
+        Debug.Log("toggle back pack visability!!!");
+
+        isBPPanelVisable = !isBPPanelVisable;
+        backPackPanel.SetActive(isBPPanelVisable);
+
+        isBPVisable = !isBPVisable;
+        backPack.SetActive(isBPVisable);
+
+        togglePlayerInputSystem(isBPPanelVisable);
+    }
+
+    public bool togglePlayerInputSystem(bool val)
+    {
+        InputManager input = player.GetComponent<InputManager>();
+
+        // able/disable player's movment
+        if (val)
+            input.OnDisable();
+        else
+            input.OnEnable();
+
+        return input.isActiveAndEnabled;
+    }
+
+    public void SetPlayersLoc(Dictionary<string, Vector3> playersLoc)
     {
     this.playersLoc = playersLoc;
 
     }   
 
-    public void checkIfChatIsNeeded()
+    public void CheckIfChatIsNeeded()
     {
         Debug.Log("At LevelHandler.checkIfChatIsNeeded()");
         Debug.Log("number of other players in room: " + otherPlayersAvatars.Count + " " + playersLoc.Count);
@@ -100,4 +149,51 @@ public class LevelHandler : MonoBehaviour
             Destroy(chatHandler);
         }
     }
+
+    public void UpdateTeamPassedLabel(int passed, int total)
+    {
+        teamsPassaedLabel.text = passed + "/" + total + " Teams passed";
+    }
+
+    public void UpdateRoomObjectUI(string name, Dictionary<string, object> data)
+    {
+        try {
+            Debug.Log("at UpdateRoomObjectUI: trying to send data to: " + name);
+            levelObjects[name].UpdateUI(data);
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Error at UpdateRoomObjectUI while trying to send data to: " + name + "\n the error: " + e.Message);
+        }
+    }
+
+    public void addLevelObject(string name, Interactable obj)
+    {
+        levelObjects.Add(name, obj);
+        Debug.Log("at addLevelObject:: trying to add " + name + ". levelObjects size:" + levelObjects.Count);
+    }
+
+    public Interactable getLevelObject(string name)
+    {
+        return levelObjects[name];
+    }
+
+    //async private void createPlayer()
+    //{
+    //    Vector3 loc = await DataBaseManager.instance.levelManager.getInitialPlayerLoc();
+    //    GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("Player"));
+    //    GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
+
+    //    Vector3 newPos = new Vector3(loc.x, loc.y, loc.z);
+    //    avatar.transform.position = newPos;
+
+    //    //Debug.Log("******* putting player in: " + loc);
+    //    Debug.Log("******* avatar.transform.position: " + avatar.transform.position);
+
+    //    Destroy(referencePlayer);
+    //    player = avatar;
+
+    //    player.GetComponent<PlayerUI>().setPromptText(promptText);
+    //    player.transform.parent = null;
+    //}
 }

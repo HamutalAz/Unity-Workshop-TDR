@@ -4,7 +4,8 @@
 AnimatorController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: FlipR
   serializedVersion: 5
   m_AnimatorParameters: []
@@ -23,10 +24,11 @@ AnimatorController:
     m_Controller: {fileID: 9100000}
 --- !u!1102 &1102484887492449816
 AnimatorState:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Idle
   m_Speed: 1
   m_CycleOffset: 0
@@ -48,10 +50,11 @@ AnimatorState:
   m_TimeParameter: 
 --- !u!1102 &1102792231715041516
 AnimatorState:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Rup
   m_Speed: 1
   m_CycleOffset: 0
@@ -73,10 +76,11 @@ AnimatorState:
   m_TimeParameter: 
 --- !u!1102 &1102977073983423308
 AnimatorState:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Rdown
   m_Speed: 1
   m_CycleOffset: 0
@@ -98,15 +102,16 @@ AnimatorState:
   m_TimeParameter: 
 --- !u!1107 &1107009022525228348
 AnimatorStateMachine:
-  serializedVersion: 5
+  serializedVersion: 6
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: Base Layer
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1102977073983423308}
-    m_Position: {x: 298, y: 92, z: 0}
+    m_Position: {x: 300, y: 90, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102792231715041516}
     m_Position: {x: 283, y: 179, z: 0}
