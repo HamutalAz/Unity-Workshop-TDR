@@ -5,10 +5,6 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 const db = admin.firestore();
 
-// // Create and deploy your first functions
-// // https://firebase.google.com/docs/functions/get-started
-//
-
 exports.updateObject = regionalFunctions.https.onCall(async(data) => {
   console.log("***********updateObject*********");
   const roomId = data.roomID;
@@ -116,8 +112,6 @@ exports.dropObject = regionalFunctions.https.onCall(async(data) => {
   console.log("Player's directionZ: " + playerDirectionZ);
   console.log("current level:" + level);
 
-
-
   let isDropped = false;
   const docs = await db.collection("Rooms").doc(roomId).collection("room_objects")
   .where('name','==', objectName).get();
@@ -139,10 +133,26 @@ exports.dropObject = regionalFunctions.https.onCall(async(data) => {
         [key] : null,
         location : specificLocation
       });
+      if(objectName == "plate"){
+        const response = checkIfLocationIsWithinRedLight(specificLocation, levelData);
+        promises.push(response);
+        if(response){
+          const a = doc.ref.update({
+            isReadable : true
+          });
+          promises.push(a);
+        } else{
+           const b = doc.ref.update({
+            isReadable : false
+          });
+          promises.push(b);
+        }
+      }
       promises.push(p);
     }
   });
   await Promise.all(promises);
+  
   console.log("about to return: " + isDropped);
   return isDropped;
 });
@@ -312,4 +322,39 @@ function getClosestBorder(playerLocation, border){
   } else{
     return border[1];
   }
+}
+
+async function checkIfLocationIsWithinRedLight(specificLocation, levelData){
+  let returnValue = false;
+  
+  const redLightDoc = await db.collection("Rooms").doc(roomId).collection("room_objects")
+  .where('name','==', "redLight").get();
+
+  redLightDoc.forEach((val) => {
+    const data = val.data();
+    const isOn = data.isOn;
+    if(isOn){
+      returnValue = checkIfLocationIsInCircle(specificLocation, data.center, data.radius);
+    }
+  });
+  Promise.resolve(returnValue);
+}
+
+
+function checkIfLocationIsInCircle(location, center, radius){
+  const x = stringToPoint(location, 0);
+  const z = stringToPoint(location, 2);
+
+  var dist_points = (x - center[0]) * (x - center[0]) + (z - center[1]) * (z - center[1]);
+  radius *= radius;
+  if (dist_points < r) {
+    return true;
+  }
+  return false;
+}
+
+
+function stringToPoint(location, index){
+  const newString = location.split(/[() ]/).filter(true);
+  return parseDouble(newString[index]);
 }
