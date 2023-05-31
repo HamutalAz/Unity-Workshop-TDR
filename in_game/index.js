@@ -126,7 +126,7 @@ exports.dropObject = regionalFunctions.https.onCall(async(data) => {
         specificLocation = getValidLocation(playerLocationX,playerLocationZ,2*playerDirectionX, 2*playerDirectionZ ,levelData.data(), desiredY);
       }
       else{
-        specificLocation = getValidLocation(playerLocationX, desiredY,playerLocationZ);
+        specificLocation = getLocation(playerLocationX, desiredY,playerLocationZ);
       }
       //const newLocation = getValidLocation(playerLocationX,playerLocationZ,2*playerDirectionX, 2*playerDirectionZ ,levelData.data(), desiredY);
       console.log("location chosen for item: " + specificLocation);
@@ -364,8 +364,8 @@ async function checkIfLocationIsWithinRedLight(specificLocation, roomId){
 
 function checkIfLocationIsInCircle(location, center, radius){
   console.log('At: checkIfLocationIsInCircle!');
-  const x = stringToPoint(location, 0);
-  const z = stringToPoint(location, 2);
+  const x = stringToPoint(location, 1);
+  const z = stringToPoint(location, 5);
 
   var dist_points = (x - center[0]) * (x - center[0]) + (z - center[1]) * (z - center[1]);
   radius *= radius;
