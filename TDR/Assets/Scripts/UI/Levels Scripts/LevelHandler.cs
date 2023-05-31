@@ -157,6 +157,7 @@ public class LevelHandler : MonoBehaviour
     public void UpdateRoomObjectUI(string name, Dictionary<string, object> data)
     {
         try {
+            Debug.Log(name);
             levelObjects[name].UpdateUI(data);
         }
         catch (Exception)

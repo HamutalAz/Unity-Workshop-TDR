@@ -134,14 +134,17 @@ exports.dropObject = regionalFunctions.https.onCall(async(data) => {
         location : specificLocation
       });
       if(objectName == "plate"){
-        const response = checkIfLocationIsWithinRedLight(specificLocation, levelData);
-        promises.push(response);
+        const response = await checkIfLocationIsWithinRedLight(specificLocation, roomId);
+        console.log(response);
+        // promises.push(response);
         if(response){
+          console.log("location is within red light");
           const a = doc.ref.update({
             isReadable : true
           });
           promises.push(a);
         } else{
+          console.log("location isn't within red light");
            const b = doc.ref.update({
             isReadable : false
           });
@@ -214,8 +217,20 @@ exports.checkCode = regionalFunctions.https.onCall(async(data) => {
         [key] : isCodeValid, // opening box
         owner : null // releasing panel!
       }); 
-      
       promises.push(p);
+
+      if(objectName == "board"){ // open all doors!
+        const doors = await db.collection("Rooms").doc(roomId).collection("room_objects")
+        .where('name', 'in', ['cellDoor', 'fanDoor']).get();
+        console.log("number of doors found in query: " + doors.size);
+        doors.forEach(async(door) => {
+          console.log("currently opening: " + door.data().name);
+          const x = door.ref.update({
+            isOpen : true,
+          });
+          promises.push(x);
+        });
+      }
     }
   });
   await Promise.all(promises);
@@ -324,30 +339,36 @@ function getClosestBorder(playerLocation, border){
   }
 }
 
-async function checkIfLocationIsWithinRedLight(specificLocation, levelData){
+async function checkIfLocationIsWithinRedLight(specificLocation, roomId){
   let returnValue = false;
   
   const redLightDoc = await db.collection("Rooms").doc(roomId).collection("room_objects")
   .where('name','==', "redLight").get();
-
+  console.log("At: checkIfLocationIsWithinRedLight");
   redLightDoc.forEach((val) => {
     const data = val.data();
     const isOn = data.isOn;
     if(isOn){
+      console.log("light is on!");
       returnValue = checkIfLocationIsInCircle(specificLocation, data.center, data.radius);
+      console.log("location is within red light!");
+    }
+    else{
+      console.log("location isn't within red light!");
     }
   });
-  Promise.resolve(returnValue);
+  return Promise.resolve(returnValue);
 }
 
 
 function checkIfLocationIsInCircle(location, center, radius){
+  console.log('At: checkIfLocationIsInCircle!');
   const x = stringToPoint(location, 0);
   const z = stringToPoint(location, 2);
 
   var dist_points = (x - center[0]) * (x - center[0]) + (z - center[1]) * (z - center[1]);
   radius *= radius;
-  if (dist_points < r) {
+  if (dist_points < radius) {
     return true;
   }
   return false;
@@ -355,6 +376,21 @@ function checkIfLocationIsInCircle(location, center, radius){
 
 
 function stringToPoint(location, index){
-  const newString = location.split(/[() ]/).filter(true);
-  return parseDouble(newString[index]);
+  console.log('At: stringToPoint! index: ' + index);
+  console.log("before split: " + location);
+  const newString = splitMulti(location, [' ', '(', ')']);
+  console.log("after split: " + newString);
+  const returnValue = parseDouble(newString[index]);
+  console.log("about to return: " + returnValue);
+  return returnValue;;
+}
+
+
+function splitMulti(str, tokens){
+  var tempChar = tokens[0]; // We can use the first token as a temporary join character
+  for(var i = 1; i < tokens.length; i++){
+      str = str.split(tokens[i]).join(tempChar);
+  }
+  str = str.split(tempChar);
+  return str;
 }
