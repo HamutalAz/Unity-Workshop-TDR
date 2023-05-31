@@ -5,11 +5,12 @@ using UnityEngine;
 public class FanDoor : Interactable
 {
     private bool isOpen = false;
+    public LevelHandler levelHandler;
 
     // Start is called before the first frame update
     void Start()
     {
-        //DataBaseManager.instance.levelHandler.addLevelObject("fanDoor", this);
+        levelHandler.addLevelObject("fanDoor", this);
     }
 
     // Update is called once per frame
@@ -20,8 +21,8 @@ public class FanDoor : Interactable
 
     public override void UpdateUI(Dictionary<string, object> data)
     {
-        //isOpen = (bool)data["isOpen"];
-        //gameObject.GetComponent<Animator>().SetBool("isOpen", isOpen);
+        isOpen = (bool)data["isOpen"];
+        gameObject.GetComponent<Animator>().SetBool("isOpen", isOpen);
 
     }
 }

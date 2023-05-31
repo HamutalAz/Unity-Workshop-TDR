@@ -33,14 +33,15 @@ public class LevelHandler : MonoBehaviour
     //[SerializeField]
     //public TextMeshProUGUI promptText;
 
-    public Dictionary<string, Interactable> levelObjects = new();
+    private Dictionary<string, Interactable> levelObjects = new();
 
 
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("At LevelHandler.start()");
+        Debug.Log("At LevelHandler.start(), levelObjects.size(): " + levelObjects.Count);
         DataBaseManager.instance.setLevelHandler(this);
+        
         createPlayersAvatars();
         //createPlayer();
         DataBaseManager.instance.levelManager.listenOnRoomObjects();
@@ -157,20 +158,19 @@ public class LevelHandler : MonoBehaviour
     public void UpdateRoomObjectUI(string name, Dictionary<string, object> data)
     {
         try {
-            Debug.Log(name);
+            Debug.Log("at UpdateRoomObjectUI: trying to send data to: " + name);
             levelObjects[name].UpdateUI(data);
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            Debug.Log("couldn't find matching obj");
+            Debug.Log("Error at UpdateRoomObjectUI while trying to send data to: " + name + "\n the error: " + e.Message);
         }
     }
 
     public void addLevelObject(string name, Interactable obj)
     {
-        Debug.Log("trying to add!");
         levelObjects.Add(name, obj);
-        Debug.Log("Obj added");
+        Debug.Log("at addLevelObject:: trying to add " + name + ". levelObjects size:" + levelObjects.Count);
     }
 
     public Interactable getLevelObject(string name)

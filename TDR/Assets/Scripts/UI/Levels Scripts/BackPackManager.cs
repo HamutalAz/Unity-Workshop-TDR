@@ -14,7 +14,6 @@ public class BackPackManager : MonoBehaviour
     List<GameObject> sideBarPlaceHolders;
     [SerializeField]
     List<GameObject> panelPlaceHolders;
-    //BackPackPanel bpPanel;
     Dictionary<string, GameObject> nameToImgMap = new();
     Dictionary<GameObject, string> imgToObjName = new();
     [SerializeField]
@@ -27,8 +26,6 @@ public class BackPackManager : MonoBehaviour
 
     bool dropInLoc = false;
     Vector3 location = Vector3.zero;
-    Vector3 rotation = Vector3.zero;
-
 
     // Start is called before the first frame update
     void Start()
@@ -157,16 +154,11 @@ public class BackPackManager : MonoBehaviour
         {
                 { "owner", null },
                 { "key", "owner" },
-                { "desiredX", location.x },
+                { "playerLocationX", location.x },
                 { "desiredY", location.y},
-                { "desiredZ", location.z },
-                { "rotationX", rotation.x},
-                { "rotationY", rotation.y },
-                { "rotationZ", rotation.z},
+                { "playerLocationZ", location.z },
                 { "level" , levelName },
                 { "dropInLoc" , dropInLoc }
-                //{"specificLocation", location}
-                //this line needed to be added if you want to drop an object in a specific location, considreing dropInLoc is true!
         };
         }
 
@@ -191,11 +183,10 @@ public class BackPackManager : MonoBehaviour
         }
     }
 
-    public void dropItemInLoc(Vector3 loc, Vector3 rot)
+    public void dropItemInLoc(Vector3 loc)
     {
         dropInLoc = true;
         location = loc;
-        rotation = rot;
 
         levelHandler.toggleBackPackVisability();
 

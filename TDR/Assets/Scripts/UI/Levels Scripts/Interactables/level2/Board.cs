@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,7 @@ public class Board : Interactable
     // Start is called before the first frame update
     void Start()
     {
-        DataBaseManager.instance.levelHandler.addLevelObject("Board", this);
+        DataBaseManager.instance.levelHandler.addLevelObject("board", this);
         boardPanel.SetActive(false);
     }
 
@@ -45,9 +46,8 @@ public class Board : Interactable
     {
         Debug.Log("$$$$$ setting rooks location");
         for (int i = 0; i < rooks.Count; i++)
-        {
             placeRookInPosition(rooks[i], choosedLocations[i]);
-        }
+        
     }
 
     private void placeRookInPosition(GameObject rook, int cubeInd)
@@ -82,11 +82,16 @@ public class Board : Interactable
 
     public override void UpdateUI(Dictionary<string, object> data)
     {
-        List<int> choosedLocations = (List<int>)data["currentRooksLocations"];
-        if (choosedLocations.Contains(0)) // means an invalid location is set
+        List<object> choosedLocations = (List<object>)data["currentRooksLocations"];
+        List<int> choosedLocationsi = new();
+
+        for (int i=0; i< rooks.Count; i++)
+            choosedLocationsi.Add(Convert.ToInt32(choosedLocations[i]));
+
+        if (choosedLocationsi.Contains(0)) // means an invalid location is set
             return;
 
-        setRooksInLocation(choosedLocations);
+        setRooksInLocation(choosedLocationsi);
 
     }
 }

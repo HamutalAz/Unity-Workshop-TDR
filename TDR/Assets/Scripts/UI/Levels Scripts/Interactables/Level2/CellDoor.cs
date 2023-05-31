@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class CellDoor : Interactable
 {
+    public LevelHandler levelHandler;
     private bool isOpen = false;
+
     // Start is called before the first frame update
     void Start()
     {
-        //DataBaseManager.instance.levelHandler.addLevelObject("cellDoor", this);
+        levelHandler.addLevelObject("cellDoor", this);
 
     }
 
@@ -20,7 +22,7 @@ public class CellDoor : Interactable
 
     public override void UpdateUI(Dictionary<string, object> data)
     {
-        //isOpen = (bool)data["isOpen"];
-        //gameObject.GetComponent<Animator>().SetBool("isOpen", isOpen);
+        isOpen = (bool)data["isOpen"];
+        gameObject.GetComponent<Animator>().SetBool("isOpen", isOpen);
     }
 }

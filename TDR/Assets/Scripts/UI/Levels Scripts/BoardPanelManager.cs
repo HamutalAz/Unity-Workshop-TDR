@@ -16,9 +16,12 @@ public class BoardPanelManager : MonoBehaviour
     [SerializeField]
     public GameObject outerBoard;
 
+    public GameObject okBtn;
+
     private Color red = new Color32(219, 55, 55, 255);
     private Color black = new Color32(0, 0, 0, 255);
     private Color white = new Color32(255, 255, 255, 100);
+
 
     // Start is called before the first frame update
     void Start()
@@ -43,17 +46,16 @@ public class BoardPanelManager : MonoBehaviour
 
     async public void okClicked()
     {
+        if (choosenLocations.Count != 5) { 
+            feedbackLabel.text = "Please select exactly 5 squares";
+            return;
+        }
+
         choosenLocations.Sort();
 
         // update UI (for the user only - so he'll think there's a progress).
         // It'll be updated again after a response from DB will be received.
         outerBoard.GetComponent<Board>().setRooksInLocation(choosenLocations);
-
-        //// todo: delete later!!
-        //choosenLocations = new List<int>
-        //{
-        //    11,33,56,53,44
-        //};
 
         // send request to server
         Dictionary<string, object> data = new Dictionary<string, object>
@@ -65,8 +67,9 @@ public class BoardPanelManager : MonoBehaviour
         bool response = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("checkCode", "board", data);
 
         
-        if (response)   // if OK - close panel;
+        if (response)   // if OK - close panel & disable board interactivity
         {
+            outerBoard.GetComponent<BoxCollider>().enabled = false;
             gameObject.SetActive(false);
             DataBaseManager.instance.levelHandler.togglePlayerInputSystem(false);
         }

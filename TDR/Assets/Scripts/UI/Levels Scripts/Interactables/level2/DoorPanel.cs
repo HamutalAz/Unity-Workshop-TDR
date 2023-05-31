@@ -28,9 +28,8 @@ public class DoorPanel : Interactable
         Debug.Log("interact with doorPanel!!!");
 
         Vector3 loc = transform.position;
-        Vector3 rot = new Vector3(0, 0, 90); // todo: isOK?
 
-        backPack.GetComponent<BackPackManager>().dropItemInLoc(loc, rot);
+        backPack.GetComponent<BackPackManager>().dropItemInLoc(loc);
 
     }
 

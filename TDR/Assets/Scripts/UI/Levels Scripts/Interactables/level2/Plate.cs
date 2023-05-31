@@ -20,6 +20,7 @@ public class Plate : Interactable
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("at plate.start()");
         levelHandler.addLevelObject("plate", this);
         gameObject.GetComponent<BoxCollider>().enabled = false;
     }
@@ -56,7 +57,6 @@ public class Plate : Interactable
         owner = (string)data["owner"];
         isReadable = (bool)data["isReadable"];
         string location = (string)data["location"];
-        string rotation = (string)data["rotation"];
 
         if (owner != null) // if someone owns the plate
         {
@@ -76,15 +76,13 @@ public class Plate : Interactable
             }
             // make it unactive (unvisable)
             gameObject.SetActive(false);
-            Debug.Log("is plate activee?" + isActiveAndEnabled);
+            Debug.Log("is plate active?" + isActiveAndEnabled);
         }
         else // the plate isn't owned by someone
         {
-            //update plate's new location & rotation
+            //update plate's new location
             gameObject.transform.position = DataBaseManager.instance.levelManager.stringToVec(location);
-            if (!rotation.Equals(""))
-                gameObject.transform.eulerAngles = DataBaseManager.instance.levelManager.stringToVec(rotation);
-
+            
             // change image
             if (isReadable)
                 gameObject.GetComponent<MeshRenderer>().material = visableMaterial;
@@ -94,7 +92,6 @@ public class Plate : Interactable
 
             //make plate active again
             gameObject.SetActive(true);
-
 
         }
 
