@@ -14,11 +14,11 @@ public class LogInSceneHandler : MonoBehaviour
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Return))
-            buttonClicked();
+            loginButtonClicked();
     }
 
 
-    public async void buttonClicked()
+    public async void loginButtonClicked()
     {
         logInButton.enabled = false;
         string userName = userNameInput.text;
@@ -39,5 +39,12 @@ public class LogInSceneHandler : MonoBehaviour
             feedbackLBL.text = e.Message;
             logInButton.enabled = true;
         }
+    }
+
+    public void tutorialButtonClicked()
+    {
+        Debug.Log("switching to tutorial!");
+
+        SceneManager.LoadScene(sceneName: "level1");
     }
 }
