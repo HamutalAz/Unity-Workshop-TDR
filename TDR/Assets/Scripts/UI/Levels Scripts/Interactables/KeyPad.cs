@@ -7,12 +7,12 @@ public class KeyPad : Interactable
 {
     [SerializeField]
     private GameObject door;
-    private bool isOpen;
+    private bool isOpen = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        DataBaseManager.instance.levelHandler.addLevelObject("door", this);
+        //DataBaseManager.instance.levelHandler.addLevelObject("door", this);
     }
 
     // Update is called once per frame
@@ -21,17 +21,21 @@ public class KeyPad : Interactable
         
     }
 
-    protected override async void Interact()
+    protected override void Interact()
     {
         // create dictionary with the data we want to send to the DB
-        Dictionary<string, object> data = new Dictionary<string, object>
-            {
-                {"key", "isOpen" }
-            };
+        //Dictionary<string, object> data = new Dictionary<string, object>
+        //    {
+        //        {"key", "isOpen" }
+        //    };
 
-        bool response = (bool) await DataBaseManager.instance.levelManager.LaunchRequest("updateObject", "door", data);
-        Debug.Log(response);
-        
+        //bool response = (bool) await DataBaseManager.instance.levelManager.LaunchRequest("updateObject", "door", data);
+        //Debug.Log(response);
+
+        isOpen = !isOpen;
+
+        // Update value
+        door.GetComponent<Animator>().SetBool("IsOpen", isOpen);
 
         //// send the data to the DB
         //bool status = await DataBaseManager.instance.levelManager.WriteToDb("door", data);
@@ -49,9 +53,9 @@ public class KeyPad : Interactable
     {
         //Debug.Log("updating data from the DB!");
 
-        isOpen = (bool)data["isOpen"];
+        //isOpen = (bool)data["isOpen"];
 
-        // Update value
-        door.GetComponent<Animator>().SetBool("IsOpen", isOpen);
+        //// Update value
+        //door.GetComponent<Animator>().SetBool("IsOpen", isOpen);
     }
 }
