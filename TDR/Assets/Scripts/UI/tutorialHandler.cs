@@ -33,7 +33,9 @@ public class tutorialHandler : MonoBehaviour
         }
         else
         {
-            Debug.Log("no more!");
+            panelsArr[currInd].SetActive(false);
+            currInd = 0;
+            Debug.Log("Done!");
         }
     }
 
