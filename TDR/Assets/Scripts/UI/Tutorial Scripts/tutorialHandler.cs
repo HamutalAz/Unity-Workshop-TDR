@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class tutorialHandler : MonoBehaviour
 {
@@ -48,5 +49,12 @@ public class tutorialHandler : MonoBehaviour
                 panelsArr[currInd + 1].SetActive(false);
             panelsArr[currInd].SetActive(true);
         }
+    }
+
+    public void backToMainMenu()
+    {
+        Debug.Log("switching to login page!");
+
+        SceneManager.LoadScene(sceneName: "LoginV2");
     }
 }

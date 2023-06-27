@@ -46,7 +46,10 @@ public class KeyPad : Interactable
             digitLock.SetActive(isPanelOpen);
         }
         else
+        {
             updateFeedBackLabel("Wrong code. Try again.");
+            code = "";
+        }
     }
 
     public void digitPressed(int num)
