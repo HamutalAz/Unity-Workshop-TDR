@@ -184,7 +184,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!43 &33975508
 Mesh:
@@ -192,7 +192,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh25076
+  m_Name: pb_Mesh112032
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -457,7 +457,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: first
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 6961079265201146615, guid: 4d405710bdaa74fe7b7309c70ed663f1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7220766205745759607, guid: 4d405710bdaa74fe7b7309c70ed663f1, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4d405710bdaa74fe7b7309c70ed663f1, type: 3}
 --- !u!114 &191480358 stripped
 MonoBehaviour:
@@ -479,7 +484,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6197846583820659995, guid: 218827762347f4bd6ac5341c0e389f27, type: 3}
       propertyPath: m_RootOrder
-      value: 15
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 6197846583820659995, guid: 218827762347f4bd6ac5341c0e389f27, type: 3}
       propertyPath: m_LocalPosition.x
@@ -552,7 +557,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5998549415140767080, guid: dac832d4528444259979553407eccec0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: nextClick
+      value: okClicked
       objectReference: {fileID: 0}
     - target: {fileID: 5998549415140767080, guid: dac832d4528444259979553407eccec0, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -654,7 +659,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7220766205745759607, guid: dac832d4528444259979553407eccec0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: dac832d4528444259979553407eccec0, type: 3}
 --- !u!1 &320974178 stripped
 GameObject:
@@ -671,6 +677,35 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6961079265201146615, guid: 5449fd5f3ab234e85acb714afd1a7153, type: 3}
   m_PrefabInstance: {fileID: 1884596094}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &372388122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138683916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1721340882}
+          m_TargetAssemblyTypeName: KeyPad, Assembly-CSharp
+          m_MethodName: okClicked
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &426472189 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6961079265201146615, guid: bf4fd9c2d02d4445194fa17fce1929f0, type: 3}
@@ -757,55 +792,35 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: ea01806291afd4b88868c7c1dc961a92, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 36a6f539b94e449dbbdd5b02e06d7a21, type: 3}
---- !u!1 &487103804
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 487103806}
-  - component: {fileID: 487103805}
-  m_Layer: 0
-  m_Name: LevelHandler
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &487103805
+--- !u!114 &504773943
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 487103804}
+  m_GameObject: {fileID: 1138683921}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1906ac971200546438e43befd7173d2e, type: 3}
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chatHandler: {fileID: 609163933}
-  teamsPassaedLabel: {fileID: 191480358}
-  backPack: {fileID: 0}
-  backPackPanel: {fileID: 0}
-  player: {fileID: 0}
---- !u!4 &487103806
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 487103804}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1004.28253, y: 493.22534, z: 261366.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 13
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1721340882}
+          m_TargetAssemblyTypeName: KeyPad, Assembly-CSharp
+          m_MethodName: digitPressed
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 6
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &539333139
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1179,8 +1194,38 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7220766205745759607, guid: 02309324c6f244376afdf0804746ea85, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 02309324c6f244376afdf0804746ea85, type: 3}
+--- !u!114 &976688804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138683915}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1721340882}
+          m_TargetAssemblyTypeName: KeyPad, Assembly-CSharp
+          m_MethodName: resetClicked
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1041305785
 GameObject:
   m_ObjectHideFlags: 0
@@ -1312,6 +1357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   promptMessage: Press E to open
   clipboard: {fileID: 1626732484}
+  tHandler: {fileID: 13320809}
 --- !u!1001 &1108732674
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1807,11 +1853,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6961079265201146612, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 100
+      value: 1049.9
       objectReference: {fileID: 0}
     - target: {fileID: 6961079265201146612, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 100
+      value: 591.6
       objectReference: {fileID: 0}
     - target: {fileID: 6961079265201146612, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1860,6 +1906,18 @@ PrefabInstance:
     - target: {fileID: 6961079265201146612, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6961079265201146613, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+      propertyPath: m_Type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6961079265201146613, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6961079265201146613, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+      propertyPath: m_Material
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 6961079265201146615, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
       propertyPath: m_Name
@@ -1947,6 +2005,211 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1138683915 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8295818827140381680, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+  m_PrefabInstance: {fileID: 1138683912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138683916 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3469803273097467122, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+  m_PrefabInstance: {fileID: 1138683912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138683917 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1165532931858484462, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+  m_PrefabInstance: {fileID: 1138683912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138683918 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5972236945298063302, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+  m_PrefabInstance: {fileID: 1138683912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138683919 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3466152235075179731, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+  m_PrefabInstance: {fileID: 1138683912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138683920 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5176422622657184014, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+  m_PrefabInstance: {fileID: 1138683912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138683921 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2788477957381705919, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+  m_PrefabInstance: {fileID: 1138683912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138683922 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4320621947014072500, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+  m_PrefabInstance: {fileID: 1138683912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138683923 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1814167433163018988, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+  m_PrefabInstance: {fileID: 1138683912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138683924 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7640309038317514501, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+  m_PrefabInstance: {fileID: 1138683912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138683925 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 346084673028357511, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+  m_PrefabInstance: {fileID: 1138683912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1138683926 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7847440206727732816, guid: d8488c6b2a87e47f38066029d10b76b5, type: 3}
+  m_PrefabInstance: {fileID: 1138683912}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1138683927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138683922}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1721340882}
+          m_TargetAssemblyTypeName: KeyPad, Assembly-CSharp
+          m_MethodName: digitPressed
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 5
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1138683928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138683923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1721340882}
+          m_TargetAssemblyTypeName: KeyPad, Assembly-CSharp
+          m_MethodName: digitPressed
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 4
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1138683929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138683924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1721340882}
+          m_TargetAssemblyTypeName: KeyPad, Assembly-CSharp
+          m_MethodName: digitPressed
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 3
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1138683930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138683925}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1721340882}
+          m_TargetAssemblyTypeName: KeyPad, Assembly-CSharp
+          m_MethodName: digitPressed
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 2
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1138683931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138683926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1721340882}
+          m_TargetAssemblyTypeName: KeyPad, Assembly-CSharp
+          m_MethodName: digitPressed
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 1
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1001 &1173751904
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1972,7 +2235,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5998549415140767080, guid: 794d07123fd3846128cc99cf1b23b7fc, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: nextClick
+      value: okClicked
       objectReference: {fileID: 0}
     - target: {fileID: 5998549415140767080, guid: 794d07123fd3846128cc99cf1b23b7fc, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -2074,7 +2337,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7220766205745759607, guid: 794d07123fd3846128cc99cf1b23b7fc, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 794d07123fd3846128cc99cf1b23b7fc, type: 3}
 --- !u!1001 &1222197926
 PrefabInstance:
@@ -2200,7 +2464,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5998549415140767080, guid: 4ebc660aaaf7a4e9083cb8e8b2a55f7a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: nextClick
+      value: okClicked
       objectReference: {fileID: 0}
     - target: {fileID: 5998549415140767080, guid: 4ebc660aaaf7a4e9083cb8e8b2a55f7a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -2310,7 +2574,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-2184
+  m_Name: pb_Mesh-94186
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -2498,6 +2762,93 @@ Mesh:
     offset: 0
     size: 0
     path: 
+--- !u!114 &1382850344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138683920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1721340882}
+          m_TargetAssemblyTypeName: KeyPad, Assembly-CSharp
+          m_MethodName: digitPressed
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 7
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1439817321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138683919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1721340882}
+          m_TargetAssemblyTypeName: KeyPad, Assembly-CSharp
+          m_MethodName: digitPressed
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 8
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+--- !u!114 &1464954897
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138683918}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1721340882}
+          m_TargetAssemblyTypeName: KeyPad, Assembly-CSharp
+          m_MethodName: digitPressed
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 9
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!850595691 &1521984551
 LightingSettings:
   m_ObjectHideFlags: 0
@@ -2839,7 +3190,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7220766205745759607, guid: bf4fd9c2d02d4445194fa17fce1929f0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bf4fd9c2d02d4445194fa17fce1929f0, type: 3}
 --- !u!1001 &1685382052
 PrefabInstance:
@@ -3121,6 +3473,7 @@ MonoBehaviour:
   door: {fileID: 329466608}
   digitLock: {fileID: 1138683913}
   feedbackLabel: {fileID: 1138683914}
+  tHandler: {fileID: 13320809}
 --- !u!65 &1721340884
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3139,6 +3492,35 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6961079265201146615, guid: 794d07123fd3846128cc99cf1b23b7fc, type: 3}
   m_PrefabInstance: {fileID: 1173751904}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1808068188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1138683917}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 4
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1721340882}
+          m_TargetAssemblyTypeName: KeyPad, Assembly-CSharp
+          m_MethodName: digitPressed
+          m_Mode: 3
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &1834578035 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8463694648003185191, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
@@ -3278,7 +3660,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5998549415140767080, guid: 5449fd5f3ab234e85acb714afd1a7153, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: nextClick
+      value: okClicked
       objectReference: {fileID: 0}
     - target: {fileID: 5998549415140767080, guid: 5449fd5f3ab234e85acb714afd1a7153, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -3380,7 +3762,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7220766205745759607, guid: 5449fd5f3ab234e85acb714afd1a7153, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5449fd5f3ab234e85acb714afd1a7153, type: 3}
 --- !u!1 &1891178214
 GameObject:
@@ -3670,7 +4053,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2127296500
 PrefabInstance:
@@ -31241,7 +31624,8 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8463694649496634081, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d6d46df5e385041aea6d469ba92e25e9, type: 3}
 --- !u!224 &8463694648895871103 stripped
 RectTransform:

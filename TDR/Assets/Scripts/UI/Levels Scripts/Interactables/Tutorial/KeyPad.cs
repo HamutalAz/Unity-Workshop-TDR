@@ -15,25 +15,42 @@ public class KeyPad : Interactable
     bool isPanelOpen = false;
     [SerializeField]
     public TMP_Text feedbackLabel;
-    // Start is called before the first frame update
-    void Start()
-    {
-        //DataBaseManager.instance.levelHandler.addLevelObject("door", this);
-    }
+    [SerializeField]
+    private tutorialHandler tHandler;
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
-        
+        if (isPanelOpen)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha0))
+                digitPressed(0);
+            else if (Input.GetKeyDown(KeyCode.Alpha1))
+                digitPressed(1);
+            else if (Input.GetKeyDown(KeyCode.Alpha2))
+                digitPressed(2);
+            else if (Input.GetKeyDown(KeyCode.Alpha3))
+                digitPressed(3);
+            else if (Input.GetKeyDown(KeyCode.Alpha4))
+                digitPressed(4);
+            else if (Input.GetKeyDown(KeyCode.Alpha5))
+                digitPressed(5);
+            else if (Input.GetKeyDown(KeyCode.Alpha6))
+                digitPressed(6);
+            else if (Input.GetKeyDown(KeyCode.Alpha7))
+                digitPressed(7);
+            else if (Input.GetKeyDown(KeyCode.Alpha8))
+                digitPressed(8);
+            else if (Input.GetKeyDown(KeyCode.Alpha9))
+                digitPressed(9);
+            else if (Input.GetKeyDown(KeyCode.Return))
+                okClicked();
+        }
     }
-
     protected override void Interact()
     {
-
         isPanelOpen = !isPanelOpen;
         digitLock.SetActive(isPanelOpen);
-
+        resetClicked();
     }
 
     public void okClicked()
@@ -44,6 +61,7 @@ public class KeyPad : Interactable
             door.GetComponent<Animator>().SetBool("IsOpen", isOpen);
             isPanelOpen = false;
             digitLock.SetActive(isPanelOpen);
+            tHandler.showNextGuidePanel(8);
         }
         else
         {
@@ -56,7 +74,6 @@ public class KeyPad : Interactable
     {
         code += num.ToString();
         updateFeedBackLabel(code);
-
     }
 
     public void resetClicked()

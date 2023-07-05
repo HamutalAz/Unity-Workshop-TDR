@@ -40,10 +40,8 @@ public class tutorialHandler : MonoBehaviour
 
     public void nextClick()
     {
-        Debug.Log("count:" + panelsArr.Count);
         if(currInd < panelsArr.Count-1)
         {
-            Debug.Log("currInd:" + currInd);
             currInd++;
             if (currInd >= 1)
                 panelsArr[currInd - 1].SetActive(false);
@@ -53,7 +51,6 @@ public class tutorialHandler : MonoBehaviour
         {
             panelsArr[currInd].SetActive(false);
             currInd = 0;
-            Debug.Log("Done!");
         }
     }
 
@@ -66,6 +63,31 @@ public class tutorialHandler : MonoBehaviour
                 panelsArr[currInd + 1].SetActive(false);
             panelsArr[currInd].SetActive(true);
         }
+    }
+
+    public void okClicked()
+    {
+        if (currInd <= panelsArr.Count - 1)
+        {
+            if (currInd >= 1)
+                panelsArr[currInd].SetActive(false);
+        }
+    }
+
+    public void showNextGuidePanel(int ind)
+    {
+        while(currInd < ind)
+        {
+            panelsArr[currInd - 1].SetActive(false);
+            currInd++;
+        }
+        //currInd++;
+        panelsArr[currInd - 1].SetActive(false);
+
+        //if (currInd >= 1)
+        //    panelsArr[currInd-1].SetActive(false);
+
+        panelsArr[currInd].SetActive(true);
     }
 
     public void backToMainMenu()

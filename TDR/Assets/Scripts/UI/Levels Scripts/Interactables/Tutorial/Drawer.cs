@@ -8,7 +8,8 @@ public class Drawer : Interactable
     [SerializeField]
     private GameObject clipboard;
     private bool isOpen = false;
-
+    [SerializeField]
+    private tutorialHandler tHandler;
     // Start is called before the first frame update
     void Start()
     {
@@ -27,6 +28,6 @@ public class Drawer : Interactable
         GetComponentInParent<Animator>().SetBool("isOpen", isOpen);
         gameObject.GetComponent<BoxCollider>().enabled = false;  //disable drawer interaction.
         clipboard.GetComponent<BoxCollider>().enabled = true;    // start clipboard interaction.
-
+        tHandler.showNextGuidePanel(4);
     }
 }

@@ -10,6 +10,8 @@ public class ClipBoard : Interactable
     public GameObject backPack;
     [SerializeField]
     public tutorialHandler tHandler;
+    bool wasTakenBefore = false;
+    bool wasDroppedBefore = false;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +32,11 @@ public class ClipBoard : Interactable
 
         //put in backpack
         backPack.GetComponent<TutorialBackPack>().PutInBackPack("clipboard", new Vector2(900f, 900f), "ClipBoard");
+
+        if (!wasTakenBefore)
+            tHandler.showNextGuidePanel(6);
+
+        //wasTakenBefore = true;
         gameObject.SetActive(false);
     }
 
@@ -38,6 +45,12 @@ public class ClipBoard : Interactable
         gameObject.SetActive(true);
         Vector3 position = (Vector3)data["position"] + Vector3.forward;
         position.y = 0;
+
+        if (!wasDroppedBefore)
+            tHandler.showNextGuidePanel(7);
+
+        //wasDroppedBefore = true;
+
         gameObject.transform.position = position;
     }
 
