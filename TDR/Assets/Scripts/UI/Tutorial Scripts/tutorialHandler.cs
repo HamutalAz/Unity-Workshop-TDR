@@ -11,8 +11,6 @@ public class tutorialHandler : MonoBehaviour
     private List<GameObject> panelsArr = new();
     int currInd = 0;
     [SerializeField]
-    public GameObject chatHandler;
-    [SerializeField]
     public TextMeshProUGUI teamsPassaedLabel;
     [SerializeField]
     public GameObject backPack;
@@ -24,6 +22,10 @@ public class tutorialHandler : MonoBehaviour
     public GameObject player;
 
     private Dictionary<string, Interactable> levelObjects = new();
+
+    void Start() {
+        player.GetComponent<PlayerMotor>().setIsTutorial(true);
+    }
 
     // Update is called once per frame
     void Update()

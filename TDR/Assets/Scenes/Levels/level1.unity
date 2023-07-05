@@ -167,7 +167,6 @@ MonoBehaviour:
   - {fileID: 572727428}
   - {fileID: 1730857384}
   - {fileID: 9619649}
-  chatHandler: {fileID: 0}
   teamsPassaedLabel: {fileID: 191480358}
   backPack: {fileID: 8463694648895871112}
   backPackPanel: {fileID: 8463694648895871104}
@@ -2997,6 +2996,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7220766205745759607, guid: 6f0cc06afd2884a938bd623fcd1fc703, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7360188222836896892, guid: 6f0cc06afd2884a938bd623fcd1fc703, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 349
@@ -3005,7 +3008,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -616
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7220766205745759607, guid: 6f0cc06afd2884a938bd623fcd1fc703, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 6f0cc06afd2884a938bd623fcd1fc703, type: 3}
 --- !u!1001 &1721340880
 PrefabInstance:

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,16 +12,21 @@ public class PlayerMotor : MonoBehaviour
     public float speed = 5;
     public float gravity = -9.8f;
     public float jumpHeight = 1.5f;
+    private bool isTutorial = false;
 
     // Start is called before the first frame update
     async void Start()
     {
         controller = GetComponent<CharacterController>();
-       
-        Vector3 loc = await DataBaseManager.instance.levelManager.getInitialPlayerLoc();
-        transform.position = loc;
-        Physics.SyncTransforms();
-        //controller.Move(transform.TransformDirection(loc) * speed * Time.deltaTime);
+        try {
+            Vector3 loc = await DataBaseManager.instance.levelManager.getInitialPlayerLoc();
+            transform.position = loc;
+            Physics.SyncTransforms();
+        }
+        catch (Exception e)
+        {
+            Debug.Log("Error at: PlayerMotor::start: " + e.Message);
+        }
     }
 
     // Update is called once per frame
@@ -37,8 +43,8 @@ public class PlayerMotor : MonoBehaviour
 
         SetLocation(moveDirection);
 
-        //update location in DB if movment detected
-        if(moveDirection != Vector3.zero) {
+        //update location in DB if movment detected & it's an online game
+        if(moveDirection != Vector3.zero && !isTutorial) {
             string loc = transform.position.ToString();
             Dictionary<string, object> updates = new Dictionary<string, object>
             {
@@ -66,5 +72,10 @@ public class PlayerMotor : MonoBehaviour
 
         if (IsGrounded && playerVelocity.y < 0)
             playerVelocity.y = -2f;
+    }
+
+    public void setIsTutorial(bool i)
+    {
+        isTutorial = i;
     }
 }
