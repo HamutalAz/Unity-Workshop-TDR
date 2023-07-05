@@ -6,11 +6,16 @@ using UnityEngine;
 
 public class ClipBoard : Interactable
 {
+    [SerializeField]
+    public GameObject backPack;
+    [SerializeField]
+    public tutorialHandler tHandler;
 
     // Start is called before the first frame update
     void Start()
     {
         gameObject.GetComponent<BoxCollider>().enabled = false;
+        tHandler.addLevelObject("ClipBoard", this);
     }
 
     // Update is called once per frame
@@ -22,6 +27,18 @@ public class ClipBoard : Interactable
     protected override void Interact()
     {
         Debug.Log("interacted with ClipBoard. TODO: Put in backpack.");
-        //todo: put in backpack
+
+        //put in backpack
+        backPack.GetComponent<TutorialBackPack>().PutInBackPack("clipboard", new Vector2(900f, 900f), "ClipBoard");
+        gameObject.SetActive(false);
     }
+
+    public override void UpdateUI(Dictionary<string, object> data)
+    {
+        gameObject.SetActive(true);
+        Vector3 position = (Vector3)data["position"] + Vector3.forward;
+        position.y = 0;
+        gameObject.transform.position = position;
+    }
+
 }

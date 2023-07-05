@@ -30,8 +30,6 @@ public class LevelHandler : MonoBehaviour
     private bool isBPPanelVisable = false;
     [SerializeField]
     public GameObject player;
-    //[SerializeField]
-    //public TextMeshProUGUI promptText;
 
     private Dictionary<string, Interactable> levelObjects = new();
 
@@ -43,19 +41,15 @@ public class LevelHandler : MonoBehaviour
         DataBaseManager.instance.setLevelHandler(this);
         
         createPlayersAvatars();
-        //createPlayer();
+
         DataBaseManager.instance.levelManager.listenOnRoomObjects();
         DataBaseManager.instance.levelManager.getTeamPassedInfo();
-
-
     }
 
     // create player's "avatar" and add them to the scene
     private async void createPlayersAvatars()
     {
         Dictionary<string, Vector3> playersLoc = await DataBaseManager.instance.levelManager.getOtherPlayersData();
-
-        //Debug.Log("**** LH: createPlayersAvatars: playersLoc: ****" + playersLoc.Count);
 
         foreach (Vector3 playerLoc in playersLoc.Values)
         {
@@ -135,9 +129,9 @@ public class LevelHandler : MonoBehaviour
 
     public void SetPlayersLoc(Dictionary<string, Vector3> playersLoc)
     {
-    this.playersLoc = playersLoc;
+        this.playersLoc = playersLoc;
 
-    }   
+    } 
 
     public void CheckIfChatIsNeeded()
     {
@@ -177,23 +171,4 @@ public class LevelHandler : MonoBehaviour
     {
         return levelObjects[name];
     }
-
-    //async private void createPlayer()
-    //{
-    //    Vector3 loc = await DataBaseManager.instance.levelManager.getInitialPlayerLoc();
-    //    GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("Player"));
-    //    GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
-
-    //    Vector3 newPos = new Vector3(loc.x, loc.y, loc.z);
-    //    avatar.transform.position = newPos;
-
-    //    //Debug.Log("******* putting player in: " + loc);
-    //    Debug.Log("******* avatar.transform.position: " + avatar.transform.position);
-
-    //    Destroy(referencePlayer);
-    //    player = avatar;
-
-    //    player.GetComponent<PlayerUI>().setPromptText(promptText);
-    //    player.transform.parent = null;
-    //}
 }

@@ -27,18 +27,6 @@ public class BackPackManager : MonoBehaviour
     bool dropInLoc = false;
     Vector3 location = Vector3.zero;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
-
     public void PutInBackPack(string imageName, Vector2 delta, string objName)
     {
         if (empty == sideBarPlaceHolders.Count) { 

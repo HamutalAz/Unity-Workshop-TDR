@@ -17,26 +17,15 @@ public class TutorialBackPack : MonoBehaviour
     Dictionary<string, GameObject> nameToImgMap = new();
     Dictionary<GameObject, string> imgToObjName = new();
     [SerializeField]
-    LevelHandler levelHandler;
+    tutorialHandler tutorialHandler;
 
     bool dropInLoc = false;
     Vector3 location = Vector3.zero;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-       
-    }
 
     public void PutInBackPack(string imageName, Vector2 delta, string objName)
     {
-        if (empty == sideBarPlaceHolders.Count) { 
+        if (empty == sideBarPlaceHolders.Count) {
             Debug.Log("**** BACKPACK IS FULL!!!");
             return;
         }
@@ -53,6 +42,7 @@ public class TutorialBackPack : MonoBehaviour
         addEventListener(img2);
 
         empty++;
+        Debug.Log("item in backpack!");
     }
 
     static public GameObject createNewObjImage(string objName, Vector2 delta, GameObject parent)
@@ -82,7 +72,7 @@ public class TutorialBackPack : MonoBehaviour
             EventTrigger.Entry entry = new EventTrigger.Entry();
             entry.eventID = EventTriggerType.PointerClick;
             entry.callback.AddListener((eventData) => {
-                
+
                 dropOutOfBackPack(img);
 
             });
@@ -99,21 +89,24 @@ public class TutorialBackPack : MonoBehaviour
 
     private void dropOutOfBackPack(GameObject gameObject)
     {
+        // get thr info about the object that needs to be dropped out of backPack
         string objectName = imgToObjName[gameObject];
         GameObject sideBarImage = nameToImgMap[objectName];
         GameObject panelObject = gameObject;
-        string levelName = SceneManager.GetActiveScene().name;
 
-        Debug.Log("item " + imgToObjName[gameObject] + " about to be drop out of the back pack.");
+        // find to player location in which the object will be dropped.
+        GameObject player = tutorialHandler.player;
+        Vector3 playerPos = player.transform.position;
+        Vector3 playerDirection = player.transform.forward;
 
-        if (!dropInLoc)
+        var data = new Dictionary<string, object>
         {
-            GameObject player = DataBaseManager.instance.levelHandler.player;
-            Vector3 playerPos = player.transform.position;
-            Vector3 playerDirection = player.transform.forward;
+            { "position", playerPos },
+            { "direction", playerDirection }
+        };
 
-        }
-        //todo: change location of item in the item itself.
+        //change location of item in the item itself.
+        tutorialHandler.UpdateRoomObjectUI(objectName, data);
 
         // delete object from backpack side bar & destroy image
         nameToImgMap.Remove(objectName);
@@ -125,20 +118,9 @@ public class TutorialBackPack : MonoBehaviour
 
         empty--;
 
-        levelHandler.toggleBackPackVisability(); // todo: no level handler
+        tutorialHandler.toggleBackPackVisability();
 
-        dropInLoc = false;
         
-    }
-
-    public void dropItemInLoc(Vector3 loc)
-    {
-        dropInLoc = true;
-        location = loc;
-
-        levelHandler.toggleBackPackVisability();
-
-        // todo: if tab repressed - it doesn't change dropInLoc
     }
 
 }
