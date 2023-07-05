@@ -18,8 +18,6 @@ public class TutorialBackPack : MonoBehaviour
     Dictionary<GameObject, string> imgToObjName = new();
     [SerializeField]
     tutorialHandler tutorialHandler;
-
-    bool dropInLoc = false;
     Vector3 location = Vector3.zero;
 
 
