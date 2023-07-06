@@ -133,12 +133,12 @@ public class InteractivePanel : MonoBehaviour
         feedbackLabel.text = message;
     }
 
-     private void restoreLastClickedColor()
+    private void restoreLastClickedColor()
     {
-        if (lastClicked == OKBTN)
-            lastClicked.GetComponent<Image>().sprite = blackOK;
-        else
-            lastClicked.GetComponent<Image>().sprite = blackArrow;
+    if (lastClicked == OKBTN)
+        lastClicked.GetComponent<Image>().sprite = blackOK;
+    else
+        lastClicked.GetComponent<Image>().sprite = blackArrow;
     }
 
     private void arrowBtnClicked(char c, Image img)

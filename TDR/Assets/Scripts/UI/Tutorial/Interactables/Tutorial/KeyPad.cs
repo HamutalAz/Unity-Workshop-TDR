@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Palmmedia.ReportGenerator.Core.Common;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class KeyPad : Interactable
 {
@@ -17,6 +20,15 @@ public class KeyPad : Interactable
     public TMP_Text feedbackLabel;
     [SerializeField]
     private tutorialHandler tHandler;
+
+    //[SerializeField]
+    //private Sprite redIMG;
+    //[SerializeField]
+    //private Sprite blackIMG;
+    private int lastClicked = 0;
+
+    [SerializeField]
+    private List<Image> buttons;
 
     private void Update()
     {
@@ -55,6 +67,8 @@ public class KeyPad : Interactable
 
     public void okClicked()
     {
+        restoreAndPaint(10);
+
         if (code == "1234")
         {
             isOpen = !isOpen;
@@ -72,18 +86,35 @@ public class KeyPad : Interactable
 
     public void digitPressed(int num)
     {
+        restoreAndPaint(num);
+
         code += num.ToString();
         updateFeedBackLabel(code);
     }
 
     public void resetClicked()
     {
+        restoreAndPaint(11);
         code = "";
         updateFeedBackLabel(code);
+
+        restoreLastClickedColor();
     }
 
     private void updateFeedBackLabel(string text)
     {
         feedbackLabel.text = text;
+    }
+
+    private void restoreLastClickedColor()
+    {
+        buttons[lastClicked].GetComponent<Image>().color = Color.black;
+    }
+
+    private void restoreAndPaint(int ind)
+    {
+        restoreLastClickedColor();
+        buttons[ind].GetComponent<Image>().color = Color.red;
+        lastClicked = ind;
     }
 }

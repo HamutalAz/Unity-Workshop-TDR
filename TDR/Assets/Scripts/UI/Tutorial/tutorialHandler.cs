@@ -81,11 +81,7 @@ public class tutorialHandler : MonoBehaviour
             panelsArr[currInd - 1].SetActive(false);
             currInd++;
         }
-        //currInd++;
         panelsArr[currInd - 1].SetActive(false);
-
-        //if (currInd >= 1)
-        //    panelsArr[currInd-1].SetActive(false);
 
         panelsArr[currInd].SetActive(true);
     }
