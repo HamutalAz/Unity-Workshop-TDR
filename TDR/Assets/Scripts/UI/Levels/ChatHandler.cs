@@ -4,13 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class ChatHandler : MonoBehaviour
+public class ChatHandler : ChatHandlerInterface
 {
-    public GameObject chatPanel, textObject;
-    public TMP_InputField inputField;
-
-    [SerializeField]
-    public List<Message> messageList = new List<Message>();
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +38,7 @@ public class ChatHandler : MonoBehaviour
         DataBaseManager.instance.chatManager.stopListeningToMessages();
     }
 
-    public Message sendMessageToChat(string text, string sentBy)
+    public override Message sendMessageToChat(string text, string sentBy)
     {
         // itay levy needs to change to => DataBaseManager.userName
         Message newMessage = new Message(text, sentBy, "white");

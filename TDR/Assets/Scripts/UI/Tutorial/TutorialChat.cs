@@ -4,15 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class TutorialChat : MonoBehaviour
+public class TutorialChat : ChatHandlerInterface
 {
-    public GameObject chatPanel, textObject;
-    public TMP_InputField inputField;
-
-    [SerializeField]
-    public List<Message> messageList = new List<Message>();
-    // Start is called before the first frame update
     bool firstMessage = true;
+
+    // Start is called before the first frame update
     void Start()
     {
         
@@ -39,33 +35,11 @@ public class TutorialChat : MonoBehaviour
 
     }
 
-    private void OnDestroy()
+    public void OnDestroy()
     {
         Debug.Log("At ChatHandler.OnDestroy()");
-
     }
 
-    public Message sendMessageToChat(string text, string sentBy)
-    {
-        // itay levy needs to change to => DataBaseManager.userName
-        Message newMessage = new Message(text, sentBy, "white");
-
-        GameObject newText = Instantiate(textObject, chatPanel.transform);
-
-        TMP_Text tmp_text = newText.GetComponent<TMP_Text>();
-        tmp_text.text = newMessage.sentBy + ": " + newMessage.text;
-
-        //TODO: needs to be changed later
-        if (sentBy == "Tutorial Guide")
-            tmp_text.color = Color.magenta;
-        else
-            tmp_text.color = Color.white;
-
-        messageList.Add(newMessage);
-        
-        return newMessage;
-
-    }
 }
 
 
