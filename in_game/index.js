@@ -284,9 +284,11 @@ exports.escapeTheRoom = regionalFunctions.https.onCall(async(data) => {
     rooms.forEach(async(roomPointer) => {
       const id = roomPointer.data().roomId;
       const roomDoc = await db.collection("Rooms").doc(id).get();
-      deletes.push(deleteRoom(roomDoc));
+      deletes.push(deleteNestedDocument(roomDoc));
       deletes.push(roomDoc.ref.delete());
     });
+    deletes.push(deleteNestedDocument(gameDoc));
+    deletes.push(gameDoc.ref.delete());
     return Promise.all(deletes);
     
 
@@ -307,8 +309,8 @@ exports.escapeTheRoom = regionalFunctions.https.onCall(async(data) => {
 
 });
 
-async function deleteRoom(roomDoc){
-  const subCollections = await roomDoc.ref.listCollections();
+async function deleteNestedDocument(Doc){
+  const subCollections = await Doc.ref.listCollections();
   subCollections.forEach(async(subCollection) => {
     const docs = await subCollection.listDocuments();
     docs.forEach(async(doc) => {
