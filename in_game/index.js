@@ -248,7 +248,7 @@ exports.escapeTheRoom = regionalFunctions.https.onCall(async(data) => {
 
   const roomDoc = await db.collection("Rooms").doc(roomId).get();
 
-  const promises = [];
+  const statuses = [];
   //update room status
   await roomDoc.ref.update({
     status: "Qualified",
@@ -274,12 +274,23 @@ exports.escapeTheRoom = regionalFunctions.https.onCall(async(data) => {
         const p = room.ref.update({
           status: "Eliminated",
         });
-        promises.push(p);
+        statuses.push(p);
       }
     });
-    return Promise.all(promises);
+    Promise.all(statuses);
 
+    deletes = [];
     //delete  all rooms!
+    rooms.forEach(async(roomPointer) => {
+      const id = roomPointer.data().roomId;
+      const roomDoc = await db.collection("Rooms").doc(id).get();
+      deletes.push(deleteRoom(roomDoc));
+      deletes.push(roomDoc.ref.delete());
+    });
+    return Promise.all(deletes);
+    
+
+    
     // rooms.forEach(async(roomPointer) => {
     //   const id = roomPointer.data().roomId;
     //   await db.collection("Rooms").doc(id).delete();
@@ -295,6 +306,17 @@ exports.escapeTheRoom = regionalFunctions.https.onCall(async(data) => {
   }
 
 });
+
+async function deleteRoom(roomDoc){
+  const subCollections = await roomDoc.ref.listCollections();
+  subCollections.forEach(async(subCollection) => {
+    const docs = await subCollection.listDocuments();
+    docs.forEach(async(doc) => {
+      await doc.delete();
+    });
+  });
+
+}
 
 function getValidLocation(playerLocationX, playerLocationZ, playerDirectionX, playerDirectionZ, levelData, desiredY) {
   let borderX, borderZ;

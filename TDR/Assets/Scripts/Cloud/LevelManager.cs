@@ -154,13 +154,16 @@ public class LevelManager : MonoBehaviour
 
     public void listenOnRoomDocument()
     {
-        roomDoc.Listen(snapshot =>
+        roomDoc.Listen(async(snapshot) =>
         {
             Debug.Log("something has changed in room document!");
             string roomStatus = snapshot.GetValue<string>("status");
             Debug.Log("roomStatus: " + roomStatus);
             if (!roomStatus.Equals("mid-game"))
             {
+                //delete user from 'Users'
+                DocumentReference cityRef = dbReference.Collection("Users").Document(userID);
+                await cityRef.DeleteAsync();
                 if (roomStatus.Equals("Qualified"))
                 {
                     DataBaseManager.instance.levelHandler.moveScene("Winning");
@@ -169,6 +172,8 @@ public class LevelManager : MonoBehaviour
                 {
                     DataBaseManager.instance.levelHandler.moveScene("Losing");
                 }
+                
+                
             }
         });
     }
