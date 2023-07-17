@@ -106,7 +106,7 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
   let numberOfPlayersInRoom = 2; //todo: change to 1
   let currentGameInfo = await db.collection("Games").doc(gameId).get();
   let currentLevel = levelsOrder[currentGameInfo.data().currentLevelInd];
-  if(numOfPlayers > 3){
+  if(numOfPlayers > 4){
       isFinal = false;
       
       numberOfPlayersInRoom = setNumberOfPlayersInRoom(numOfPlayers,currentLevel);
@@ -143,7 +143,8 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
     
     //updates the gameId under Rooms/{roomId}
     const b = roomRef.set({
-      gameId: gameId
+      gameId: gameId,
+      status: "mid-game"
     });
     promises.push(b);
 
@@ -336,6 +337,7 @@ function shuffleArray(arr) {
 
 function generateRandomLoc(xArr, y, zArr){
   console.log("***** generateRandomLoc *****");
+  console.log(xArr,zArr);
   const x = randomFromInterval(xArr[0], xArr[1]);
   const z = randomFromInterval(zArr[0], zArr[1]);
 

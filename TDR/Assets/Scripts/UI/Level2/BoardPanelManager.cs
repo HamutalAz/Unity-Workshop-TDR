@@ -72,6 +72,12 @@ public class BoardPanelManager : MonoBehaviour
             outerBoard.GetComponent<BoxCollider>().enabled = false;
             gameObject.SetActive(false);
             DataBaseManager.instance.levelHandler.togglePlayerInputSystem(false);
+            Dictionary<string, object> dict = new Dictionary<string, object>();
+            bool res = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("escapeTheRoom", "blabla", dict);
+
+
+            //call escape room function
+            //set a 5 sec timer and then move to 'won' scene
         }
         else            // else: show feedback label
         {

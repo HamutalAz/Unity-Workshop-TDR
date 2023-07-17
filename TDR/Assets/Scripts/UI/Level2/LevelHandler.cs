@@ -11,6 +11,7 @@ using UnityEngine.ProBuilder.Shapes;
 using Random = UnityEngine.Random;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelHandler : SceneHandler
 {
@@ -30,6 +31,7 @@ public class LevelHandler : SceneHandler
         createPlayersAvatars();
 
         DataBaseManager.instance.levelManager.listenOnRoomObjects();
+        DataBaseManager.instance.levelManager.listenOnRoomDocument();
         DataBaseManager.instance.levelManager.getTeamPassedInfo();
     }
 
@@ -108,6 +110,12 @@ public class LevelHandler : SceneHandler
     public void UpdateTeamPassedLabel(int passed, int total)
     {
         teamsPassaedLabel.text = passed + "/" + total + " Teams passed";
+    }
+
+    public async void moveScene(string scene)
+    {
+        await Task.Delay(5000);
+        SceneManager.LoadScene(sceneName: scene);
     }
 
 }

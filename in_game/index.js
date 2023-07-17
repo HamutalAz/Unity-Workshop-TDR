@@ -206,7 +206,7 @@ exports.checkCode = regionalFunctions.https.onCall(async(data) => {
     console.log("input by user: " + codeInput);
     if (objectName == "board"){
       const s = doc.ref.update({
-        currentRooksLocations : code,
+        currentRooksLocations : codeInput,
       });
       promises.push(s);
     }
@@ -231,12 +231,69 @@ exports.checkCode = regionalFunctions.https.onCall(async(data) => {
           });
           promises.push(x);
         });
+        //needs to update the game doc about a qualified room, and also delete the room!
       }
     }
   });
   await Promise.all(promises);
   console.log("about to return: " + isCodeValid);
   return isCodeValid;
+});
+
+exports.escapeTheRoom = regionalFunctions.https.onCall(async(data) => {
+  console.log("***********escapeTheRoom************");
+  const roomId = data.roomID;
+  const gameId = data.gameID;
+  const userId = data.userID;
+
+  const roomDoc = await db.collection("Rooms").doc(roomId).get();
+
+  const promises = [];
+  //update room status
+  await roomDoc.ref.update({
+    status: "Qualified",
+  })
+  const gameDoc = await db.collection("Games").doc(gameId).get();
+  const qualified = gameDoc.data().Qualified;
+  const numberOfRoomsToQualify = gameDoc.data().numberOfRoomsToQualify;
+  const isFinal = gameDoc.data().isFinal;
+  await gameDoc.ref.update({
+    Qualified: qualified + 1,
+
+  });
+  console.log(`qualified: ${qualified}, able to qualify: ${numberOfRoomsToQualify}`);
+  if((numberOfRoomsToQualify - qualified) == 1){
+    console.log("game has ended, no more spots left in the next round!");
+    const rooms = await gameDoc.ref.collection("game_rooms").get();
+
+    //go through all rooms in game, and change their status to not qualified!
+    rooms.forEach(async(roomPointer) => {
+      const id = roomPointer.data().roomId;
+      const room = await db.collection("Rooms").doc(id).get();
+      if(room.data().status == "mid-game"){
+        const p = room.ref.update({
+          status: "Eliminated",
+        });
+        promises.push(p);
+      }
+    });
+    return Promise.all(promises);
+
+    //delete  all rooms!
+    // rooms.forEach(async(roomPointer) => {
+    //   const id = roomPointer.data().roomId;
+    //   await db.collection("Rooms").doc(id).delete();
+    // });
+
+
+    // //if is final == true => delete game!
+    // if(isFinal){
+    //   console.log( `isFinal = ${isFinal}`);
+    //   gameDoc.ref.delete();
+    // }
+
+  }
+
 });
 
 function getValidLocation(playerLocationX, playerLocationZ, playerDirectionX, playerDirectionZ, levelData, desiredY) {

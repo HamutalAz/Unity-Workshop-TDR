@@ -20,6 +20,7 @@ public class LevelManager : MonoBehaviour
 
     private string userID;
     private string roomID;
+    private string gameID;
 
     // other players data
     private List<string> otherUsersID = new();
@@ -36,6 +37,7 @@ public class LevelManager : MonoBehaviour
     {
         userID = DataBaseManager.userID;
         roomID = DataBaseManager.roomID;
+        gameID = DataBaseManager.gameID;
         userDoc = dbReference.Collection("Users").Document(userID);
 
         //Debug.Log("**** LM: getOtherPlayersData: roomID: ****" + roomID);
@@ -150,6 +152,27 @@ public class LevelManager : MonoBehaviour
         });
     }
 
+    public void listenOnRoomDocument()
+    {
+        roomDoc.Listen(snapshot =>
+        {
+            Debug.Log("something has changed in room document!");
+            string roomStatus = snapshot.GetValue<string>("status");
+            Debug.Log("roomStatus: " + roomStatus);
+            if (!roomStatus.Equals("mid-game"))
+            {
+                if (roomStatus.Equals("Qualified"))
+                {
+                    DataBaseManager.instance.levelHandler.moveScene("Winning");
+                }
+                else
+                {
+                    DataBaseManager.instance.levelHandler.moveScene("Losing");
+                }
+            }
+        });
+    }
+
     public void getTeamPassedInfo()
     {
         gameDoc = dbReference.Collection("Games").Document(DataBaseManager.gameID);
@@ -167,6 +190,7 @@ public class LevelManager : MonoBehaviour
         Dictionary<string, object> newDict = new();
         newDict.Add("userID", userID);
         newDict.Add("roomID", roomID);
+        newDict.Add("gameID", gameID);
         newDict.Add("objectName", objName);
         newDict.Add("data", data);
         HttpsCallableReference request = functions.GetHttpsCallable(functionName);
