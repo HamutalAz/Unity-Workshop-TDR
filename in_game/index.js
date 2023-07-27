@@ -262,8 +262,10 @@ exports.escapeTheRoom = regionalFunctions.https.onCall(async(data) => {
 
   });
   console.log(`qualified: ${qualified}, able to qualify: ${numberOfRoomsToQualify}`);
+  let isGameOver; 
   if((numberOfRoomsToQualify - qualified) == 1){
     console.log("game has ended, no more spots left in the next round!");
+    isGameOver = true;
     const rooms = await gameDoc.ref.collection("game_rooms").get();
 
     //go through all rooms in game, and change their status to not qualified!
@@ -277,19 +279,24 @@ exports.escapeTheRoom = regionalFunctions.https.onCall(async(data) => {
         statuses.push(p);
       }
     });
+  } else {
+    isGameOver = false;
+  }
     Promise.all(statuses);
+    console.log(`about to return: ${isGameOver}`);
+    return isGameOver; // true means game is over!
 
-    deletes = [];
-    //delete  all rooms!
-    rooms.forEach(async(roomPointer) => {
-      const id = roomPointer.data().roomId;
-      const roomDoc = await db.collection("Rooms").doc(id).get();
-      deletes.push(deleteNestedDocument(roomDoc));
-      deletes.push(roomDoc.ref.delete());
-    });
-    deletes.push(deleteNestedDocument(gameDoc));
-    deletes.push(gameDoc.ref.delete());
-    return Promise.all(deletes);
+    // deletes = [];
+    // //delete  all rooms!
+    // rooms.forEach(async(roomPointer) => {
+    //   const id = roomPointer.data().roomId;
+    //   const roomDoc = await db.collection("Rooms").doc(id).get();
+    //   deletes.push(deleteNestedDocument(roomDoc));
+    //   deletes.push(roomDoc.ref.delete());
+    // });
+    // deletes.push(deleteNestedDocument(gameDoc));
+    // deletes.push(gameDoc.ref.delete());
+    // return Promise.all(deletes);
     
 
     
@@ -305,7 +312,6 @@ exports.escapeTheRoom = regionalFunctions.https.onCall(async(data) => {
     //   gameDoc.ref.delete();
     // }
 
-  }
 
 });
 

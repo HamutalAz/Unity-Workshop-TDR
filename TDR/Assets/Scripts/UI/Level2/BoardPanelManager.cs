@@ -74,10 +74,11 @@ public class BoardPanelManager : MonoBehaviour
             DataBaseManager.instance.levelHandler.togglePlayerInputSystem(false);
             Dictionary<string, object> dict = new Dictionary<string, object>();
             bool res = (bool)await DataBaseManager.instance.levelManager.LaunchRequest("escapeTheRoom", "blabla", dict);
-
-
-            //call escape room function
-            //set a 5 sec timer and then move to 'won' scene
+            if (res) //if res == true, it means the game is over, and a request to delete all the game docs is required
+            {
+                Debug.Log("res is true, game is over!");
+                //send request to delete all game and rooms docs!
+            }
         }
         else            // else: show feedback label
         {
