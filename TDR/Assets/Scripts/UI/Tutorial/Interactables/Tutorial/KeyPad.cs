@@ -21,14 +21,15 @@ public class KeyPad : Interactable
     [SerializeField]
     private tutorialHandler tHandler;
 
-    //[SerializeField]
-    //private Sprite redIMG;
-    //[SerializeField]
-    //private Sprite blackIMG;
     private int lastClicked = 0;
 
     [SerializeField]
     private List<Image> buttons;
+
+    // sound effects
+    public AudioClip doorOpen;
+    public AudioClip incorrectCode;
+
 
     private void Update()
     {
@@ -71,6 +72,7 @@ public class KeyPad : Interactable
 
         if (code == "1234")
         {
+            gameObject.GetComponent<AudioSource>().PlayOneShot(doorOpen);
             isOpen = !isOpen;
             door.GetComponent<Animator>().SetBool("IsOpen", isOpen);
             isPanelOpen = false;
@@ -79,6 +81,7 @@ public class KeyPad : Interactable
         }
         else
         {
+            gameObject.GetComponent<AudioSource>().PlayOneShot(incorrectCode);
             updateFeedBackLabel("Wrong code. Try again.");
             code = "";
         }

@@ -17,6 +17,9 @@ public class Plate : Interactable
     [SerializeField]
     private Material inVisableMaterial;
 
+    // sound effects
+    public AudioClip clip;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -82,7 +85,8 @@ public class Plate : Interactable
         {
             //update plate's new location
             gameObject.transform.position = DataBaseManager.instance.levelManager.stringToVec(location);
-            
+            gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
+
             // change image
             if (isReadable)
                 gameObject.GetComponent<MeshRenderer>().material = visableMaterial;

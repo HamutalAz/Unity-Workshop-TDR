@@ -13,6 +13,9 @@ public class ClipBoard : Interactable
     bool wasTakenBefore = false;
     bool wasDroppedBefore = false;
 
+    // sound effects
+    public AudioClip clip;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +51,8 @@ public class ClipBoard : Interactable
 
         if (!wasDroppedBefore)
             tHandler.showNextGuidePanel(7);
+
+        gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
 
         //wasDroppedBefore = true;
 

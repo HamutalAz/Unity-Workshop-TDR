@@ -15,6 +15,8 @@ public class Box : Interactable
     [SerializeField]
     private GameObject plate;
 
+    // sounds effect
+    public AudioClip clip;
 
     // Start is called before the first frame update
     void Start()
@@ -55,6 +57,9 @@ public class Box : Interactable
 
         // Update value
         gameObject.GetComponent<Animator>().SetBool("isOpen", isOpen);
+
+        if(isOpen)
+            gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
 
         Debug.Log("IsOpen:" + isOpen);
     }

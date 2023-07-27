@@ -6,6 +6,8 @@ using TMPro;
 
 public class ChatHandler : ChatHandlerInterface
 {
+    public AudioClip clip;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -52,6 +54,10 @@ public class ChatHandler : ChatHandlerInterface
         tmp_text.color = Color.white;
 
         messageList.Add(newMessage);
+
+        if(newMessage.sentBy != DataBaseManager.userName)
+            gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
+
         return newMessage;
     }
 }

@@ -12,31 +12,26 @@ public class RedButton : Interactable
     private bool isOn = false;
     public LevelHandler levelHandler;
 
+    // sounds effect
+    public AudioClip clip;
+
     // Start is called before the first frame update
     void Start()
     {
-        //Debug.Log("hereeee");
-        //Debug.Log("isnull?:" + DataBaseManager.instance.levelHandler == null);
         levelHandler.addLevelObject("redLight", this);
-
-        //addLevelObject("redLight", this);
-
-        //DataBaseManager.instance.levelHandler.addLevelObject("redLight", this);
     }
 
     // Update is called once per frame
     void Update()
     {
-        //if (!Input.GetKeyUp(KeyCode.E) && isOn)
-        //{
-        //    TurnLightOff();
-        //}
+
     }
 
     protected override async void Interact()
     {
         Debug.Log("interact with button!!!");
-
+        gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
+        
         // create dictionary with the data we want to send to the DB
         Dictionary<string, object> data = new Dictionary<string, object>
             {
@@ -49,14 +44,6 @@ public class RedButton : Interactable
         Debug.Log(response);
         
 
-        // send the data to the DB
-        //bool status = await DataBaseManager.instance.levelManager.WriteToDb("redLight", data);
-
-        //// check if sucseed
-        //if (!status)
-        //{
-        //    Debug.Log("couldn't turn on light!!!");
-        //}
     }
     // Apply received changes
     public override void UpdateUI(Dictionary<string, object> data)

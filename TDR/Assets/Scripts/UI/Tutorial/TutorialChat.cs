@@ -7,6 +7,7 @@ using TMPro;
 public class TutorialChat : ChatHandlerInterface
 {
     bool firstMessage = true;
+    public AudioClip clip;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +30,8 @@ public class TutorialChat : ChatHandlerInterface
                 {
                     Message AutoMessage = sendMessageToChat("Congruts! You just sent your first message!", "Tutorial Guide");
                     firstMessage = false;
+                    gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
+
                 }
             }
         }
