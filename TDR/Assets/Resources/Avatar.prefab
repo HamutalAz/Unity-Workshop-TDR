@@ -979,7 +979,7 @@ GameObject:
   m_Component:
   - component: {fileID: 139260736375640879}
   - component: {fileID: 139260736375640878}
-  - component: {fileID: 139260736375640874}
+  - component: {fileID: 7438755497551397318}
   m_Layer: 0
   m_Name: Avatar
   m_TagString: Untagged
@@ -996,7 +996,7 @@ Transform:
   m_GameObject: {fileID: 139260736375640877}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
+  m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 139260735172370283}
@@ -1057,21 +1057,22 @@ MonoBehaviour:
   BlinkingInterval: 1.98
   BlinkSpeed: 0.8
   ExpressionChangeSpeed: 5
---- !u!114 &139260736375640874
+--- !u!114 &7438755497551397318
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 139260736375640877}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ff9ab8ef67d9d2458929875d8f96604, type: 3}
+  m_Script: {fileID: 11500000, guid: 308ce14a3c0bd49b185e5fbdfe65bc77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MovementAcceleration: 22
   MovementDamping: 5
   _inputVector: {x: 0, y: 0}
+  newLoc: {x: 0, y: 0, z: 0}
 --- !u!1 &156248256763038020
 GameObject:
   m_ObjectHideFlags: 0

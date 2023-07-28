@@ -40,7 +40,7 @@ public class LevelManager : MonoBehaviour
         gameID = DataBaseManager.gameID;
         userDoc = dbReference.Collection("Users").Document(userID);
 
-        //Debug.Log("**** LM: getOtherPlayersData: roomID: ****" + roomID);
+        Debug.Log("**** LM: getOtherPlayersData: roomID: ****" + roomID);
 
         // Loop over all of the players in the room (which aren't the current user & add their useID to a list.
         roomDoc = dbReference.Collection("Rooms").Document(roomID);
@@ -51,11 +51,11 @@ public class LevelManager : MonoBehaviour
             QuerySnapshot snapshot = task.Result;
             foreach (DocumentSnapshot documentSnapshot in snapshot.Documents)
             {
-                //Debug.Log(String.Format("LM: getOtherPlayersData: Fetched player with ID: " + documentSnapshot.Id));
+                Debug.Log(String.Format("LM: getOtherPlayersData: Fetched player with ID: " + documentSnapshot.Id));
                 otherUsersID.Add(documentSnapshot.Id);
             }
         });
-        //Debug.Log("**** LM: getOtherPlayersData: amount of other players in the room: ****" + otherUsersID.Count);
+        Debug.Log("**** LM: getOtherPlayersData: amount of other players in the room: ****" + otherUsersID.Count);
 
         // Get the players document from the DB
         foreach (string id in otherUsersID)

@@ -1818,6 +1818,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 139260736375640874, guid: a2709147cb090450d8f9f7b45e721968, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 139260736375640877, guid: a2709147cb090450d8f9f7b45e721968, type: 3}
       propertyPath: m_Name
       value: Avatar
