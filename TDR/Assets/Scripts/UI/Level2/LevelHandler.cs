@@ -42,11 +42,11 @@ public class LevelHandler : SceneHandler
 
         foreach (Vector3 playerLoc in playersLoc.Values)
         {
-            GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("3RdPersonPlayer"));
+            GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("Avatar"));
 
             // the following 2 lines generates random color to player - todo: delete when changing to avatars
-            var playerRenderer = referencePlayer.GetComponent<Renderer>();
-            playerRenderer.material.SetColor("_Color", UnityEngine.Random.ColorHSV());
+            //var playerRenderer = referencePlayer.GetComponent<Renderer>();
+            //playerRenderer.material.SetColor("_Color", UnityEngine.Random.ColorHSV());
 
             GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
             otherPlayersAvatars.Add(avatar);

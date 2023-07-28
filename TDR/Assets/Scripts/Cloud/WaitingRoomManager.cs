@@ -20,7 +20,7 @@ public class WaitingRoomManager : MonoBehaviour
     {
 
         dbReference = FirebaseFirestore.DefaultInstance;
-        lobbyDocument = dbReference.Collection("Lobby").Document("gYdtPMVaorwoc2jH3Iog");
+        lobbyDocument = dbReference.Collection("Lobby").Document("x3XGhSKLrwiXtcgyBuIr");
         roomMembersCollection =lobbyDocument.Collection("lobby_members");
         updateMaxPlayers();
     }

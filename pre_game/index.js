@@ -5,7 +5,7 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 const db = admin.firestore();
 
-const lobbyPath = "Lobby/gYdtPMVaorwoc2jH3Iog/lobby_members/{user_id}";
+const lobbyPath = "Lobby/x3XGhSKLrwiXtcgyBuIr/lobby_members/{user_id}";
 let currentGameId = null;
 let maxPlayers = 0;
 
@@ -16,7 +16,7 @@ exports.checkNumberOfPlayersInLobby = firestore
       
       // get all players from the lobby & check how many player in there
       const lobbyCol = db.collection("Lobby");
-      const lobbyDoc = lobbyCol.doc("gYdtPMVaorwoc2jH3Iog");
+      const lobbyDoc = lobbyCol.doc("x3XGhSKLrwiXtcgyBuIr");
       const room_mem = lobbyDoc.collection("lobby_members");
       const snapshot = await room_mem.count().get();
       const numOfPlayers = snapshot.data().count;
@@ -85,7 +85,7 @@ function deleteFromLobby(arr) {
   console.log("***** deleting from lobby! *****");
   
   let lobbyCol = db.collection("Lobby");
-  const lobbyDoc = lobbyCol.doc("gYdtPMVaorwoc2jH3Iog");
+  const lobbyDoc = lobbyCol.doc("x3XGhSKLrwiXtcgyBuIr");
   lobbyCol = lobbyDoc.collection("lobby_members");
   const promises = [];
   arr.forEach((val) => {

@@ -11,7 +11,7 @@ public class LoginManager : MonoBehaviour
     private void Start()
     {
         dbReference = FirebaseFirestore.DefaultInstance;
-        roomMembersCollection = dbReference.Collection("Lobby").Document("gYdtPMVaorwoc2jH3Iog").Collection("lobby_members");
+        roomMembersCollection = dbReference.Collection("Lobby").Document("x3XGhSKLrwiXtcgyBuIr").Collection("lobby_members");
     }
     public async Task CreateUser(string newUserName)
     {
@@ -29,8 +29,8 @@ public class LoginManager : MonoBehaviour
                     throw new Exception("Username '" + newUserName + "' already exists. please try again.");
                 }
             });
-            
-            //Add RefUser to'Lobby/gYdtPMVaorwoc2jH3Iog/room_members' collection
+
+            //Add RefUser to'Lobby/x3XGhSKLrwiXtcgyBuIr/room_members' collection
             DocumentReference newLobbyDoc = roomMembersCollection.Document();
             await newLobbyDoc.SetAsync(newRefUser);
 
