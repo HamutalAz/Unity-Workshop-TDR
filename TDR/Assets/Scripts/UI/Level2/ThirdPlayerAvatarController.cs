@@ -38,17 +38,15 @@ public class ThirdPlayerAvatarController : MonoBehaviour
             _inputVector.x = Mathf.Clamp(_inputVector.x, -1, 1);
             _inputVector.y = Mathf.Clamp(_inputVector.y, -1, 1);
 
-            //Vector3 movement = new Vector3(_inputVector.x, 0, _inputVector.y) * 5.0f * Time.deltaTime;
-            //transform.position += movement;
-
             transform.position = newLoc;
 
             // animate movment
             _avatar.Animator.SetFloat("MoveX", _inputVector.x);
             _avatar.Animator.SetFloat("MoveY", _inputVector.y);
+
             // stop animation after 5 seconds
             StartCoroutine(stopAnimation());
-            //transform.position = newLoc;
+            
         }
 
     }
@@ -76,7 +74,6 @@ public class ThirdPlayerAvatarController : MonoBehaviour
     private IEnumerator stopAnimation()
     {
         yield return new WaitForSeconds(1);
-        Debug.Log("stopping animation!!");
         _avatar.Animator.SetFloat("MoveX", 0);
         _avatar.Animator.SetFloat("MoveY", 0);
     }

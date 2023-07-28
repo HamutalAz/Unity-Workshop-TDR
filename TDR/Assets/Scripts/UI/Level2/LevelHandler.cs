@@ -8,7 +8,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.LowLevel;
 using UnityEngine.ProBuilder.Shapes;
-using Random = UnityEngine.Random;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
@@ -21,7 +20,6 @@ public class LevelHandler : SceneHandler
     // other players data
     private List<GameObject> otherPlayersAvatars = new List<GameObject>();
     public Dictionary<string, Vector3> playersLoc = new Dictionary<string, Vector3>();
-    public Dictionary<GameObject, string> avatarToUsername = new Dictionary<GameObject, string>();
 
 
     [SerializeField]
@@ -50,7 +48,8 @@ public class LevelHandler : SceneHandler
             Vector3 playerLoc = entry.Value;
 
             // create the avatar
-            GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("Avatar"));
+            // todo: get the name of the avatar to load from the DB
+            GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("Boy1"));
             GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
 
             // set it's location
@@ -58,31 +57,11 @@ public class LevelHandler : SceneHandler
             Debug.Log("******* about to put another player in:" + newLoc);
             avatar.transform.position = newLoc;
 
-            // add to list & dictionary
+            // add to list
             otherPlayersAvatars.Add(avatar);
-            avatarToUsername.Add(avatar, entry.Key);
 
             Destroy(referencePlayer);
         }
-
-
-        //foreach (Vector3 playerLoc in playersLoc.Values)
-        //{
-        //    GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("Avatar"));
-
-        //    // the following 2 lines generates random color to player - todo: delete when changing to avatars
-        //    //var playerRenderer = referencePlayer.GetComponent<Renderer>();
-        //    //playerRenderer.material.SetColor("_Color", UnityEngine.Random.ColorHSV());
-
-        //    GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
-        //    otherPlayersAvatars.Add(avatar);
-
-        //    Vector3 newLoc = new Vector3(playerLoc.x, 0, playerLoc.z);
-        //    Debug.Log("******* about to put another player in:" + newLoc);
-        //    avatar.transform.position = newLoc;
-
-        //    Destroy(referencePlayer);
-        //}
 
         // set listener on other players location & update their location
         DataBaseManager.instance.levelManager.listenOnOtherPlayersDoc();
@@ -148,17 +127,5 @@ public class LevelHandler : SceneHandler
         await Task.Delay(5000);
         SceneManager.LoadScene(sceneName: scene);
     }
-
-    //public Vector3 fetchPlayerLoc(GameObject obj)
-    //{
-    //    // find the index in the list
-    //    if (avatarToUsername[obj] == null)
-    //    {
-    //        Debug.Log("****** Couldn't find the avatar!!!");
-    //        return Vector3.zero;
-    //    }
-
-    //    return playersLoc[avatarToUsername[obj]];
-    //}
 
 }
