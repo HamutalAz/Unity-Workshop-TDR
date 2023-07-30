@@ -32,7 +32,6 @@ public class WaitingRoomManager : MonoBehaviour
 
             DocumentSnapshot res = task.Result;
             DataBaseManager.MAXPLAYERS = res.GetValue<int>("MaxPlayers");
-           // Debug.Log("MaxPlayers = " + DataBaseManager.MAXPLAYERS);
         });
     }
 
@@ -49,36 +48,7 @@ public class WaitingRoomManager : MonoBehaviour
 
         startListenToUserChanges();
 
-        //DocumentReference userDoc = dbReference.Collection("Users").Document(DataBaseManager.userID);
-        //// creating a listener on user's DOC
-        //docListener = userDoc.Listen(async(docSnapshot) =>
-        //{
-        //    string roomID = docSnapshot.GetValue<string>("roomId");
-        //    Debug.Log("roomID: " + roomID);
-        //    string gameID = docSnapshot.GetValue<string>("gameId");
-        //    Debug.Log("gameID: " + gameID);
 
-
-        //    if (roomID != null)
-        //    {
-        //        // set room & game ID to DB Manager
-        //        DataBaseManager.roomID = roomID;
-        //        DataBaseManager.gameID = gameID;
-
-        //        DocumentReference gameDoc = dbReference.Collection("Games").Document(gameID);
-        //        await gameDoc.GetSnapshotAsync().ContinueWithOnMainThread(task =>
-        //        {
-        //            Debug.Log("on listener");
-        //            DocumentSnapshot res = task.Result;
-        //            int currentLevel = res.GetValue<int>("currentLevelInd");
-        //            Debug.Log("currentLevel" + currentLevel);
-        //            string[] levelsOrder = res.GetValue<string[]>("levelsOrder"); // todo: save later
-        //            Debug.Log("levelsOrder" + levelsOrder);
-        //            DataBaseManager.instance.waitingRoomSceneHandler.loadScene(levelsOrder[currentLevel]);
-        //        });
-
-        //    }
-        //});
        
     }
 
@@ -105,25 +75,6 @@ public class WaitingRoomManager : MonoBehaviour
                  startListenToGameChanges(gameID);
             }
 
-            //if (roomID != null)
-            //{
-            //    // set room & game ID to DB Manager
-            //    DataBaseManager.roomID = roomID;
-            //    DataBaseManager.gameID = gameID;
-
-            //    DocumentReference gameDoc = dbReference.Collection("Games").Document(gameID);
-            //    await gameDoc.GetSnapshotAsync().ContinueWithOnMainThread(task =>
-            //    {
-            //        Debug.Log("on listener");
-            //        DocumentSnapshot res = task.Result;
-            //        int currentLevel = res.GetValue<int>("currentLevelInd");
-            //        Debug.Log("currentLevel" + currentLevel);
-            //        string[] levelsOrder = res.GetValue<string[]>("levelsOrder"); // todo: save later
-            //        Debug.Log("levelsOrder" + levelsOrder);
-            //        DataBaseManager.instance.waitingRoomSceneHandler.loadScene(levelsOrder[currentLevel]);
-            //    });
-
-            //}
         });
     }
 
@@ -137,7 +88,6 @@ public class WaitingRoomManager : MonoBehaviour
             Debug.Log("number of docs in games/{gameID}/games_status : " + snapshot.Count);
             foreach (DocumentSnapshot childSnapshot in snapshot.Documents)
             {
-                //Debug.Log("number of docs:" + snapshot.Count);
                 if (childSnapshot.GetValue<bool>("readyToLoad"))
                 {
                     Debug.Log("game is ready to load!");
@@ -161,28 +111,7 @@ public class WaitingRoomManager : MonoBehaviour
                 }
             }
         });
-        //gameListener = gameDoc.Listen(async(snapshot) =>
-        //{
-        //    Debug.Log("game listener is called!");
-        //    var x = snapshot.GetValue<bool>("readyToLoad");
-        //    if (x == true)
-        //    {
-        //        Debug.Log("game is ready to load!");
-        //        DocumentReference gameDoc = dbReference.Collection("Games").Document(gameID);
-        //        await gameDoc.GetSnapshotAsync().ContinueWithOnMainThread(task =>
-        //        {
-        //            DocumentSnapshot res = task.Result;
-        //            int currentLevel = res.GetValue<int>("currentLevelInd");
-        //            Debug.Log("currentLevel" + currentLevel);
-        //            string[] levelsOrder = res.GetValue<string[]>("levelsOrder"); // todo: save later
-        //            Debug.Log("levelsOrder" + levelsOrder);
-        //            DataBaseManager.instance.waitingRoomSceneHandler.loadScene(levelsOrder[currentLevel]);
 
-        //        });
-        //    }
-            
-
-        //});
     }
     public void stopListenToUserChanges()
     {

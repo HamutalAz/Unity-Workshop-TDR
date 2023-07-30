@@ -14,7 +14,6 @@ public class DoorPanel : Interactable
     // Start is called before the first frame update
     void Start()
     {
-        //levelHandler.addLevelObject("doorPanel", this);
     }
 
     // Update is called once per frame

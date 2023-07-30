@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using UnityEngine.LowLevel;
+using UnityEngine.UI;
 
 public class WaitingRoomSceneHandler : MonoBehaviour
 {
@@ -20,6 +22,18 @@ public class WaitingRoomSceneHandler : MonoBehaviour
     private float spaceX = 300;
     [SerializeField]
     private float spaceY = 150;
+    [SerializeField]
+    Image avatarPlaceHolder;
+    [SerializeField]
+    private Sprite Boy1;
+    [SerializeField]
+    private Sprite Boy2;
+    [SerializeField]
+    private Sprite Boy3;
+    [SerializeField]
+    private Sprite Girl1;
+    [SerializeField]
+    private Sprite Girl2;
 
     private List<GameObject> nodes;
     // Start is called before the first frame update
@@ -27,6 +41,7 @@ public class WaitingRoomSceneHandler : MonoBehaviour
     {
         DataBaseManager.instance.setWaitingRoomSceneHandler(this);
         GenerateGrid();
+        getPlayerAvatar();
     }
 
     public void GenerateGrid()
@@ -87,18 +102,36 @@ public class WaitingRoomSceneHandler : MonoBehaviour
 
     public string WaitingForPlayersToString(int currentAmount)
     {
-        return "Waiting for players: \n" + currentAmount + "/" + DataBaseManager.MAXPLAYERS;
+        return "Waiting for players: " + currentAmount + "/" + DataBaseManager.MAXPLAYERS;
     }
 
     public void loadScene(string scene)
     {
-        //Debug.Log("stopping user listener");
-        //DataBaseManager.instance.waitingRoomManager.stopListenToUserChanges();
-        //Debug.Log("stopping game listener");
-        //DataBaseManager.instance.waitingRoomManager.stopListenToGameChanges();
-        Debug.Log("moving to level1");
-        //SceneManager.LoadScene(sceneName: scene);
-        SceneManager.LoadScene(sceneName: scene); // todo: change to scene later
+        Debug.Log("moving to " + scene);
+        SceneManager.LoadScene(sceneName: scene);
 
+    }
+
+    private void getPlayerAvatar()
+    {
+        string avaterName = DataBaseManager.avatar;
+        avatarPlaceHolder.GetComponent<Image>().sprite = getSpriteFromName(avaterName);
+
+    }
+
+    private Sprite getSpriteFromName(string name)
+    {
+        switch (name) {
+            case "Boy1":
+                return Boy1;
+            case "Boy2":
+                return Boy2;
+            case "Boy3":
+                return Boy3;
+            case "Girl1":
+                return Girl1;
+            default:
+                return Girl2;
+        }
     }
 }

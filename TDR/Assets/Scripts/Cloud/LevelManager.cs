@@ -26,7 +26,7 @@ public class LevelManager : MonoBehaviour
     private List<string> otherUsersID = new();
     private List<DocumentReference> otherPlayersDocRef = new();
     private Dictionary<string, Vector3> playersLoc = new(); // players locations
-    //private Dictionary<string, bool> toRotate = new();
+
     private List<User> allUsers = new();
 
     private void Start()
@@ -76,20 +76,13 @@ public class LevelManager : MonoBehaviour
                 DocumentSnapshot snapshot = task.Result;
                 User player = snapshot.ConvertTo<User>();
                 allUsers.Add(player);
-                //playersLoc.Add(player.userName, stringToVec(player.location));
-                //toRotate.Add(player.userName, player.toRotate);
-                //Debug.Log("**LM: setPlayersLocation() playerLoc: **" + stringToVec(player.location));
+               ;
             });
         }
 
-        //Debug.Log("**** LM: setPlayersLocation(): playersLoc.Count **** " + playersLoc.Count);
         return getAllUsers();
     }
 
-    //public Dictionary<string, bool> getToRotate()
-    //{
-    //    return toRotate;
-    //}
 
     public List<User> getAllUsers()
     {
@@ -133,13 +126,8 @@ public class LevelManager : MonoBehaviour
             foreach (DocumentSnapshot documentSnapshot in snapshot.Documents)
             {
                 DocumentReference roomObjDocRef = documentSnapshot.Reference;
-                //Debug.Log("inside listen loop on room obj!");
-
                 string name = documentSnapshot.GetValue<string>("name");
-                //Debug.Log("got doc: " + name);
-
                 Dictionary<string, object> data = documentSnapshot.ToDictionary();
-                //objectsData[name] = data;
                 DataBaseManager.instance.levelHandler.UpdateRoomObjectUI(name, data);
 
                 roomObjDocRef.Listen((docSnapshot) =>
@@ -147,7 +135,6 @@ public class LevelManager : MonoBehaviour
                     Debug.Log("something changed in game object!");
                     string name = docSnapshot.GetValue<string>("name");             // the name of the object
                     Dictionary<string, object> data = docSnapshot.ToDictionary();   // it's data
-                    //objectsData[name] = data;
 
                     DataBaseManager.instance.levelHandler.UpdateRoomObjectUI(name, data);
                 });
@@ -271,7 +258,6 @@ public class LevelManager : MonoBehaviour
         return await userDoc.GetSnapshotAsync().ContinueWithOnMainThread(task =>
         {
             string location = task.Result.GetValue<string>("location");
-            Debug.Log("******* player location from DB is: " + location);
             return stringToVec(location);
         });        
     }

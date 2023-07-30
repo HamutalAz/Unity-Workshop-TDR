@@ -43,9 +43,6 @@ public class LevelHandler : SceneHandler
     private async void createPlayersAvatars()
     {
         List<User> users = await DataBaseManager.instance.levelManager.getOtherPlayersData();
-        //Dictionary<string, Vector3> playersLoc = await DataBaseManager.instance.levelManager.getOtherPlayersData();
-        //Dictionary<string, bool> toRotate = DataBaseManager.instance.levelManager.getToRotate();
-
 
         foreach (User player in users)
         {
@@ -74,35 +71,6 @@ public class LevelHandler : SceneHandler
 
             Destroy(referencePlayer);
         }
-
-        //foreach (KeyValuePair<string, Vector3> entry in playersLoc)
-        //{
-        //    Vector3 playerLoc = entry.Value;
-        //    bool rotatePlayer = toRotate[entry.Key];
-
-        //    // create the avatar
-        //    // todo: get the name of the avatar to load from the DB
-        //    GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("Boy1"));
-        //    GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
-
-        //    // set it's location
-        //    Vector3 newLoc = new Vector3(playerLoc.x, 0, playerLoc.z);
-        //    Debug.Log("******* about to put another player in:" + newLoc);
-        //    avatar.transform.position = newLoc;
-
-        //    Debug.Log("torotate:" + rotatePlayer);
-        //    // set it's rotation
-        //    if (rotatePlayer)
-        //    {
-        //        avatar.transform.Rotate(0, 180, 0);
-        //        Physics.SyncTransforms();
-        //    }
-
-        //    // add to list
-        //    otherPlayersAvatars.Add(avatar);
-
-        //    Destroy(referencePlayer);
-        //}
 
         // set listener on other players location & update their location
         DataBaseManager.instance.levelManager.listenOnOtherPlayersDoc();
