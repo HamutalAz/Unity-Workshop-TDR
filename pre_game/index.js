@@ -5,7 +5,7 @@ const admin = require("firebase-admin");
 admin.initializeApp();
 const db = admin.firestore();
 
-const lobbyPath = "Lobby/gYdtPMVaorwoc2jH3Iog/lobby_members/{user_id}";
+const lobbyPath = "Lobby/x3XGhSKLrwiXtcgyBuIr/lobby_members/{user_id}";
 let currentGameId = null;
 let maxPlayers = 0;
 
@@ -16,7 +16,7 @@ exports.checkNumberOfPlayersInLobby = firestore
       
       // get all players from the lobby & check how many player in there
       const lobbyCol = db.collection("Lobby");
-      const lobbyDoc = lobbyCol.doc("gYdtPMVaorwoc2jH3Iog");
+      const lobbyDoc = lobbyCol.doc("x3XGhSKLrwiXtcgyBuIr");
       const room_mem = lobbyDoc.collection("lobby_members");
       const snapshot = await room_mem.count().get();
       const numOfPlayers = snapshot.data().count;
@@ -85,7 +85,7 @@ function deleteFromLobby(arr) {
   console.log("***** deleting from lobby! *****");
   
   let lobbyCol = db.collection("Lobby");
-  const lobbyDoc = lobbyCol.doc("gYdtPMVaorwoc2jH3Iog");
+  const lobbyDoc = lobbyCol.doc("x3XGhSKLrwiXtcgyBuIr");
   lobbyCol = lobbyDoc.collection("lobby_members");
   const promises = [];
   arr.forEach((val) => {
@@ -106,7 +106,7 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
   let numberOfPlayersInRoom = 2; //todo: change to 1
   let currentGameInfo = await db.collection("Games").doc(gameId).get();
   let currentLevel = levelsOrder[currentGameInfo.data().currentLevelInd];
-  if(numOfPlayers > 3){
+  if(numOfPlayers > 4){
       isFinal = false;
       
       numberOfPlayersInRoom = setNumberOfPlayersInRoom(numOfPlayers,currentLevel);
@@ -143,7 +143,8 @@ async function matchMaking(arr, numOfPlayers, gameId, levelsOrder){
     
     //updates the gameId under Rooms/{roomId}
     const b = roomRef.set({
-      gameId: gameId
+      gameId: gameId,
+      status: "mid-game"
     });
     promises.push(b);
 
@@ -217,17 +218,22 @@ async function setPlayersLocationInRooms(currentLevel){
   //console.log("xarr, y, zarr: " + xArr + y +zArr);
   promises = []
   for (var i = 0; i < usersIDs.length; i++) {
+    let toRotate;
     if(subRoom){
+      
       if(i%2 == 0){
-        loc = generateRandomLoc(xArr, y, zArr);
+        toRotate = false;
+        loc = generateRandomLoc(xArr, y, zArr); //box
       } else{
-        loc = generateRandomLoc(xArr2, y, zArr2);
+        toRotate = true;
+        loc = generateRandomLoc(xArr2, y, zArr2); // fan
       }
     } else{
       loc = generateRandomLoc(xArr, y, zArr);
     }
     const p = db.collection("Users").doc(usersIDs[i]).update({
-      location: loc
+      location: loc,
+      toRotate: toRotate,
     });
     promises.push(p);
   }
@@ -336,6 +342,7 @@ function shuffleArray(arr) {
 
 function generateRandomLoc(xArr, y, zArr){
   console.log("***** generateRandomLoc *****");
+  console.log(xArr,zArr);
   const x = randomFromInterval(xArr[0], xArr[1]);
   const z = randomFromInterval(zArr[0], zArr[1]);
 

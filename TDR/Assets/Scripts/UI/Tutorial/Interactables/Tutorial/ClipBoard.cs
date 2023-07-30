@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Palmmedia.ReportGenerator.Core.Common;
+//using Palmmedia.ReportGenerator.Core.Common;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,6 +12,9 @@ public class ClipBoard : Interactable
     public tutorialHandler tHandler;
     bool wasTakenBefore = false;
     bool wasDroppedBefore = false;
+
+    // sound effects
+    public AudioClip clip;
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +51,8 @@ public class ClipBoard : Interactable
 
         if (!wasDroppedBefore)
             tHandler.showNextGuidePanel(7);
+
+        gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
 
         //wasDroppedBefore = true;
 

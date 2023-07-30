@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Palmmedia.ReportGenerator.Core.Common;
+//using Palmmedia.ReportGenerator.Core.Common;
 using UnityEngine;
 
 public class Drawer : Interactable
@@ -10,6 +10,10 @@ public class Drawer : Interactable
     private bool isOpen = false;
     [SerializeField]
     private tutorialHandler tHandler;
+
+    // sound effects
+    public AudioClip clip;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,6 +29,7 @@ public class Drawer : Interactable
     protected override void Interact()
     {
         isOpen = !isOpen;
+        gameObject.GetComponent<AudioSource>().PlayOneShot(clip);
         GetComponentInParent<Animator>().SetBool("isOpen", isOpen);
         gameObject.GetComponent<BoxCollider>().enabled = false;  //disable drawer interaction.
         clipboard.GetComponent<BoxCollider>().enabled = true;    // start clipboard interaction.

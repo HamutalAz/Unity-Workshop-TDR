@@ -20,11 +20,14 @@ public class LevelManager : MonoBehaviour
 
     private string userID;
     private string roomID;
+    private string gameID;
 
     // other players data
     private List<string> otherUsersID = new();
     private List<DocumentReference> otherPlayersDocRef = new();
     private Dictionary<string, Vector3> playersLoc = new(); // players locations
+
+    private List<User> allUsers = new();
 
     private void Start()
     {
@@ -32,13 +35,14 @@ public class LevelManager : MonoBehaviour
         functions = FirebaseFunctions.GetInstance("europe-west1");
     }
     
-    public async Task<Dictionary<string, Vector3>> getOtherPlayersData()
+    public async Task<List<User>> getOtherPlayersData()
     {
         userID = DataBaseManager.userID;
         roomID = DataBaseManager.roomID;
+        gameID = DataBaseManager.gameID;
         userDoc = dbReference.Collection("Users").Document(userID);
 
-        //Debug.Log("**** LM: getOtherPlayersData: roomID: ****" + roomID);
+        Debug.Log("**** LM: getOtherPlayersData: roomID: ****" + roomID);
 
         // Loop over all of the players in the room (which aren't the current user & add their useID to a list.
         roomDoc = dbReference.Collection("Rooms").Document(roomID);
@@ -49,11 +53,11 @@ public class LevelManager : MonoBehaviour
             QuerySnapshot snapshot = task.Result;
             foreach (DocumentSnapshot documentSnapshot in snapshot.Documents)
             {
-                //Debug.Log(String.Format("LM: getOtherPlayersData: Fetched player with ID: " + documentSnapshot.Id));
+                Debug.Log(String.Format("LM: getOtherPlayersData: Fetched player with ID: " + documentSnapshot.Id));
                 otherUsersID.Add(documentSnapshot.Id);
             }
         });
-        //Debug.Log("**** LM: getOtherPlayersData: amount of other players in the room: ****" + otherUsersID.Count);
+        Debug.Log("**** LM: getOtherPlayersData: amount of other players in the room: ****" + otherUsersID.Count);
 
         // Get the players document from the DB
         foreach (string id in otherUsersID)
@@ -63,7 +67,7 @@ public class LevelManager : MonoBehaviour
         return await setPlayersLocation();
     }
 
-    public async Task<Dictionary<string,Vector3>> setPlayersLocation()
+    public async Task<List<User>> setPlayersLocation()
     {
         foreach (DocumentReference playerDocRef in otherPlayersDocRef)
         {
@@ -71,13 +75,18 @@ public class LevelManager : MonoBehaviour
             {
                 DocumentSnapshot snapshot = task.Result;
                 User player = snapshot.ConvertTo<User>();
-                playersLoc.Add(player.userName, stringToVec(player.location));
-                //Debug.Log("**LM: setPlayersLocation() playerLoc: **" + stringToVec(player.location));
+                allUsers.Add(player);
+               ;
             });
         }
 
-        //Debug.Log("**** LM: setPlayersLocation(): playersLoc.Count **** " + playersLoc.Count);
-        return getOtherPlayersLoc();
+        return getAllUsers();
+    }
+
+
+    public List<User> getAllUsers()
+    {
+        return allUsers;
     }
 
     public void listenOnOtherPlayersDoc()
@@ -117,13 +126,8 @@ public class LevelManager : MonoBehaviour
             foreach (DocumentSnapshot documentSnapshot in snapshot.Documents)
             {
                 DocumentReference roomObjDocRef = documentSnapshot.Reference;
-                //Debug.Log("inside listen loop on room obj!");
-
                 string name = documentSnapshot.GetValue<string>("name");
-                //Debug.Log("got doc: " + name);
-
                 Dictionary<string, object> data = documentSnapshot.ToDictionary();
-                //objectsData[name] = data;
                 DataBaseManager.instance.levelHandler.UpdateRoomObjectUI(name, data);
 
                 roomObjDocRef.Listen((docSnapshot) =>
@@ -131,7 +135,6 @@ public class LevelManager : MonoBehaviour
                     Debug.Log("something changed in game object!");
                     string name = docSnapshot.GetValue<string>("name");             // the name of the object
                     Dictionary<string, object> data = docSnapshot.ToDictionary();   // it's data
-                    //objectsData[name] = data;
 
                     DataBaseManager.instance.levelHandler.UpdateRoomObjectUI(name, data);
                 });
@@ -147,6 +150,32 @@ public class LevelManager : MonoBehaviour
             int qualified = snapshot.GetValue<int>("Qualified");
             int totalTeams = snapshot.GetValue<int>("numberOfRoomsToQualify");
             DataBaseManager.instance.levelHandler.UpdateTeamPassedLabel(qualified, totalTeams);
+        });
+    }
+
+    public void listenOnRoomDocument()
+    {
+        roomDoc.Listen(async(snapshot) =>
+        {
+            Debug.Log("something has changed in room document!");
+            string roomStatus = snapshot.GetValue<string>("status");
+            Debug.Log("roomStatus: " + roomStatus);
+            if (!roomStatus.Equals("mid-game"))
+            {
+                //delete user from 'Users'
+                DocumentReference cityRef = dbReference.Collection("Users").Document(userID);
+                await cityRef.DeleteAsync();
+                if (roomStatus.Equals("Qualified"))
+                {
+                    DataBaseManager.instance.levelHandler.moveScene("Winning");
+                }
+                else
+                {
+                    DataBaseManager.instance.levelHandler.moveScene("Losing");
+                }
+                
+                
+            }
         });
     }
 
@@ -167,6 +196,7 @@ public class LevelManager : MonoBehaviour
         Dictionary<string, object> newDict = new();
         newDict.Add("userID", userID);
         newDict.Add("roomID", roomID);
+        newDict.Add("gameID", gameID);
         newDict.Add("objectName", objName);
         newDict.Add("data", data);
         HttpsCallableReference request = functions.GetHttpsCallable(functionName);
@@ -228,7 +258,6 @@ public class LevelManager : MonoBehaviour
         return await userDoc.GetSnapshotAsync().ContinueWithOnMainThread(task =>
         {
             string location = task.Result.GetValue<string>("location");
-            Debug.Log("******* player location from DB is: " + location);
             return stringToVec(location);
         });        
     }

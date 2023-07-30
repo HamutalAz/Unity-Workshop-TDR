@@ -8,15 +8,20 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.LowLevel;
 using UnityEngine.ProBuilder.Shapes;
-using Random = UnityEngine.Random;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using Sunbox.Avatars;
+using System.Xml;
+using static UnityEngine.EventSystems.EventTrigger;
+using UnityEngine.UIElements;
 
 public class LevelHandler : SceneHandler
 {
     // other players data
     private List<GameObject> otherPlayersAvatars = new List<GameObject>();
     public Dictionary<string, Vector3> playersLoc = new Dictionary<string, Vector3>();
+
 
     [SerializeField]
     public GameObject chatHandler;
@@ -30,27 +35,39 @@ public class LevelHandler : SceneHandler
         createPlayersAvatars();
 
         DataBaseManager.instance.levelManager.listenOnRoomObjects();
+        DataBaseManager.instance.levelManager.listenOnRoomDocument();
         DataBaseManager.instance.levelManager.getTeamPassedInfo();
     }
 
     // create player's "avatar" and add them to the scene
     private async void createPlayersAvatars()
     {
-        Dictionary<string, Vector3> playersLoc = await DataBaseManager.instance.levelManager.getOtherPlayersData();
+        List<User> users = await DataBaseManager.instance.levelManager.getOtherPlayersData();
 
-        foreach (Vector3 playerLoc in playersLoc.Values)
+        foreach (User player in users)
         {
-            GameObject referencePlayer = (GameObject)Instantiate(Resources.Load("3RdPersonPlayer"));
+            Vector3 playerLoc = DataBaseManager.instance.levelManager.stringToVec(player.location);
+            bool rotatePlayer = player.toRotate;
+            string avatarName = player.avatar;
 
-            // the following 2 lines generates random color to player - todo: delete when changing to avatars
-            var playerRenderer = referencePlayer.GetComponent<Renderer>();
-            playerRenderer.material.SetColor("_Color", UnityEngine.Random.ColorHSV());
-
+            // create the avatar
+            GameObject referencePlayer = (GameObject)Instantiate(Resources.Load(avatarName));
             GameObject avatar = (GameObject)Instantiate(referencePlayer, transform);
+
+            // set it's location
+            Vector3 newLoc = new Vector3(playerLoc.x, 0, playerLoc.z);
+            Debug.Log("******* about to put another player in:" + newLoc);
+            avatar.transform.position = newLoc;
+
+            // set it's rotation
+            if (rotatePlayer)
+            {
+                avatar.transform.Rotate(0, 180, 0);
+                Physics.SyncTransforms();
+            }
+
+            // add to list
             otherPlayersAvatars.Add(avatar);
-            Debug.Log("******* about to put another player in:" + playerLoc);
-            avatar.transform.position = playerLoc;
-            //Debug.Log("LH: createPlayersAvatars(): avatar created at: " + playerLoc);
 
             Destroy(referencePlayer);
         }
@@ -69,6 +86,7 @@ public class LevelHandler : SceneHandler
         if (otherPlayersAvatars.Count == 0)
             return;
 
+
         int i = 0;
 
         foreach (Vector3 playerLoc in playersLoc.Values)
@@ -76,8 +94,12 @@ public class LevelHandler : SceneHandler
             GameObject avatar = otherPlayersAvatars[i];
 
             if (playerLoc.ToString() != avatar.transform.position.ToString())
-                avatar.transform.position = playerLoc;
-            
+            {
+                Vector3 newLoc = new Vector3(playerLoc.x, 0, playerLoc.z);
+                avatar.GetComponent<ThirdPlayerAvatarController>().setNewLoc(newLoc);
+
+            }
+
             i++;
         }
 
@@ -108,6 +130,12 @@ public class LevelHandler : SceneHandler
     public void UpdateTeamPassedLabel(int passed, int total)
     {
         teamsPassaedLabel.text = passed + "/" + total + " Teams passed";
+    }
+
+    public async void moveScene(string scene)
+    {
+        await Task.Delay(5000);
+        SceneManager.LoadScene(sceneName: scene);
     }
 
 }
