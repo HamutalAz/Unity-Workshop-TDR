@@ -15,6 +15,9 @@ public class User
     public string roomId { get; set; }
     [FirestoreProperty]
     public string location { get; set; }
+
+    [FirestoreProperty]
+    public string avatar { get; set; }
     public User()
     {
     }
@@ -23,13 +26,15 @@ public class User
         this.userName = userName;
     }
 
-    public User(string userName, string userId)
+    public User(string userName, string userId, string avatar)
     {
         this.userName = userName;
         this.userId = userId;
+        this.avatar = avatar;
         this.gameId = null;
         this.roomId = null;
         this.location = null;
+
     }
 
 }

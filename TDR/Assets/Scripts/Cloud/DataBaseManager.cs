@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 public class DataBaseManager : MonoBehaviour
@@ -7,6 +8,7 @@ public class DataBaseManager : MonoBehaviour
     public static string userID;
     public static string roomID;
     public static string gameID;
+    public static string avatar;
 
     //Scene Handlers
     public WaitingRoomSceneHandler waitingRoomSceneHandler;
@@ -22,6 +24,7 @@ public class DataBaseManager : MonoBehaviour
     //Other variables
     public static int MAXPLAYERS = 20;
     public static DataBaseManager instance;
+    public static List<string> avatarNames = new List<string> {"Boy1", "Boy2", "Boy3", "Girl1", "Girl2"};
 
     private void Awake()
     {

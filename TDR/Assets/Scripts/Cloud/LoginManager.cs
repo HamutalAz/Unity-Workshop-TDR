@@ -1,6 +1,7 @@
 using Firebase.Extensions;
 using Firebase.Firestore;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class LoginManager : MonoBehaviour
 {
     private FirebaseFirestore dbReference;
     private CollectionReference roomMembersCollection;
+    private List<string> avatarsList; 
     private void Start()
     {
         dbReference = FirebaseFirestore.DefaultInstance;
@@ -34,14 +36,22 @@ public class LoginManager : MonoBehaviour
             DocumentReference newLobbyDoc = roomMembersCollection.Document();
             await newLobbyDoc.SetAsync(newRefUser);
 
+            //Selecting an avatar for user
+            var random = new System.Random();
+            int avatarIndex = random.Next(DataBaseManager.avatarNames.Count);
+            string avatar = DataBaseManager.avatarNames[avatarIndex];
+
             //Add user to 'Users' collection
-            User newUser = new User(newUserName,newLobbyDoc.Id);
+            User newUser = new User(newUserName,newLobbyDoc.Id,avatar );
+           
             await usersCollection.Document(newUser.userId).SetAsync(newUser);
             //await roomMembersCollection.Document()
 
             //Here we need to consider to just save an instance of User in databasemanager.
             DataBaseManager.userName = newUserName;
             DataBaseManager.userID = newUser.userId;
+            DataBaseManager.avatar = avatar;
+
 
             //await usersCollection.AddAsync(newUser);
             
