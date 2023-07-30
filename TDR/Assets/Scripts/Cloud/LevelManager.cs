@@ -26,6 +26,8 @@ public class LevelManager : MonoBehaviour
     private List<string> otherUsersID = new();
     private List<DocumentReference> otherPlayersDocRef = new();
     private Dictionary<string, Vector3> playersLoc = new(); // players locations
+    //private Dictionary<string, bool> toRotate = new();
+    private List<User> allUsers = new();
 
     private void Start()
     {
@@ -33,7 +35,7 @@ public class LevelManager : MonoBehaviour
         functions = FirebaseFunctions.GetInstance("europe-west1");
     }
     
-    public async Task<Dictionary<string, Vector3>> getOtherPlayersData()
+    public async Task<List<User>> getOtherPlayersData()
     {
         userID = DataBaseManager.userID;
         roomID = DataBaseManager.roomID;
@@ -65,7 +67,7 @@ public class LevelManager : MonoBehaviour
         return await setPlayersLocation();
     }
 
-    public async Task<Dictionary<string,Vector3>> setPlayersLocation()
+    public async Task<List<User>> setPlayersLocation()
     {
         foreach (DocumentReference playerDocRef in otherPlayersDocRef)
         {
@@ -73,13 +75,25 @@ public class LevelManager : MonoBehaviour
             {
                 DocumentSnapshot snapshot = task.Result;
                 User player = snapshot.ConvertTo<User>();
-                playersLoc.Add(player.userName, stringToVec(player.location));
+                allUsers.Add(player);
+                //playersLoc.Add(player.userName, stringToVec(player.location));
+                //toRotate.Add(player.userName, player.toRotate);
                 //Debug.Log("**LM: setPlayersLocation() playerLoc: **" + stringToVec(player.location));
             });
         }
 
         //Debug.Log("**** LM: setPlayersLocation(): playersLoc.Count **** " + playersLoc.Count);
-        return getOtherPlayersLoc();
+        return getAllUsers();
+    }
+
+    //public Dictionary<string, bool> getToRotate()
+    //{
+    //    return toRotate;
+    //}
+
+    public List<User> getAllUsers()
+    {
+        return allUsers;
     }
 
     public void listenOnOtherPlayersDoc()

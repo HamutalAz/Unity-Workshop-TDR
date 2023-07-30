@@ -218,17 +218,22 @@ async function setPlayersLocationInRooms(currentLevel){
   //console.log("xarr, y, zarr: " + xArr + y +zArr);
   promises = []
   for (var i = 0; i < usersIDs.length; i++) {
+    let toRotate;
     if(subRoom){
+      
       if(i%2 == 0){
-        loc = generateRandomLoc(xArr, y, zArr);
+        toRotate = false;
+        loc = generateRandomLoc(xArr, y, zArr); //box
       } else{
-        loc = generateRandomLoc(xArr2, y, zArr2);
+        toRotate = true;
+        loc = generateRandomLoc(xArr2, y, zArr2); // fan
       }
     } else{
       loc = generateRandomLoc(xArr, y, zArr);
     }
     const p = db.collection("Users").doc(usersIDs[i]).update({
-      location: loc
+      location: loc,
+      toRotate: toRotate,
     });
     promises.push(p);
   }

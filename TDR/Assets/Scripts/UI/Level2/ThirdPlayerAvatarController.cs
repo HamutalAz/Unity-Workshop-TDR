@@ -39,16 +39,15 @@ public class ThirdPlayerAvatarController : MonoBehaviour
             _inputVector.y = Mathf.Clamp(_inputVector.y, -1, 1);
 
             transform.position = newLoc;
-
+            
             // animate movment
             _avatar.Animator.SetFloat("MoveX", _inputVector.x);
             _avatar.Animator.SetFloat("MoveY", _inputVector.y);
 
-            // stop animation after 5 seconds
+            // stop animation after 1 second
             StartCoroutine(stopAnimation());
             
         }
-
     }
 
     public void Dance()

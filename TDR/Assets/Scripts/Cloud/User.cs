@@ -15,7 +15,8 @@ public class User
     public string roomId { get; set; }
     [FirestoreProperty]
     public string location { get; set; }
-
+    [FirestoreProperty]
+    public bool toRotate { get; set; }
     [FirestoreProperty]
     public string avatar { get; set; }
     public User()
@@ -34,7 +35,7 @@ public class User
         this.gameId = null;
         this.roomId = null;
         this.location = null;
-
+        this.toRotate = false;
     }
 
 }
