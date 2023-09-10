@@ -20,6 +20,7 @@ public class LogInSceneHandler : MonoBehaviour
 
     public async void loginButtonClicked()
     {
+        feedbackLBL.text = "Please wait, signing you in.";
         logInButton.enabled = false;
         string userName = userNameInput.text;
         if (userName.Equals("Username") || userName.Equals("") || userName.Equals("username"))
